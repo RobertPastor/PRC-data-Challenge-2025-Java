@@ -16,6 +16,8 @@ public class FolderDiscovery {
 	
 	private static String fuelRankFolderStr = "C:/Users/rober/git/PRCdataChallenge2025/trajectory/Fuel/";
 	
+	private static String flightListTrainRankFolderStr = "C:/Users/rober/git/PRCdataChallenge2025/trajectory/FlightList";
+	
 	private File flightTrainFolder = null;
 	private File flightRankFolder = null;
 	
@@ -63,7 +65,7 @@ public class FolderDiscovery {
 		this.className = FolderDiscovery.class.getSimpleName();
 	}
 	
-	public File getFlightFileFromFileName ( train_rank value , String fileName ) {
+	public File getFlightFileFromFileName ( train_rank train_rank_value , String fileName ) {
 		
 		System.out.println(this.className + " --- " + fileName );
 		if (!fileName.endsWith("parquet")) {
@@ -71,7 +73,7 @@ public class FolderDiscovery {
 		}
 		try {
 			Path path = null;
-			if ( value == train_rank.rank) {
+			if ( train_rank_value == train_rank.rank) {
 				path = Paths.get(FolderDiscovery.flightRankFolderStr , fileName);
 			} else {
 				path = Paths.get(FolderDiscovery.flightTrainFolderStr , fileName);
@@ -141,6 +143,21 @@ public class FolderDiscovery {
 	
 	public void setFlightRankFiles(File[] flightRankFiles) {
 		this.flightRankFiles = flightRankFiles;
+	}
+
+	public File getFlightListFileFromFileName(train_rank train_rank_value) {
+		// TODO Auto-generated method stub
+		String fileName = "flightlist_train.parquet";
+		if ( train_rank_value == train_rank.rank) {
+			fileName = "flightlist_rank.parquet";
+		}
+		Path path = Paths.get(FolderDiscovery.flightListTrainRankFolderStr , fileName);
+		File file = path.toFile();
+		if ( file.exists() && file.isFile()) {
+			return file;
+		}
+		return null;
+		
 	}
 
 }

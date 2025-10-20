@@ -14,7 +14,7 @@ import org.apache.parquet.avro.AvroWriteSupport;
 import org.apache.parquet.hadoop.ParquetWriter;
 import org.apache.parquet.hadoop.api.WriteSupport;
 import org.apache.parquet.hadoop.metadata.CompressionCodecName;
-import org.apache.parquet.schema.MessageType;
+import org.apache.parquet.schema.MessageType; 
 
 
 public class GenericAvroParquetWriter {
@@ -32,16 +32,20 @@ public class GenericAvroParquetWriter {
         final WriteSupport<Pojo> writeSupport = new AvroWriteSupport(parquetSchema, avroSchema);
         final String parquetFile = "./data.parquet";
         
-        final Path path = Paths.get(parquetFile);
+        //final Path path = Paths.get(parquetFile);
         
-        ParquetWriter<GenericRecord> parquetWriter = new ParquetWriter<GenericRecord>(path, writeSupport, 
-        		CompressionCodecName.SNAPPY, DEFAULT_BLOCK_SIZE, DEFAULT_PAGE_SIZE);
-        final GenericRecord record = new GenericData.Record(avroSchema);
-        record.put("id", 1);
-        record.put("age", 10);
-        record.put("name", "ABC");
-        record.put("place", "BCD");
-        parquetWriter.write(record);
-        parquetWriter.close();
+        /**
+         * ParquetWriter<GenericRecord> parquetWriter = new ParquetWriter<GenericRecord>(path, writeSupport, 
+         */
+        /*		CompressionCodecName.SNAPPY, DEFAULT_BLOCK_SIZE, DEFAULT_PAGE_SIZE);
+         * final GenericRecord record = new GenericData.Record(avroSchema);
+         *       record.put("id", 1);
+         *       record.put("age", 10);
+         *       record.put("name", "ABC");
+         *        record.put("place", "BCD");
+         *       parquetWriter.write(record);
+         */
+        
+        //parquetWriter.close();
     }
 }

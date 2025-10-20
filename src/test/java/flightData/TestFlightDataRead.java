@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 
 import dataChallengeEnums.DataChallengeEnums.train_rank;
 
-
 public class TestFlightDataRead {
 	
 	@Test

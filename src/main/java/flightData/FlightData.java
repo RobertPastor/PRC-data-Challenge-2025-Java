@@ -10,7 +10,6 @@ import com.jerolba.carpet.CarpetReader;
 import flightData.FlightDataSchema.FlightDataRecord;
 import folderDiscovery.FolderDiscovery;
 
-import tech.tablesaw.api.*; 
 
 public class FlightData extends FlightDataTable {
 	
@@ -66,7 +65,5 @@ public class FlightData extends FlightDataTable {
 	public void writeParquet( )throws IOException {
 	
 	}
-
-	
 
 }

@@ -37,8 +37,6 @@
     		<version>1.15.2</version>
 		</dependency>
         
-        
-        
         <dependency>
 			<groupId>org.apache.parquet</groupId>
 			<artifactId>parquet-hadoop</artifactId>
@@ -89,12 +87,6 @@
 	      <artifactId>maven-core</artifactId>
 	      <version>${mavenVersion}</version>
 	    </dependency>
-	    
-	    <dependency>
-		  <groupId>com.globalmentor</groupId>
-		  <artifactId>hadoop-bare-naked-local-fs</artifactId>
-		  <version>0.1.0</version>
-		</dependency>
 		
 		<dependency>
 			<groupId>com.github.javafaker</groupId>
