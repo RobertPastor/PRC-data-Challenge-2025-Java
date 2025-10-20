@@ -1,9 +1,7 @@
 package flightListData;
 
-import flightData.FlightDataSchema.FlightDataRecord;
 import flightListData.FlightListDataSchema.FlightListDataRecord;
 import tech.tablesaw.api.DateColumn;
-import tech.tablesaw.api.FloatColumn;
 import tech.tablesaw.api.InstantColumn;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.StringColumn;
@@ -60,6 +58,11 @@ public class FlightListDataTable extends Table {
 		row.setString("destination_name", r.destination_name());
 
 		row.setString("aircraft_type", r.aircraft_type());
+		
+	}
+	
+	public void extendWithStartEndDifference() {
+		
 		
 	}
 }

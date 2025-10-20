@@ -9,26 +9,26 @@ public class FuelDataSchema {
 			String flight_id, 
 			Instant start, 
 			Instant end,
-			int fuel_kg
+			float fuel_kg
 			) {
 
 		public int idx() {
 			return idx;
 		}
 
-		    public String flight_id() {
+		public String flight_id() {
 			return flight_id;
 		}
 
-		    public Instant start() {
+		public Instant start() {
 			return start;
 		}
 
-		    public Instant end() {
+		public Instant end() {
 			return end;
 		}
 
-		    public int fuel_kg() {
+		    public float fuel_kg() {
 			return fuel_kg;
 		}
 	}

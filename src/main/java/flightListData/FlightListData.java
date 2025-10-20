@@ -7,8 +7,6 @@ import java.util.Iterator;
 import com.jerolba.carpet.CarpetReader;
 
 import dataChallengeEnums.DataChallengeEnums.train_rank;
-import flightData.FlightDataTable;
-import flightListData.FlightListDataSchema;
 import flightListData.FlightListDataSchema.FlightListDataRecord;
 import folderDiscovery.FolderDiscovery;
 

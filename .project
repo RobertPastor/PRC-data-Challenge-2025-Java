@@ -3,7 +3,9 @@
 	<name>Data-Challenge-2025</name>
 	<comment></comment>
 	<projects>
-		<project>parquet-carpet-master</project>
+		<project>carpet-record</project>
+		<project>parquet-carpet</project>
+		<project>tablesaw-core</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

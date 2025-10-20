@@ -1,9 +1,0 @@
-{
-  "type": "record",
-  "name": "Message",
-  "fields": [
-    {"name": "id", "type": "string"},
-    {"name": "timestamp", "type": "long"},
-    {"name": "content", "type": "string"}
-  ]
-}

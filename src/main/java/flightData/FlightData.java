@@ -25,9 +25,18 @@ public class FlightData extends FlightDataTable {
 		return train_rank_value;
 	}
 	
-	FlightData( train_rank value , final String flight_id) {
+	public FlightData( train_rank value , final String flight_id) {
 		this.flight_id = flight_id;
 		this.train_rank_value = value;
+	}
+	
+	public void extendFlightDataTable() {
+		/**
+		 time_diff_seconds |   fuel_flow_kg_sec |   origin_longitude |   origin_latitude |   origin_elevation |   destination_longitude |   destination_latitude |   destination_elevation |   flight_distance_Nm |   flight_duration_sec |   MTOW_lb |   MALW_lb |   Num_Engines |   Approach_Speed_knot |   Wingspan_ft_without_winglets_sharklets |   Length_ft |   Parking_Area_ft2 |   fuel_burn_relative_start |   fuel_burn_relative_end |   latitude |   longitude |   altitude |   groundspeed |   track |   vertical_rate |   mach |   TAS |   CAS |   timestamp_relative_start |
+		 +====+=====================+====================+====================+===================+====================+=========================+========================+=========================+======================+=======================+===========+===========+===============+=======================+==========================================+=============+====================+============================+==========================+============+=============+============+===============+=========+=================+========+=======+=======+============================+
+		 |  0 |            1800.04  |           1.38886  |            101.71  |           2.74558 |                 69 |                 4.76389 |                52.3086 |                     -11 |              5533.53 |                 44297 |    560000 |    425000 |             2 |                   144 |                                    197.3 |       206.1 |            43747   |                    36929.4 |                  38729.5 |    45.1833 |    24.35    |    35974.9 |       467     | 302.324 |        0        |   0.86 |     0 |     0 |                    36929.4 |
+		 +---
+		 */
 	}
 	
 
@@ -45,16 +54,16 @@ public class FlightData extends FlightDataTable {
 			
 			while (iterator.hasNext()) {
 			    FlightDataSchema.FlightDataRecord r = iterator.next();
-			    System.out.println(r);
+			    //sSystem.out.println(r);
 			    
 			    this.appendRowToFlightDataTable(r);
-		        
 			    if (count > 10) {
 			    	break;
 			    }
 			    count = count + 1;
 			}
 			System.out.println(this.flightDataTable.print(10));
+			
 		} catch (Exception ex) {
             ex.printStackTrace(System.out);
         }

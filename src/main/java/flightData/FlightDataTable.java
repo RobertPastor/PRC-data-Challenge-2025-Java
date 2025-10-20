@@ -47,7 +47,7 @@ public class FlightDataTable extends Table {
         row.setString("typecode", r.typecode());
         row.setFloat("TAS", r.TAS());
         row.setFloat("CAS", r.CAS());
-        row.setString("source", r.source());;
+        row.setString("source", r.source());
 	}
 	
 }

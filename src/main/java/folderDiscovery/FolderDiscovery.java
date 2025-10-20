@@ -6,7 +6,6 @@ import java.nio.file.Paths;
 
 import dataChallengeEnums.DataChallengeEnums.train_rank;
 
-
 public class FolderDiscovery {
 	
 	String className = "";
@@ -15,9 +14,15 @@ public class FolderDiscovery {
 	private static String flightRankFolderStr = "C:/Users/rober/git/PRCdataChallenge2025/Data-Download-OpenSkyNetwork/competition-rank-data/";
 	
 	private static String fuelRankFolderStr = "C:/Users/rober/git/PRCdataChallenge2025/trajectory/Fuel/";
+	private static String fuelTrainFolderStr = "C:/Users/rober/git/PRCdataChallenge2025/trajectory/Fuel/";
 	
 	private static String flightListTrainRankFolderStr = "C:/Users/rober/git/PRCdataChallenge2025/trajectory/FlightList";
+	private static String airportsFolderStr = "C:/Users/rober/git/PRCdataChallenge2025/trajectory/Environment/AirportsDataChallenge";
 	
+	public static String getAirportsFolderStr() {
+		return airportsFolderStr;
+	}
+
 	private File flightTrainFolder = null;
 	private File flightRankFolder = null;
 	
@@ -35,7 +40,6 @@ public class FolderDiscovery {
 	public void setFlightTrainFolderStr(String flightTrainFolderStr) {
 		FolderDiscovery.flightTrainFolderStr = flightTrainFolderStr;
 	}
-
 
 	public void setFlightRankFolderStr(String flightRankFolderStr) {
 		FolderDiscovery.flightRankFolderStr = flightRankFolderStr;
@@ -91,18 +95,20 @@ public class FolderDiscovery {
 		return null;
 	}
 	
-	public File getRankFuelFileFromFileName( String fileName ) {
+	public File getFuelFileFromFileName( final train_rank train_rank_value ) {
 		
-		System.out.println(this.className + " --- " + fileName );
-		if (!fileName.endsWith("parquet")) {
-			fileName = fileName + ".parquet";
-		}
 		try {
-			Path path = Paths.get(FolderDiscovery.fuelRankFolderStr , fileName);
+			Path path =  null;
+			if ( train_rank_value == train_rank.rank ) {
+				path = Paths.get(FolderDiscovery.fuelRankFolderStr , "fuel_rank_submission.parquet" );
+			} else {
+				path = Paths.get(FolderDiscovery.fuelTrainFolderStr , "fuel_train.parquet");
+			}
 			File file = path.toFile();
 			if (!file.exists() || !file.isFile()) {
 				return null;
 			} else {
+				System.out.println(file.getAbsolutePath());
 				return file;
 			}
 		} catch (Exception ex) {
@@ -110,6 +116,7 @@ public class FolderDiscovery {
         }
 		return null;
 	}
+	
 	
 	public void discover() {
 		this.flightTrainFolder = new File(flightTrainFolderStr);
@@ -154,7 +161,6 @@ public class FolderDiscovery {
 	}
 
 	public File getFlightListFileFromFileName(train_rank train_rank_value) {
-		// TODO Auto-generated method stub
 		String fileName = "flightlist_train.parquet";
 		if ( train_rank_value == train_rank.rank) {
 			fileName = "flightlist_rank.parquet";
@@ -165,7 +171,16 @@ public class FolderDiscovery {
 			return file;
 		}
 		return null;
-		
+	}
+
+	public File getAirportsFileFromFileName() {
+		String fileName = "apt.parquet";
+		Path path = Paths.get(FolderDiscovery.getAirportsFolderStr() , fileName);
+		File file = path.toFile();
+		if ( file.exists() && file.isFile()) {
+			return file;
+		}
+		return null;
 	}
 
 }

@@ -9,7 +9,6 @@ import folderDiscovery.FolderDiscovery;
 
 public class TestFlightListDataReader {
 
-	
 	@Test
     public void testReadFlightList() throws IOException {
 
