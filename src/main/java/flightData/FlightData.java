@@ -10,7 +10,9 @@ import com.jerolba.carpet.CarpetReader;
 import flightData.FlightDataSchema.FlightDataRecord;
 import folderDiscovery.FolderDiscovery;
 
-public class FlightData {
+import tech.tablesaw.api.*; 
+
+public class FlightData extends FlightDataTable {
 	
 	private String flight_id = "";
 	
@@ -28,25 +30,32 @@ public class FlightData {
 		this.flight_id = flight_id;
 		this.train_rank_value = value;
 	}
+	
 
-	public void read( ) throws IOException {
+	public void readParquet() throws IOException {
+		this.createEmptyFlightDataTable();
+		
 		String fileName = this.getFlight_id() + ".parquet";
 		try {
 			FolderDiscovery folderDiscovery = new FolderDiscovery();
-			
 			
 			File file = folderDiscovery.getFlightFileFromFileName(this.train_rank_value , fileName);
 			var reader = new CarpetReader<>(file, FlightDataRecord.class);
 			Iterator<FlightDataRecord> iterator = ((CarpetReader<FlightDataRecord>) reader).iterator();
 			int count = 0;
+			
 			while (iterator.hasNext()) {
 			    FlightDataSchema.FlightDataRecord r = iterator.next();
 			    System.out.println(r);
+			    
+			    this.appendRowToFlightDataTable(r);
+		        
 			    if (count > 10) {
 			    	break;
 			    }
 			    count = count + 1;
 			}
+			System.out.println(this.flightDataTable.print(10));
 		} catch (Exception ex) {
             ex.printStackTrace(System.out);
         }
@@ -54,7 +63,7 @@ public class FlightData {
 		
 	}
 	
-	public void write( )throws IOException {
+	public void writeParquet( )throws IOException {
 	
 	}
 

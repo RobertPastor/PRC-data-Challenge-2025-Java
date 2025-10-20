@@ -13,7 +13,7 @@ public class TestFlightDataRead {
     public void testReadFlight() throws IOException {
 
 		FlightData flightData = new FlightData(train_rank.rank , "prc806615763");
-		flightData.read();
+		flightData.readParquet();
 	}
 
 }
