@@ -38,12 +38,12 @@ private train_rank train_rank_value;
 			
 			while (iterator.hasNext()) {
 			    FlightListDataSchema.FlightListDataRecord r = iterator.next();
-			    System.out.println(r);
+			    //System.out.println(r);
 			    
 			    this.appendRowToFlightListDataTable(r);
 		        
 			    if (count > 10) {
-			    	break;
+			    	//break;
 			    }
 			    count = count + 1;
 			}

@@ -124,6 +124,14 @@ public class FolderDiscovery {
 		
 	}
 	
+	public int getFlightFolderNbFiles( train_rank train_rank_value ) {
+		if ( train_rank_value == train_rank.rank ) {
+			return this.getRankFolderNbFiles();
+		} else {
+			return this.getTrainFolderNbFiles();
+		}
+	}
+	
 	public int getTrainFolderNbFiles() {
 		return this.flightTrainFiles.length;
 	}
