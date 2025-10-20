@@ -55,8 +55,8 @@ public class FuelDataTable extends Table {
 	
 	public void extendWithEndStartDifference( ) {
 		
-		DoubleColumn time_diff_seconds = DoubleColumn.create("time_diff_seconds");
-		this.fuelDataTable.addColumns(time_diff_seconds);
+		DoubleColumn time_diff_seconds_column = DoubleColumn.create("time_diff_seconds");
+		this.fuelDataTable.addColumns(time_diff_seconds_column);
 		
 		System.out.println( this.fuelDataTable.structure() );
 		//int maxRowCount = this.fuelDataTable.rowCount();
@@ -68,6 +68,31 @@ public class FuelDataTable extends Table {
 			Instant end = row.getInstant("end");
 			double difference = Duration.between(start, end).toSeconds();
 			row.setDouble("time_diff_seconds" , difference);
+		}
+		System.out.println( this.fuelDataTable.print(10) );
+	}
+	
+	public void extendFuelFlowKgSeconds() {
+		
+		FloatColumn fuel_flow_kg_sec_column = FloatColumn.create("fuel_flow_kg_sec");
+		this.fuelDataTable.addColumns(fuel_flow_kg_sec_column);
+		
+		System.out.println( this.fuelDataTable.structure() );
+		
+		Iterator<Row> iter = this.fuelDataTable.iterator();
+		while ( iter.hasNext()) {
+			Row row = iter.next();
+			Float fuel_kg = row.getFloat ("fuel_kg");
+			
+			Instant start = row.getInstant("start");
+			Instant end = row.getInstant("end");
+			long difference = Duration.between(start, end).toSeconds();
+
+			float fuel_flow_kg_seconds = (float) 0.0;
+			if ( difference > 0.0 ) {
+				fuel_flow_kg_seconds = fuel_kg / difference;
+			}
+			row.setFloat("fuel_flow_kg_sec" , fuel_flow_kg_seconds);
 		}
 		System.out.println( this.fuelDataTable.print(10));
 	}

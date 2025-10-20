@@ -14,6 +14,7 @@ public class TestFuelDataReader {
 		FuelData fuelData = new FuelData(train_rank.rank );
 		fuelData.readParquet();
 		fuelData.extendWithEndStartDifference();
+		fuelData.extendFuelFlowKgSeconds();
 	}
 	
 	@Test
@@ -22,5 +23,6 @@ public class TestFuelDataReader {
 		FuelData fuelData = new FuelData(train_rank.train );
 		fuelData.readParquet();
 		fuelData.extendWithEndStartDifference();
+		fuelData.extendFuelFlowKgSeconds();
 	}
 }
