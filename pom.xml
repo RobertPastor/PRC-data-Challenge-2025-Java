@@ -44,11 +44,6 @@
 		</dependency>
 		
 		<!-- https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-common -->
-		<dependency>
-		    <groupId>org.apache.hadoop</groupId>
-		    <artifactId>hadoop-common</artifactId>
-		    <version>3.4.2</version>
-		</dependency>
 		
 		<dependency>
 			<groupId>org.apache.parquet</groupId>
@@ -60,13 +55,6 @@
 			<groupId>org.apache.parquet</groupId>
 			<artifactId>parquet-variant</artifactId>
 			<version>1.16.0</version>
-			<scope>runtime</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.apache.hadoop</groupId>
-			<artifactId>hadoop-mapreduce-client-core</artifactId>
-			<version>3.4.1</version>
 			<scope>runtime</scope>
 		</dependency>
 		
@@ -107,8 +95,19 @@
 		    <artifactId>guava</artifactId>
 		    <version>33.5.0-jre</version>
 		</dependency>
-				
-	
+		
+		<!-- https://mvnrepository.com/artifact/org.dhatim/fastexcel -->
+		<dependency>
+		    <groupId>org.dhatim</groupId>
+		    <artifactId>fastexcel</artifactId>
+		    <version>0.19.0</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.dhatim</groupId>
+		    <artifactId>fastexcel-reader</artifactId>
+		    <version>0.18.1</version>
+		</dependency>
 
   </dependencies>
   
@@ -128,7 +127,6 @@
         	 <snapshots>
                     <enabled>false</enabled>
              </snapshots>
-        
         </repository>
         <repository> 
         	<id>google</id>
@@ -136,8 +134,15 @@
         	 <snapshots>
                     <enabled>false</enabled>
              </snapshots>
-        
         </repository>
+        <repository> 
+        	<id>fastexcel</id>
+        	<url>https://mvnrepository.com/artifact/org.dhatim/fastexcel/</url>
+        	 <snapshots>
+             	<enabled>false</enabled>
+             </snapshots>
+        </repository>
+        
     </repositories>
     
     
@@ -155,6 +160,7 @@
                 <releases>
                     <updatePolicy>never</updatePolicy>
                 </releases>
+                
         </pluginRepository>
     </pluginRepositories>
     

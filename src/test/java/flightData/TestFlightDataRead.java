@@ -13,6 +13,8 @@ public class TestFlightDataRead {
 
 		FlightData flightData = new FlightData(train_rank.rank , "prc806615763");
 		flightData.readParquet();
+		
+		System.out.println("Row Count -> " + flightData.getFlightDataTable().rowCount() );
 	}
 
 }

@@ -16,9 +16,8 @@ public class ReadFromParquetUsingCarpetReader {
 		
 		try {
 			FolderDiscovery folderDiscovery = new FolderDiscovery();
-			
-			String fileName = "fuel_rank_submission.parquet";
-			File file = folderDiscovery.getFuelFileFromFileName(train_rank.rank, fileName);
+			// the name of the fuel file is hard coded in the Folder Discovery
+			File file = folderDiscovery.getFuelFileFromFileName(train_rank.rank);
 			var reader = new CarpetReader<>(file, FuelDataRecord.class);
 			Iterator<FuelDataSchema.FuelDataRecord> iterator = ((CarpetReader<FuelDataSchema.FuelDataRecord>) reader).iterator();
 			while (iterator.hasNext()) {

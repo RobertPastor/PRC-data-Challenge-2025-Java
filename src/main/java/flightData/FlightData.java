@@ -4,15 +4,20 @@ import java.io.File;
 import dataChallengeEnums.DataChallengeEnums.train_rank;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.logging.Logger;
 
 import com.jerolba.carpet.CarpetReader;
 
+import aircrafts.AircraftsDataReader;
 import flightData.FlightDataSchema.FlightDataRecord;
 import folderDiscovery.FolderDiscovery;
+import java.util.logging.Logger;
 
 
 public class FlightData extends FlightDataTable {
 	
+    private static final Logger logger = Logger.getLogger(FlightDataTable.class.getName());
+
 	private String flight_id = "";
 	
 	public String getFlight_id() {
@@ -58,12 +63,13 @@ public class FlightData extends FlightDataTable {
 			    
 			    this.appendRowToFlightDataTable(r);
 			    if (count > 10) {
-			    	break;
+			    	//break;
 			    }
 			    count = count + 1;
 			}
 			System.out.println(this.flightDataTable.print(10));
-			
+			logger.info("Row count = " + this.flightDataTable.rowCount());
+
 		} catch (Exception ex) {
             ex.printStackTrace(System.out);
         }
