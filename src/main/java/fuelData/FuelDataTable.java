@@ -50,7 +50,6 @@ public class FuelDataTable extends Table {
 		row.setInstant("end", r.end());
 		
 		row.setFloat ("fuel_kg", r.fuel_kg());
-	
 	}
 	
 	public void extendWithEndStartDifference( ) {

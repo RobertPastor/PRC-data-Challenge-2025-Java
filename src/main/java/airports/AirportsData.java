@@ -29,7 +29,7 @@ public class AirportsData extends AirportsDataTable {
 				    
 				    this.appendRowToAirportsDataTable(r);
 				    if (count > 10) {
-				    	break;
+				    	//break;
 				    }
 				    count = count + 1;
 				}

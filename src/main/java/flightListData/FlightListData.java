@@ -25,11 +25,11 @@ private train_rank train_rank_value;
 	
 	public void readParquet() throws IOException {
 		this.createEmptyFlightListDataTable();
-		
+		File file = null;
 		try {
 			FolderDiscovery folderDiscovery = new FolderDiscovery();
 			
-			File file = folderDiscovery.getFlightListFileFromFileName(this.train_rank_value);
+			file = folderDiscovery.getFlightListFileFromFileName(this.train_rank_value);
 			var reader = new CarpetReader<>(file, FlightListDataRecord.class);
 			Iterator<FlightListDataRecord> iterator = ((CarpetReader<FlightListDataRecord>) reader).iterator();
 			int count = 0;
@@ -49,7 +49,7 @@ private train_rank train_rank_value;
 		} catch (Exception ex) {
             ex.printStackTrace(System.out);
         }
-        System.out.println("Parquet file <<" + this.getTrain_rank_value() + ">> Flight List read successfully!");
+        System.out.println("Parquet file <<" + this.getTrain_rank_value() + ">> Flight List <<" + file.getAbsolutePath() +">> read successfully!");
 		
 	}
 	
