@@ -12,33 +12,14 @@ import tech.tablesaw.api.LongColumn;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
+import utils.Utils;
 
 import java.time.Duration;
 import java.time.Instant;
 
 public class FlightListDataTable extends Table {
 	
-	private double EARTH_RADIUS_kilometers = 6371.0;
-	private double Kilometers_to_Nautical_Miles = 0.6213711922 ;
 	
-	double haversine(double val) {
-	    return Math.pow(Math.sin(val / 2), 2);
-	}
-	
-	double calculateDistanceNauticalMiles(double startLatitudeDegrees, double startLongitudeDegrees, double endLatitudeDegrees, double endLongitudeDegrees) {
-
-	    double dLat = Math.toRadians((endLatitudeDegrees - startLatitudeDegrees));
-	    double dLong = Math.toRadians((endLongitudeDegrees - startLongitudeDegrees));
-
-	    double startLatitudeRadians = Math.toRadians(startLatitudeDegrees);
-	    double endLatitudeRadians = Math.toRadians(endLatitudeDegrees);
-
-	    double a = haversine(dLat) + Math.cos(startLatitudeRadians) * Math.cos(endLatitudeRadians) * haversine(dLong);
-	    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-	    return EARTH_RADIUS_kilometers * c * Kilometers_to_Nautical_Miles ;
-	}
-
 	public Table flightListDataTable = null;
 
 	public Table getFlightListDataTable() {
@@ -152,7 +133,7 @@ public class FlightListDataTable extends Table {
 			row.setFloat("destination_elevation" , destination_elevation_meters);
 			
 			// distance in Nautical Miles
-			double Distance_Nm = this.calculateDistanceNauticalMiles(origin_latitude_degrees, origin_longitude_degrees, 
+			double Distance_Nm = Utils.calculateHaversineDistanceNauticalMiles(origin_latitude_degrees, origin_longitude_degrees, 
 					 destination_latitude_degrees,  destination_longitude_degrees);
 			row.setDouble("flight_distance_Nm", Distance_Nm);
 			

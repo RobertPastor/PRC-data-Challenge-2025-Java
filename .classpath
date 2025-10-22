@@ -6,8 +6,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path="tablesaw-master"/>
-	<classpathentry kind="src" path="parquet-carpet-master"/>
 	<classpathentry excluding="**" kind="src" output="target/classes" path="src/main/resources">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
@@ -39,7 +37,9 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/carpet-record"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/tablesaw-core"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carpet-record"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tablesaw-excel"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

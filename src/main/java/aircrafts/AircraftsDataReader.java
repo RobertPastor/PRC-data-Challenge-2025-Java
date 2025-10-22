@@ -11,11 +11,13 @@ import org.dhatim.fastexcel.reader.ReadableWorkbook;
 import org.dhatim.fastexcel.reader.Row;
 import org.dhatim.fastexcel.reader.Sheet;
 
+import tech.tablesaw.io.xlsx.XlsxReadOptions;
+import tech.tablesaw.io.xlsx.XlsxReader;
+
 
 public class AircraftsDataReader extends AircraftsDataTable {
 	
     private static final Logger logger = Logger.getLogger(AircraftsDataReader.class.getName());
-
 
 	private static String aircraftsFileName = "FAA-Aircraft-Char-DB-AC-150-5300-13B-App-2023-09-07.xlsx";
 	
@@ -25,6 +27,19 @@ public class AircraftsDataReader extends AircraftsDataTable {
 
 	AircraftsDataReader() {
 		logger.info("file = " + getAircraftsFileName());
+	}
+	
+	public void readTableSawExcelFile() throws IOException {
+		
+		InputStream in = AircraftsDataReader.class.getResourceAsStream(AircraftsDataReader.aircraftsFileName);
+		logger.info(AircraftsDataReader.getAircraftsFileName());
+		
+		this.createEmptyAircraftsDataTable();
+		this.aircraftsDataTable = new XlsxReader()
+		            .read(XlsxReadOptions.builder(in)
+		            .sheetIndex(0)
+		            .build());
+		logger.info(this.aircraftsDataTable.print(10));
 	}
 	
 	public void readExcelFile() throws IOException {
