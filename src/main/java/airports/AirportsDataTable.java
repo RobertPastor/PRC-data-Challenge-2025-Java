@@ -1,11 +1,6 @@
 package airports;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.time.LocalDate;
-
 import airports.AirportsDataSchema.AirportDataRecord;
-import tech.tablesaw.api.DateColumn;
 import tech.tablesaw.api.FloatColumn;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.StringColumn;

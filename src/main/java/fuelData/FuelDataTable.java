@@ -39,7 +39,7 @@ public class FuelDataTable extends Table {
 
 	}
 	
-	public void appendRowToFuelDataTable(  FuelDataRecord r ) {
+	public void appendRowToFuelDataTable( FuelDataRecord r ) {
 
 		Row row = this.fuelDataTable.appendRow();
 		
@@ -95,5 +95,7 @@ public class FuelDataTable extends Table {
 		}
 		System.out.println( this.fuelDataTable.print(10));
 	}
+	
+	
 }
 

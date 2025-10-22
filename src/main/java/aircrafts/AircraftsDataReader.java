@@ -1,7 +1,10 @@
 package aircrafts;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
@@ -11,8 +14,6 @@ import org.dhatim.fastexcel.reader.ReadableWorkbook;
 import org.dhatim.fastexcel.reader.Row;
 import org.dhatim.fastexcel.reader.Sheet;
 
-import tech.tablesaw.io.xlsx.XlsxReadOptions;
-import tech.tablesaw.io.xlsx.XlsxReader;
 
 
 public class AircraftsDataReader extends AircraftsDataTable {
@@ -29,50 +30,51 @@ public class AircraftsDataReader extends AircraftsDataTable {
 		logger.info("file = " + getAircraftsFileName());
 	}
 	
-	public void readTableSawExcelFile() throws IOException {
-		
-		InputStream in = AircraftsDataReader.class.getResourceAsStream(AircraftsDataReader.aircraftsFileName);
-		logger.info(AircraftsDataReader.getAircraftsFileName());
-		
-		this.createEmptyAircraftsDataTable();
-		this.aircraftsDataTable = new XlsxReader()
-		            .read(XlsxReadOptions.builder(in)
-		            .sheetIndex(0)
-		            .build());
-		logger.info(this.aircraftsDataTable.print(10));
-	}
-	
 	public void readExcelFile() throws IOException {
 		
 		this.createEmptyAircraftsDataTable();
+		logger.info(AircraftsDataReader.getAircraftsFileName());
 		
 		String sheetName = "ACD_Data";
-
-		// java.net.URL
-		InputStream in = AircraftsDataReader.class.getResourceAsStream(AircraftsDataReader.aircraftsFileName);
-		logger.info(AircraftsDataReader.getAircraftsFileName());
-		System.out.println(AircraftsDataReader.getAircraftsFileName());
 		
-		if (in != null) {
-			System.out.println(in.available());
-			try (ReadableWorkbook wb = new ReadableWorkbook(in)) {
+		String fileName = AircraftsDataReader.getAircraftsFileName();
+		Path path = Paths.get("C:/Users/rober/eclipse-2025-09/eclipse-jee-2025-09-R-win32-x86_64/Data-Challenge-2025/documents" , fileName);
+		File inputExcelFile = path.toFile();
+		
+		if ( inputExcelFile.exists() && inputExcelFile.isFile()) {
+		
+			System.out.println(inputExcelFile.getAbsolutePath());
+			
+			try (ReadableWorkbook wb = new ReadableWorkbook(inputExcelFile)) {
 	            Optional<Sheet> sheet = wb.findSheet(sheetName);
 	            if (sheet.isPresent()) {
 	            	Sheet foundSheet = sheet.get();
 		            try (Stream<Row> rows = foundSheet.openStream()) {
 		                rows.forEach(r -> {
+		                	
 		                	logger.info( String.valueOf( r.getRowNum() ) );
 		                	//this.appendRowToAircraftsDataTable(r);
 		
 		                    for (Cell cell : r) {
-		                        logger.info( cell.getRawValue() );
+		                    	if (cell != null) {
+
+                                    System.out.println("column index = " + cell.getColumnIndex() + " cell type = " + cell.getType());
+                                    System.out.println( " -> " + r.getRowNum() + " -> " + cell.getRawValue());
+                                    //data.get(r.getRowNum()).add(cell.getRawValue());
+		                    	}
+		                        //logger.info( cell.getRawValue() );
 		                    }
 		                });
+		                System.out.println(rows.count());
+		            } catch ( Exception e) {
+                        System.out.println(e.getLocalizedMessage());
 		            }
 	            }
-	        }
+	        } catch ( Exception e) {
+                System.out.println(e.getLocalizedMessage());
+            }
 		} else {
-			System.out.println("file not found");
+			System.out.println("file <<" + inputExcelFile.getAbsolutePath() + ">> not found or it is not a file");
 		}
 	}
 }

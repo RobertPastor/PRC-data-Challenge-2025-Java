@@ -16,13 +16,57 @@
   
   <dependencies>
   
-  <!-- junit 5, unit test -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-			<version>5.7.1</version>
-            <scope>test</scope>
-        </dependency>
+  <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
+	<dependency>
+	    <groupId>org.slf4j</groupId>
+	    <artifactId>slf4j-api</artifactId>
+	    <version>2.0.16</version>
+	</dependency>
+  
+  <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12 -->
+	<dependency>
+	    <groupId>org.slf4j</groupId>
+	    <artifactId>slf4j-log4j12</artifactId>
+	    <version>2.0.16</version>
+	    <scope>runtime</scope>
+	</dependency>
+
+  	  <dependency>
+        <groupId>commons-io</groupId>
+        <artifactId>commons-io</artifactId>
+        <version>2.20.0</version>
+         <!-- ou la version appropriée -->
+      </dependency>
+      
+      <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-compress -->
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-compress</artifactId>
+		    <version>1.28.0</version>
+		</dependency>
+    
+    <dependency>
+          <groupId>org.apache.maven</groupId>
+          <artifactId>maven-archiver</artifactId>
+          <version>3.6.0</version>
+      </dependency>
+      
+		<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-params -->
+		<dependency>
+		    <groupId>org.junit.jupiter</groupId>
+		    <artifactId>junit-jupiter-params</artifactId>
+		    <version>5.9.0</version>
+		    <scope>test</scope>
+		</dependency>
+      
+     
+	  	<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter -->
+		<dependency>
+		    <groupId>org.junit.jupiter</groupId>
+		    <artifactId>junit-jupiter</artifactId>
+		    <version>5.9.0</version>
+		    <scope>test</scope>
+		</dependency>
         
         <dependency>
 			<groupId>org.apache.parquet</groupId>
@@ -108,8 +152,13 @@
 		    <artifactId>fastexcel-reader</artifactId>
 		    <version>0.18.1</version>
 		</dependency>
-		
 
+
+		<dependency>
+			<groupId>tech.tablesaw</groupId>
+			<artifactId>tablesaw-core</artifactId>
+			<version>0.44.4-SNAPSHOT</version>
+		</dependency>
   </dependencies>
   
   <repositories>
@@ -123,6 +172,13 @@
                 </snapshots>
         </repository>
         <repository> 
+        	<id>junit</id>
+        	<url>https://mvnrepository.com/artifact/</url>
+        	 <snapshots>
+                 <enabled>true</enabled>
+             </snapshots>
+        </repository>
+         <repository> 
         	<id>apache</id>
         	<url>https://mvnrepository.com/artifact/org.apache.parquet</url>
         	 <snapshots>
@@ -133,7 +189,7 @@
         	<id>google</id>
         	<url>https://mvnrepository.com/artifact/com.google.code.gson/</url>
         	 <snapshots>
-                    <enabled>false</enabled>
+                  <enabled>false</enabled>
              </snapshots>
         </repository>
         <repository> 
@@ -179,7 +235,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.0</version>
+                <version>3.5.4</version>
             </plugin>
         </plugins>
     </build>
