@@ -51,22 +51,28 @@ public class AircraftsDataReader extends AircraftsDataTable {
 		// java.net.URL
 		InputStream in = AircraftsDataReader.class.getResourceAsStream(AircraftsDataReader.aircraftsFileName);
 		logger.info(AircraftsDataReader.getAircraftsFileName());
+		System.out.println(AircraftsDataReader.getAircraftsFileName());
 		
-		try (ReadableWorkbook wb = new ReadableWorkbook(in)) {
-            Optional<Sheet> sheet = wb.findSheet(sheetName);
-            if (sheet.isPresent()) {
-            	Sheet foundSheet = sheet.get();
-	            try (Stream<Row> rows = foundSheet.openStream()) {
-	                rows.forEach(r -> {
-	                	logger.info( String.valueOf( r.getRowNum() ) );
-	                	//this.appendRowToAircraftsDataTable(r);
-	
-	                    for (Cell cell : r) {
-	                        logger.info( cell.getRawValue() );
-	                    }
-	                });
+		if (in != null) {
+			System.out.println(in.available());
+			try (ReadableWorkbook wb = new ReadableWorkbook(in)) {
+	            Optional<Sheet> sheet = wb.findSheet(sheetName);
+	            if (sheet.isPresent()) {
+	            	Sheet foundSheet = sheet.get();
+		            try (Stream<Row> rows = foundSheet.openStream()) {
+		                rows.forEach(r -> {
+		                	logger.info( String.valueOf( r.getRowNum() ) );
+		                	//this.appendRowToAircraftsDataTable(r);
+		
+		                    for (Cell cell : r) {
+		                        logger.info( cell.getRawValue() );
+		                    }
+		                });
+		            }
 	            }
-            }
-        }
+	        }
+		} else {
+			System.out.println("file not found");
+		}
 	}
 }
