@@ -15,6 +15,13 @@ public class TestFlightDataRead {
 		flightData.readParquet();
 		
 		System.out.println("Row Count -> " + flightData.getFlightDataTable().rowCount() );
+		System.out.println("Shape -> " + flightData.getFlightDataTable().shape() );
+		
+		flightData.extendWithLatitudeLongitudeCosineSine();
+		
+		System.out.println("Shape -> " + flightData.getFlightDataTable().shape() );
+		System.out.println( flightData.getFlightDataTable().print(10) );
+
 	}
 
 }

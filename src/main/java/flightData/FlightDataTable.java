@@ -1,6 +1,9 @@
 package flightData;
 
-import tech.tablesaw.api.*; 
+import tech.tablesaw.api.*;
+
+import java.util.Iterator;
+
 import flightData.FlightDataSchema.FlightDataRecord;
 
 public class FlightDataTable extends Table {
@@ -19,8 +22,10 @@ public class FlightDataTable extends Table {
 		this.flightDataTable = Table.create("Flight Data",
                 StringColumn.create("flight_id"),
                 InstantColumn.create("timestamp"),
-                FloatColumn.create("longitude"),
-                FloatColumn.create("latitude"),
+                
+                DoubleColumn.create("longitude"),
+                DoubleColumn.create("latitude"),
+                
                 FloatColumn.create("altitude"),
                 FloatColumn.create("groundspeed"),
                 FloatColumn.create("track"),
@@ -38,9 +43,12 @@ public class FlightDataTable extends Table {
 		Row row = this.flightDataTable.appendRow();
         row.setString("flight_id", r.flight_id());
         row.setInstant("timestamp", r.timestamp());
-        row.setFloat("longitude", r.longitude());
-        row.setFloat("latitude", r.latitude());
+        
+        row.setDouble("longitude", r.longitude());
+        row.setDouble("latitude", r.latitude());
+        
         row.setFloat("altitude", r.altitude());
+        
         row.setFloat("groundspeed", r.groundspeed());
         row.setFloat("vertical_rate", r.vertical_rate());
         row.setFloat("mach", r.mach());
@@ -50,4 +58,37 @@ public class FlightDataTable extends Table {
         row.setString("source", r.source());
 	}
 	
+	
+	public void extendWithLatitudeLongitudeCosineSine( ) {
+	
+		DoubleColumn latitude_cosine_column = DoubleColumn.create("latitude_cosine");
+		this.flightDataTable.addColumns(latitude_cosine_column);
+		
+		DoubleColumn latitude_sine_column = DoubleColumn.create("latitude_sine");
+		this.flightDataTable.addColumns(latitude_sine_column);
+	
+		DoubleColumn longitude_cosine_column = DoubleColumn.create("longitude_cosine");
+		this.flightDataTable.addColumns(longitude_cosine_column);
+	
+		DoubleColumn longitude_sine_column = DoubleColumn.create("longitude_sine");
+		this.flightDataTable.addColumns(longitude_sine_column);
+		
+		System.out.println( this.flightDataTable.structure() );
+		
+		Iterator<Row> iter = this.flightDataTable.iterator();
+		while ( iter.hasNext()) {
+			Row row = iter.next();
+			
+			double origin_latitude_degrees = row.getDouble("latitude");
+			double origin_longitude_degrees = row.getDouble("longitude");
+			
+			row.setDouble ("latitude_cosine" , Math.cos(Math.toRadians(origin_latitude_degrees)));
+			row.setDouble("latitude_sine" , Math.sin(Math.toRadians(origin_latitude_degrees)));
+			
+			row.setDouble("longitude_cosine" , Math.cos(Math.toRadians(origin_longitude_degrees)));
+			row.setDouble("longitude_sine" , Math.sin(Math.toRadians(origin_longitude_degrees)));
+
+		}
+
+ 	}
 }

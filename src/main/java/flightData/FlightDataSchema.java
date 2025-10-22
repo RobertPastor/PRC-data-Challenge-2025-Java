@@ -8,12 +8,16 @@ public class FlightDataSchema {
 	
 		String flight_id, 
 		Instant timestamp,
-		float longitude,
-		float latitude,
+		
+		double longitude,
+		double latitude,
+		
 		float altitude,
 		float groundspeed,
+		
 		float track,
 		float vertical_rate,
+		
 		float mach,
 		String typecode,
 		float TAS,
@@ -30,11 +34,11 @@ public class FlightDataSchema {
 			return timestamp;
 		}
 
-		public float longitude() {
+		public double longitude() {
 			return longitude;
 		}
 
-		public float latitude() {
+		public double latitude() {
 			return latitude;
 		}
 
