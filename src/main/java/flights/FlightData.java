@@ -1,7 +1,9 @@
-package flightData;
+package flights;
 
 import java.io.File;
 import dataChallengeEnums.DataChallengeEnums.train_rank;
+import flights.FlightDataSchema.FlightDataRecord;
+
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.logging.Logger;
@@ -9,7 +11,6 @@ import java.util.logging.Logger;
 import com.jerolba.carpet.CarpetReader;
 
 import aircrafts.AircraftsDataReader;
-import flightData.FlightDataSchema.FlightDataRecord;
 import folderDiscovery.FolderDiscovery;
 import java.util.logging.Logger;
 

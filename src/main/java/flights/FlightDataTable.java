@@ -1,10 +1,10 @@
-package flightData;
+package flights;
 
 import tech.tablesaw.api.*;
 
 import java.util.Iterator;
 
-import flightData.FlightDataSchema.FlightDataRecord;
+import flights.FlightDataSchema.FlightDataRecord;
 
 public class FlightDataTable extends Table {
 	

@@ -1,4 +1,4 @@
-package flightData;
+package flights;
 
 import java.time.Instant;
 

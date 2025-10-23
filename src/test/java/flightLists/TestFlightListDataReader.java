@@ -1,10 +1,11 @@
-package flightListData;
+package flightLists;
 
 import java.io.IOException;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import dataChallengeEnums.DataChallengeEnums.train_rank;
+import flightLists.FlightListData;
 import folderDiscovery.FolderDiscovery;
 
 public class TestFlightListDataReader {

@@ -1,4 +1,4 @@
-package flightListData;
+package flightLists;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,7 +7,7 @@ import java.util.Iterator;
 import com.jerolba.carpet.CarpetReader;
 
 import dataChallengeEnums.DataChallengeEnums.train_rank;
-import flightListData.FlightListDataSchema.FlightListDataRecord;
+import flightLists.FlightListDataSchema.FlightListDataRecord;
 import folderDiscovery.FolderDiscovery;
 
 public class FlightListData extends FlightListDataTable {

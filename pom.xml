@@ -16,6 +16,33 @@
   
   <dependencies>
   
+  <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+	<dependency>
+	    <groupId>org.apache.commons</groupId>
+	    <artifactId>commons-lang3</artifactId>
+	    <version>3.19.0</version>
+	</dependency>
+	
+	<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 -->
+	<dependency>
+	    <groupId>org.apache.commons</groupId>
+	    <artifactId>commons-collections4</artifactId>
+	    <version>4.5.0</version>
+	</dependency>
+	<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-compress -->
+	<dependency>
+	    <groupId>org.apache.commons</groupId>
+	    <artifactId>commons-compress</artifactId>
+	    <version>1.28.0</version>
+	</dependency>
+	
+	<!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+<dependency>
+    <groupId>commons-io</groupId>
+    <artifactId>commons-io</artifactId>
+    <version>2.20.0</version>
+</dependency>
+  
   <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
 	<dependency>
 	    <groupId>org.slf4j</groupId>
@@ -30,20 +57,7 @@
 	    <version>2.0.16</version>
 	    <scope>runtime</scope>
 	</dependency>
-
-  	  <dependency>
-        <groupId>commons-io</groupId>
-        <artifactId>commons-io</artifactId>
-        <version>2.20.0</version>
-         <!-- ou la version appropriée -->
-      </dependency>
       
-      <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-compress -->
-		<dependency>
-		    <groupId>org.apache.commons</groupId>
-		    <artifactId>commons-compress</artifactId>
-		    <version>1.28.0</version>
-		</dependency>
     
     <dependency>
           <groupId>org.apache.maven</groupId>
@@ -140,24 +154,23 @@
 		    <version>33.5.0-jre</version>
 		</dependency>
 		
-		<!-- https://mvnrepository.com/artifact/org.dhatim/fastexcel -->
-		<dependency>
-		    <groupId>org.dhatim</groupId>
-		    <artifactId>fastexcel</artifactId>
-		    <version>0.19.0</version>
-		</dependency>
-		
 		<dependency>
 		    <groupId>org.dhatim</groupId>
 		    <artifactId>fastexcel-reader</artifactId>
 		    <version>0.18.1</version>
 		</dependency>
 
-
+		<!-- https://mvnrepository.com/artifact/tech.tablesaw/tablesaw-excel -->
+		<dependency>
+		    <groupId>tech.tablesaw</groupId>
+		    <artifactId>tablesaw-excel</artifactId>
+		    <version>0.44.4</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>tech.tablesaw</groupId>
 			<artifactId>tablesaw-core</artifactId>
-			<version>0.44.4-SNAPSHOT</version>
+			<version>0.44.4</version>
 		</dependency>
   </dependencies>
   
@@ -178,11 +191,18 @@
                  <enabled>true</enabled>
              </snapshots>
         </repository>
+        <repository> 
+        	<id>commons</id>
+        	<url>https://mvnrepository.com/artifact/org.apache.commons</url>
+        	 <snapshots>
+                  <enabled>false</enabled>
+             </snapshots>
+        </repository>
          <repository> 
         	<id>apache</id>
         	<url>https://mvnrepository.com/artifact/org.apache.parquet</url>
         	 <snapshots>
-                    <enabled>false</enabled>
+                  <enabled>false</enabled>
              </snapshots>
         </repository>
         <repository> 

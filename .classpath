@@ -12,19 +12,10 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/tablesaw-core"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/carpet-record"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/tablesaw-aggregate"/>
 	<classpathentry kind="src" output="target/classes" path="src/main/java">
 		<attributes>
 			<attribute name="optional" value="true"/>
 			<attribute name="maven.pomderived" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry excluding="**" kind="src" output="target/classes" path="src/main/resources">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-			<attribute name="optional" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" output="target/test-classes" path="src/test/java">
@@ -34,12 +25,9 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry excluding="**" kind="src" output="target/test-classes" path="src/test/resources">
-		<attributes>
-			<attribute name="test" value="true"/>
-			<attribute name="maven.pomderived" value="true"/>
-			<attribute name="optional" value="true"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/tablesaw-aggregate"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/carpet-record"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tablesaw-core"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/fastexcel-reader"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

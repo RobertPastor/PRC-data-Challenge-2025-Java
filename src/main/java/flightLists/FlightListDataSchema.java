@@ -1,4 +1,4 @@
-package flightListData;
+package flightLists;
 
 import java.time.Instant;
 import java.time.LocalDate;

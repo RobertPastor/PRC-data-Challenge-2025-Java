@@ -46,20 +46,33 @@ public class AircraftsDataReader extends AircraftsDataTable {
 			System.out.println(inputExcelFile.getAbsolutePath());
 			
 			try (ReadableWorkbook wb = new ReadableWorkbook(inputExcelFile)) {
+				
+				// Access the defined names in the workbook
+	            //Optional<DefinedName> definedName = workbook.getDefinedNames()
+	            //                                            .stream()
+	            //                                            .filter(name -> name.getName().equals("ICAO_Code"))
+	            //                                            .findFirst();
+				
 	            Optional<Sheet> sheet = wb.findSheet(sheetName);
 	            if (sheet.isPresent()) {
 	            	Sheet foundSheet = sheet.get();
+	            	
 		            try (Stream<Row> rows = foundSheet.openStream()) {
 		                rows.forEach(r -> {
+		                	
+		                	// assumption - row with row num 0 contains the header
+		                	if ( r.getRowNum() == 0) {
+		                		
+		                	}
 		                	
 		                	logger.info( String.valueOf( r.getRowNum() ) );
 		                	//this.appendRowToAircraftsDataTable(r);
 		
 		                    for (Cell cell : r) {
 		                    	if (cell != null) {
-
-                                    System.out.println("column index = " + cell.getColumnIndex() + " cell type = " + cell.getType());
-                                    System.out.println( " -> " + r.getRowNum() + " -> " + cell.getRawValue());
+		                    		System.out.println(cell.getAddress().toString());
+                                    //System.out.println("column index = " + cell.getColumnIndex() + " cell type = " + cell.getType());
+                                    //System.out.println( " -> " + r.getRowNum() + " -> " + cell.getRawValue());
                                     //data.get(r.getRowNum()).add(cell.getRawValue());
 		                    	}
 		                        //logger.info( cell.getRawValue() );

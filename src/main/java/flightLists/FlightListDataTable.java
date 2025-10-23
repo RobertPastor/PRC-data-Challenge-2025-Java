@@ -1,9 +1,9 @@
-package flightListData;
+package flightLists;
 
 import java.util.Iterator;
 
 import airports.AirportsDataTable;
-import flightListData.FlightListDataSchema.FlightListDataRecord;
+import flightLists.FlightListDataSchema.FlightListDataRecord;
 import tech.tablesaw.api.DateColumn;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.FloatColumn;
