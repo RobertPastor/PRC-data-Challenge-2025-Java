@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-public class TestAircraftsDataReader {
+public class TestAircraftsDataReader_Test {
 
 	@Test
     public void testReadAircrafts () throws IOException {

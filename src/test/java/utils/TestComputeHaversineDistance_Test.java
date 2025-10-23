@@ -18,7 +18,8 @@ public class TestComputeHaversineDistance_Test {
 
 		double distanceNm = Utils.calculateHaversineDistanceNauticalMiles(lat1, lon1, lat2, lon2);
 		System.out.println("distance (nautical miles) = " +  distanceNm );
-		System.out.println("distance (kilometers) = " +  (distanceNm * 1.609344));
+		System.out.println("distance (kilometers) = " +  (distanceNm * Constants.nautical_miles_to_kilometers));
+		assert (distanceNm > 2445.0 ) && (distanceNm < 2446.0);
 		
 	}
 }

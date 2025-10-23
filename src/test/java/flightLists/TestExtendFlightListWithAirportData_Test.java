@@ -6,9 +6,8 @@ import org.junit.jupiter.api.Test;
 
 import airports.AirportsData;
 import dataChallengeEnums.DataChallengeEnums.train_rank;
-import flightLists.FlightListData;
 
-public class TestExtendFlightLIstWithAirportData_Test {
+public class TestExtendFlightListWithAirportData_Test {
 	
 	@Test
     public void testExtendFlightList() throws IOException {

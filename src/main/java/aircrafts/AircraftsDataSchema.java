@@ -7,17 +7,34 @@ public class AircraftsDataSchema {
 			
 			String ICAO_Code ,
 			int Num_Engines,
+			
 			float Approach_Speed_knot,
 			float Wingspan_ft_without_winglets_sharklets,
+			
 			float Length_ft,
 			float Tail_Height_at_OEW_ft,
+			
 			float Wheelbase_ft,
 			float Cockpit_to_Main_Gear_ft,
 			float Main_Gear_Width_ft,
-			float MTOW_lb,
-			float MALW_lb,
+			
+			// Maximum takeoff weight
+			double MTOW_lb,
+			double MTOW_kg,
+			// Maximum landing weight
+			double MALW_lb,
+			double MALW_kg,
+			
 			float Parking_Area_ft2
 			) {
+
+		public double MTOW_kg() {
+			return MTOW_kg;
+		}
+
+		    public double MALW_kg() {
+			return MALW_kg;
+		}
 
 		public String ICAO_Code() {
 			return ICAO_Code;
@@ -55,15 +72,15 @@ public class AircraftsDataSchema {
 			return Main_Gear_Width_ft;
 		}
 
-		public float MTOW_lb() {
+		public double  MTOW_lb() {
 			return MTOW_lb;
 		}
 
-		    public float MALW_lb() {
+		public double  MALW_lb() {
 			return MALW_lb;
 		}
 
-		    public float Parking_Area_ft2() {
+		public float Parking_Area_ft2() {
 			return Parking_Area_ft2;
 		}};
 			

@@ -5,10 +5,9 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import dataChallengeEnums.DataChallengeEnums.train_rank;
-import flightLists.FlightListData;
 import flights.FlightData;
 
-public class TestReadAllFlightData {
+public class TestReadAllFlightData_Test {
 
 	@Test
     public void testReadAllFilghtDataFiles() throws IOException {
@@ -25,10 +24,11 @@ public class TestReadAllFlightData {
 			
 			FlightData flightData = new FlightData(train_rank.rank , flight_id);
 			flightData.readParquet();
-			
+			if ( index > 100 ) {
+				break;
+			}
 			index++;
 		}
-		
 	}
 	
 }

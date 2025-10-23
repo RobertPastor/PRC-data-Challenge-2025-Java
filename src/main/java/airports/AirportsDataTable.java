@@ -28,7 +28,7 @@ public class AirportsDataTable  extends Table {
 
 	}
 
-	public void appendRowToAirportsDataTable(  AirportDataRecord r ) {
+	public void appendRowToAirportsDataTable( AirportDataRecord r ) {
 
 		Row row = this.airportsDataTable.appendRow();
 

@@ -2,13 +2,15 @@ package flightLists;
 
 import java.io.IOException;
 
+import org.junit.jupiter.api.Test;
+
 import airports.AirportsData;
 import dataChallengeEnums.DataChallengeEnums.train_rank;
-import flightLists.FlightListData;
 
-public class TestExtendedFlightListWithLatLonCosineSine {
+public class TestExtendedFlightListWithLatLonCosineSine_Test {
 
-	public static void main(String[] args) throws IOException {
+	@Test
+	public  void testExtendFlightList () throws IOException { 
 
 		AirportsData airportsData = new AirportsData();
 		airportsData.readParquet();
