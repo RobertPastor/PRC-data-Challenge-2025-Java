@@ -1,10 +1,11 @@
-package fuelData;
+package fuel;
 
 import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
 import dataChallengeEnums.DataChallengeEnums.train_rank;
+import fuel.FuelData;
 
 public class TestFuelDataReader_Test {
 

@@ -64,6 +64,131 @@ public class AircraftsData extends AircraftsDataTable {
 	public AircraftsData() {
 		logger.info("file = " + getAircraftsFileName());
 	}
+	
+	private void buildHeadersInformations ( final Row r ) {
+		for (Cell cell : r) {
+			if (cell != null) {
+				System.out.println("column index = " + cell.getColumnIndex() + " cell type = " + cell.getType());
+				if ( cell.getType().equals(CellType.STRING)) {
+					String headerNameFound =  cell.getRawValue();
+					System.out.println("header found = " + headerNameFound );
+					if ( AircraftsData.getAircraftsExpectedHeaders().contains(headerNameFound)) {
+						AircraftsData.getAircraftsFoundHeaders().add(headerNameFound);
+						AircraftsData.getAircraftHeadersColumnIndexes().add(cell.getColumnIndex());
+					}
+				}
+			}
+		}
+		System.out.println(AircraftsData.getAircraftsExpectedHeaders());
+		System.out.println(AircraftsData.getAircraftsFoundHeaders());
+		System.out.println(AircraftsData.getAircraftHeadersColumnIndexes());
+
+	}
+	
+	private void fillTableRow(final Row r) {
+		
+		tech.tablesaw.api.Row tableRow = this.aircraftsDataTable.appendRow();
+		logger.info ("---> " + this.aircraftsDataTable.rowCount());
+
+		//ICAO_Code
+		int columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(0);
+		Cell cell = r.getCell(columnIndex);
+		tableRow.setString("ICAO_Code", cell.getRawValue());
+
+		//Num_Engines
+		columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(1);
+		cell = r.getCell(columnIndex);
+		if ( cell.getType().equals(CellType.NUMBER) ) {
+			java.math.BigDecimal bigDecimal = (java.math.BigDecimal)cell.getValue();
+			long longValue = bigDecimal.longValueExact();
+			int intValue = Math.toIntExact(longValue);
+			tableRow.setInt("Num_Engines", intValue );
+		}
+
+		//Approach_Speed_knot
+		columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(2);
+		cell = r.getCell(columnIndex);
+		if ( cell.getType().equals(CellType.NUMBER) ) {
+			tableRow.setFloat("Approach_Speed_knot", 
+					(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
+		}
+
+		//Wingspan_ft_without_winglets_sharklets
+		columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(3);
+		cell = r.getCell(columnIndex);
+		if ( cell.getType().equals(CellType.NUMBER) ) {
+			tableRow.setFloat("Wingspan_ft_without_winglets_sharklets", 
+					(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
+		}
+
+		//Length_ft
+		columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(4);
+		cell = r.getCell(columnIndex);
+		if ( cell.getType().equals(CellType.NUMBER) ) {
+			tableRow.setFloat("Length_ft", 
+					(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
+		}
+
+		//Tail_Height_at_OEW_ft
+		columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(5);
+		cell = r.getCell(columnIndex);
+		if ( cell.getType().equals(CellType.NUMBER) ) {
+			tableRow.setFloat("Tail_Height_at_OEW_ft", 
+					(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
+		}
+
+		//Wheelbase_ft
+		columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(6);
+		cell = r.getCell(columnIndex);
+		if ( cell.getType().equals(CellType.NUMBER) ) {
+			tableRow.setFloat("Wheelbase_ft", 
+					(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
+		}
+
+		//float Cockpit_to_Main_Gear_ft,
+		columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(7);
+		cell = r.getCell(columnIndex);
+		if ( cell.getType().equals(CellType.NUMBER) ) {
+			tableRow.setFloat("Cockpit_to_Main_Gear_ft", 
+					(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
+		}
+
+		//float Main_Gear_Width_ft,
+		columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(8);
+		cell = r.getCell(columnIndex);
+		if ( cell.getType().equals(CellType.NUMBER) ) {
+			tableRow.setFloat("Main_Gear_Width_ft", 
+					(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
+		}
+
+		// MTOW_lb Maximum take-off weight
+		columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(9);
+		cell = r.getCell(columnIndex);
+		if ( cell.getType().equals(CellType.NUMBER) ) {
+			double doubleValue = (double) utils.Utils.getDoubleFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) ;
+			tableRow.setDouble("MTOW_lb", doubleValue);
+			tableRow.setDouble("MTOW_kg", doubleValue * Constants.lbs_to_kilograms);
+		}
+
+		//double MALW_lb,						
+		columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(10);
+		cell = r.getCell(columnIndex);
+		if ( cell.getType().equals(CellType.NUMBER) ) {
+			double doubleValue = (double) utils.Utils.getDoubleFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) ;
+			tableRow.setDouble("MALW_lb", doubleValue );
+			tableRow.setDouble("MALW_kg", doubleValue * Constants.lbs_to_kilograms);
+		}
+
+		//float Parking_Area_ft2
+		columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(11);
+		cell = r.getCell(columnIndex);
+		if ( cell.getType().equals(CellType.NUMBER) ) {
+			tableRow.setFloat("Parking_Area_ft2", 
+					(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
+		}
+		
+		
+	}
 
 	public void readExcelFile() throws IOException {
 
@@ -103,126 +228,10 @@ public class AircraftsData extends AircraftsDataTable {
 
 					// assumption - row with row number 1 contains the header
 					if ( r.getRowNum() == 1) {
-						for (Cell cell : r) {
-							if (cell != null) {
-								System.out.println("column index = " + cell.getColumnIndex() + " cell type = " + cell.getType());
-								if ( cell.getType().equals(CellType.STRING)) {
-									String headerNameFound =  cell.getRawValue();
-									System.out.println("header found = " + headerNameFound );
-									if ( AircraftsData.getAircraftsExpectedHeaders().contains(headerNameFound)) {
-										AircraftsData.getAircraftsFoundHeaders().add(headerNameFound);
-										AircraftsData.getAircraftHeadersColumnIndexes().add(cell.getColumnIndex());
-									}
-								}
-							}
-						}
-						System.out.println(AircraftsData.getAircraftsExpectedHeaders());
-						System.out.println(AircraftsData.getAircraftsFoundHeaders());
-						System.out.println(AircraftsData.getAircraftHeadersColumnIndexes());
-
+						this.buildHeadersInformations(r);
 					} else {
 						//logger.info( String.valueOf( r.getRowNum() ) );
-
-						tech.tablesaw.api.Row tableRow = this.aircraftsDataTable.appendRow();
-						logger.info ("---> " + this.aircraftsDataTable.rowCount());
-
-						//ICAO_Code
-						int columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(0);
-						Cell cell = r.getCell(columnIndex);
-						tableRow.setString("ICAO_Code", cell.getRawValue());
-
-						//Num_Engines
-						columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(1);
-						cell = r.getCell(columnIndex);
-						if ( cell.getType().equals(CellType.NUMBER) ) {
-							java.math.BigDecimal bigDecimal = (java.math.BigDecimal)cell.getValue();
-							long longValue = bigDecimal.longValueExact();
-							int intValue = Math.toIntExact(longValue);
-							tableRow.setInt("Num_Engines", intValue );
-						}
-
-						//Approach_Speed_knot
-						columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(2);
-						cell = r.getCell(columnIndex);
-						if ( cell.getType().equals(CellType.NUMBER) ) {
-							tableRow.setFloat("Approach_Speed_knot", 
-									(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
-						}
-
-						//Wingspan_ft_without_winglets_sharklets
-						columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(3);
-						cell = r.getCell(columnIndex);
-						if ( cell.getType().equals(CellType.NUMBER) ) {
-							tableRow.setFloat("Wingspan_ft_without_winglets_sharklets", 
-									(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
-						}
-
-						//Length_ft
-						columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(4);
-						cell = r.getCell(columnIndex);
-						if ( cell.getType().equals(CellType.NUMBER) ) {
-							tableRow.setFloat("Length_ft", 
-									(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
-						}
-
-						//Tail_Height_at_OEW_ft
-						columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(5);
-						cell = r.getCell(columnIndex);
-						if ( cell.getType().equals(CellType.NUMBER) ) {
-							tableRow.setFloat("Tail_Height_at_OEW_ft", 
-									(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
-						}
-
-						//Wheelbase_ft
-						columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(6);
-						cell = r.getCell(columnIndex);
-						if ( cell.getType().equals(CellType.NUMBER) ) {
-							tableRow.setFloat("Wheelbase_ft", 
-									(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
-						}
-
-						//float Cockpit_to_Main_Gear_ft,
-						columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(7);
-						cell = r.getCell(columnIndex);
-						if ( cell.getType().equals(CellType.NUMBER) ) {
-							tableRow.setFloat("Cockpit_to_Main_Gear_ft", 
-									(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
-						}
-
-						//float Main_Gear_Width_ft,
-						columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(8);
-						cell = r.getCell(columnIndex);
-						if ( cell.getType().equals(CellType.NUMBER) ) {
-							tableRow.setFloat("Main_Gear_Width_ft", 
-									(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
-						}
-
-						// MTOW_lb Maximum take-off weight
-						columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(9);
-						cell = r.getCell(columnIndex);
-						if ( cell.getType().equals(CellType.NUMBER) ) {
-							double doubleValue = (double) utils.Utils.getDoubleFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) ;
-							tableRow.setDouble("MTOW_lb", doubleValue);
-							tableRow.setDouble("MTOW_kg", doubleValue * Constants.lbs_to_kilograms);
-						}
-
-						//double MALW_lb,						
-						columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(10);
-						cell = r.getCell(columnIndex);
-						if ( cell.getType().equals(CellType.NUMBER) ) {
-							double doubleValue = (double) utils.Utils.getDoubleFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) ;
-							tableRow.setDouble("MALW_lb", doubleValue );
-							tableRow.setDouble("MALW_kg", doubleValue * Constants.lbs_to_kilograms);
-						}
-
-						//float Parking_Area_ft2
-						columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(11);
-						cell = r.getCell(columnIndex);
-						if ( cell.getType().equals(CellType.NUMBER) ) {
-							tableRow.setFloat("Parking_Area_ft2", 
-									(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
-						}
-
+						this.fillTableRow(r);
 					}
 				}
 				System.out.println( this.aircraftsDataTable.structure() );

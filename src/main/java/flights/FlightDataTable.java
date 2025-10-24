@@ -2,8 +2,10 @@ package flights;
 
 import tech.tablesaw.api.*;
 
+import java.util.ArrayList;
 import java.util.Iterator;
-
+import java.time.Instant;
+import java.util.List;
 import flights.FlightDataSchema.FlightDataRecord;
 
 public class FlightDataTable extends Table {
@@ -11,7 +13,7 @@ public class FlightDataTable extends Table {
 	public Table flightDataTable = null;
 
 	public Table getFlightDataTable() {
-		return flightDataTable;
+		return this.flightDataTable;
 	}
 	
 	FlightDataTable() {
@@ -28,7 +30,9 @@ public class FlightDataTable extends Table {
                 
                 FloatColumn.create("altitude"),
                 FloatColumn.create("groundspeed"),
+                
                 FloatColumn.create("track"),
+                
                 FloatColumn.create("vertical_rate"),
                 FloatColumn.create("mach"),
                 StringColumn.create("typecode"),
@@ -36,6 +40,35 @@ public class FlightDataTable extends Table {
                 FloatColumn.create("CAS"),
 				StringColumn.create("source"));
 		
+	}
+	
+	public boolean  flightIdIsExisting( final String flight_id ) {
+		
+		//InstantColumn timestampColumn = this.getFlightDataTable().instantColumn("timestamp");
+		StringColumn flightIdColumn = this.getFlightDataTable().stringColumn("flight_id");
+		
+		Table filtered = this.getFlightDataTable().where(flightIdColumn.isEqualTo(flight_id));
+		System.out.println( filtered.shape() );
+				
+		return ( filtered.rowCount() > 0);
+	}
+	
+	public Instant findNearestIntantFromFlightTimeStamps( final Instant fuelInstant ) {
+		
+		List<Instant> listOfFlightTimeStamps = new ArrayList<Instant>();
+		Iterator<Row> iter = this.flightDataTable.iterator();
+		while ( iter.hasNext()) {
+			Row row = iter.next();
+			// assumption : instants in the flight records are never nulls
+			listOfFlightTimeStamps.add(row.getInstant("timestamp"));
+		}
+		System.out.println("List of instants -> size = " + listOfFlightTimeStamps.size());
+		return listOfFlightTimeStamps.stream()
+                .min((i1, i2) -> Long.compare(
+                        Math.abs(i1.toEpochMilli() - fuelInstant.toEpochMilli()),
+                        Math.abs(i2.toEpochMilli() - fuelInstant.toEpochMilli())
+                ))
+                .orElse(null); // Return null if the list is empty
 	}
 	
 	public void appendRowToFlightDataTable(  FlightDataRecord r ) {
@@ -58,7 +91,10 @@ public class FlightDataTable extends Table {
         row.setString("source", r.source());
 	}
 	
-	
+	/**
+	 * do not provide latitude and longitudes to the model
+	 * instead convert latitude and longitude using sine and cosine
+	 */
 	public void extendWithLatitudeLongitudeCosineSine( ) {
 	
 		DoubleColumn latitude_cosine_column = DoubleColumn.create("latitude_cosine");

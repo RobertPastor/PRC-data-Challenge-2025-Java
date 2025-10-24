@@ -1,11 +1,12 @@
-package fuelData;
+package fuel;
 
 
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Iterator;
 
-import fuelData.FuelDataSchema.FuelDataRecord;
+import flights.FlightDataTable;
+import fuel.FuelDataSchema.FuelDataRecord;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.FloatColumn;
 import tech.tablesaw.api.InstantColumn;
@@ -39,6 +40,12 @@ public class FuelDataTable extends Table {
 
 	}
 	
+	
+	
+	/**
+	 * used during reading of the input parquet rows , hence records
+	 * @param r
+	 */
 	public void appendRowToFuelDataTable( FuelDataRecord r ) {
 
 		Row row = this.fuelDataTable.appendRow();
@@ -71,6 +78,9 @@ public class FuelDataTable extends Table {
 		System.out.println( this.fuelDataTable.print(10) );
 	}
 	
+	/**
+	 * Fuel Flow kg per seconds is the main Y to estimate (not the fuel in kg)
+	 */
 	public void extendFuelFlowKgSeconds() {
 		
 		FloatColumn fuel_flow_kg_sec_column = FloatColumn.create("fuel_flow_kg_sec");
@@ -96,6 +106,13 @@ public class FuelDataTable extends Table {
 		System.out.println( this.fuelDataTable.print(10));
 	}
 	
-	
+	public void extendFuelStartEndInstantwithFlightsPositions( FlightDataTable flightDataTable ) {
+		
+		// find the nearest instant from a fuel table of a flight id
+		// given a fuel start or stop instant
+		
+		
+		
+	}
 }
 

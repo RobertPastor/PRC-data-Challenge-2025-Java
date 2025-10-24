@@ -1,4 +1,4 @@
-package fuelData;
+package fuel;
 
 import java.time.Instant;
 

@@ -1,4 +1,4 @@
-package fuelData;
+package fuel;
 
 
 import java.io.File;
@@ -9,7 +9,7 @@ import com.jerolba.carpet.CarpetReader;
 
 import dataChallengeEnums.DataChallengeEnums.train_rank;
 import folderDiscovery.FolderDiscovery;
-import fuelData.FuelDataSchema.FuelDataRecord;
+import fuel.FuelDataSchema.FuelDataRecord;
 import tech.tablesaw.api.Table; 
 
 

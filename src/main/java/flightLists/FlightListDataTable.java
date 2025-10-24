@@ -3,7 +3,6 @@ package flightLists;
 import java.util.Iterator;
 
 import aircrafts.AircraftsData;
-import aircrafts.AircraftsDataTable;
 import airports.AirportsDataTable;
 import flightLists.FlightListDataSchema.FlightListDataRecord;
 import tech.tablesaw.api.DateColumn;
@@ -21,7 +20,6 @@ import java.time.Instant;
 
 public class FlightListDataTable extends Table {
 	
-	
 	public Table flightListDataTable = null;
 
 	public void setFlightListDataTable(Table flightListDataTable) {
@@ -33,7 +31,7 @@ public class FlightListDataTable extends Table {
 	}
 
 	FlightListDataTable() {
-		super("FlightListData");
+		super("Flight List Data");
 	}
 
 	public void createEmptyFlightListDataTable( ) {
@@ -53,7 +51,6 @@ public class FlightListDataTable extends Table {
 				StringColumn.create("destination_name"),
 
 				StringColumn.create("aircraft_type"));
-
 	}
 
 	public void appendRowToFlightListDataTable(  FlightListDataRecord r ) {
@@ -152,7 +149,6 @@ public class FlightListDataTable extends Table {
 		}
 		System.out.println( this.flightListDataTable.structure());
 		System.out.println( this.flightListDataTable.print(10));
-		
 	}
 	
 	@SuppressWarnings("deprecation")

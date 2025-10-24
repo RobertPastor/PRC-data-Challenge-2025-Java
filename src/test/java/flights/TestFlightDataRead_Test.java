@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import dataChallengeEnums.DataChallengeEnums.train_rank;
 import flights.FlightData;
 
-public class TestFlightDataRead {
+public class TestFlightDataRead_Test {
 	
 	@Test
     public void testReadFlight() throws IOException {
