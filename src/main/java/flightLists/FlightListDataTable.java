@@ -2,6 +2,8 @@ package flightLists;
 
 import java.util.Iterator;
 
+import aircrafts.AircraftsData;
+import aircrafts.AircraftsDataTable;
 import airports.AirportsDataTable;
 import flightLists.FlightListDataSchema.FlightListDataRecord;
 import tech.tablesaw.api.DateColumn;
@@ -21,6 +23,10 @@ public class FlightListDataTable extends Table {
 	
 	
 	public Table flightListDataTable = null;
+
+	public void setFlightListDataTable(Table flightListDataTable) {
+		this.flightListDataTable = flightListDataTable;
+	}
 
 	public Table getFlightListDataTable() {
 		return flightListDataTable;
@@ -144,8 +150,33 @@ public class FlightListDataTable extends Table {
 			row.setLong ("flight_duration_sec" , flight_duration_seconds);
 			
 		}
+		System.out.println( this.flightListDataTable.structure());
 		System.out.println( this.flightListDataTable.print(10));
 		
+	}
+	
+	@SuppressWarnings("deprecation")
+	public void extendWithAircraftsData( AircraftsData aircraftsData ) {
+		
+		// use left join
+		// aircraft_type -> join column in FlightList table
+		// ICAO_Code -> join column in aircrafts table
+		System.out.println(aircraftsData.getAircraftDataTable().shape());
+		System.out.println(aircraftsData.getAircraftDataTable().structure());
+
+		// Rename the column
+		// Rename the column
+		aircraftsData.getAircraftDataTable().column("ICAO_Code").setName("aircraft_type");
+		System.out.println(aircraftsData.getAircraftDataTable().structure());
+		
+		// Perform an left outer join on the "id" column
+		// Left Outer Join: Keeps all rows from the left table and matches from the right.
+		Table aircraftsDataTable = aircraftsData.getAircraftDataTable();
+        this.setFlightListDataTable( this.flightListDataTable.joinOn("aircraft_type").leftOuter(aircraftsDataTable));
+		
+		System.out.println( this.flightListDataTable.structure());
+		System.out.println( this.flightListDataTable.print(10));
+
 	}
 	
 	public void extendWithSinusCosinusOfLatitudeLongitude() {

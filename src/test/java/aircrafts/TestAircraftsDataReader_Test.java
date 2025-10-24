@@ -9,7 +9,7 @@ public class TestAircraftsDataReader_Test {
 	@Test
     public void testReadAircrafts () throws IOException {
 
-		AircraftsDataReader aircraftsDataReader = new AircraftsDataReader();
+		AircraftsData aircraftsDataReader = new AircraftsData();
 		aircraftsDataReader.readExcelFile();
 	}
 }

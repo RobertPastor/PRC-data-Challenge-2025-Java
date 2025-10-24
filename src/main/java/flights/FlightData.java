@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 import com.jerolba.carpet.CarpetReader;
 
-import aircrafts.AircraftsDataReader;
+import aircrafts.AircraftsData;
 import folderDiscovery.FolderDiscovery;
 import java.util.logging.Logger;
 

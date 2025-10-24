@@ -21,7 +21,7 @@ import utils.Constants;
 
 
 
-public class AircraftsDataReader extends AircraftsDataTable {
+public class AircraftsData extends AircraftsDataTable {
 
 	public class HeaderException extends RuntimeException {
 		/**
@@ -33,7 +33,7 @@ public class AircraftsDataReader extends AircraftsDataTable {
 		}
 	}
 
-	private static final Logger logger = Logger.getLogger(AircraftsDataReader.class.getName());
+	private static final Logger logger = Logger.getLogger(AircraftsData.class.getName());
 
 	private static String aircraftsFileName = "FAA-Aircraft-Char-DB-AC-150-5300-13B-App-2023-09-07.xlsx";
 
@@ -61,20 +61,21 @@ public class AircraftsDataReader extends AircraftsDataTable {
 		return aircraftsFileName;
 	}
 
-	AircraftsDataReader() {
+	public AircraftsData() {
 		logger.info("file = " + getAircraftsFileName());
 	}
 
 	public void readExcelFile() throws IOException {
 
 		this.createEmptyAircraftsDataTable();
-
-		logger.info(AircraftsDataReader.getAircraftsFileName());
+		logger.info(this.aircraftsDataTable.structure().print());
+		
+		logger.info(AircraftsData.getAircraftsFileName());
 
 		String sheetName = "ACD_Data";
 
-		String fileName = AircraftsDataReader.getAircraftsFileName();
-		Path path = Paths.get( AircraftsDataReader.aircraftsFolderPath, fileName);
+		String fileName = AircraftsData.getAircraftsFileName();
+		Path path = Paths.get( AircraftsData.aircraftsFolderPath, fileName);
 
 		File inputExcelFile = path.toFile();
 
@@ -108,29 +109,30 @@ public class AircraftsDataReader extends AircraftsDataTable {
 								if ( cell.getType().equals(CellType.STRING)) {
 									String headerNameFound =  cell.getRawValue();
 									System.out.println("header found = " + headerNameFound );
-									if ( AircraftsDataReader.getAircraftsExpectedHeaders().contains(headerNameFound)) {
-										AircraftsDataReader.getAircraftsFoundHeaders().add(headerNameFound);
-										AircraftsDataReader.getAircraftHeadersColumnIndexes().add(cell.getColumnIndex());
+									if ( AircraftsData.getAircraftsExpectedHeaders().contains(headerNameFound)) {
+										AircraftsData.getAircraftsFoundHeaders().add(headerNameFound);
+										AircraftsData.getAircraftHeadersColumnIndexes().add(cell.getColumnIndex());
 									}
 								}
 							}
 						}
-						System.out.println(AircraftsDataReader.getAircraftsExpectedHeaders());
-						System.out.println(AircraftsDataReader.getAircraftsFoundHeaders());
-						System.out.println(AircraftsDataReader.getAircraftHeadersColumnIndexes());
+						System.out.println(AircraftsData.getAircraftsExpectedHeaders());
+						System.out.println(AircraftsData.getAircraftsFoundHeaders());
+						System.out.println(AircraftsData.getAircraftHeadersColumnIndexes());
 
 					} else {
 						//logger.info( String.valueOf( r.getRowNum() ) );
 
 						tech.tablesaw.api.Row tableRow = this.aircraftsDataTable.appendRow();
+						logger.info ("---> " + this.aircraftsDataTable.rowCount());
 
 						//ICAO_Code
-						int columnIndex = AircraftsDataReader.getAircraftHeadersColumnIndexes().get(0);
+						int columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(0);
 						Cell cell = r.getCell(columnIndex);
 						tableRow.setString("ICAO_Code", cell.getRawValue());
 
 						//Num_Engines
-						columnIndex = AircraftsDataReader.getAircraftHeadersColumnIndexes().get(1);
+						columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(1);
 						cell = r.getCell(columnIndex);
 						if ( cell.getType().equals(CellType.NUMBER) ) {
 							java.math.BigDecimal bigDecimal = (java.math.BigDecimal)cell.getValue();
@@ -140,7 +142,7 @@ public class AircraftsDataReader extends AircraftsDataTable {
 						}
 
 						//Approach_Speed_knot
-						columnIndex = AircraftsDataReader.getAircraftHeadersColumnIndexes().get(2);
+						columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(2);
 						cell = r.getCell(columnIndex);
 						if ( cell.getType().equals(CellType.NUMBER) ) {
 							tableRow.setFloat("Approach_Speed_knot", 
@@ -148,7 +150,7 @@ public class AircraftsDataReader extends AircraftsDataTable {
 						}
 
 						//Wingspan_ft_without_winglets_sharklets
-						columnIndex = AircraftsDataReader.getAircraftHeadersColumnIndexes().get(3);
+						columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(3);
 						cell = r.getCell(columnIndex);
 						if ( cell.getType().equals(CellType.NUMBER) ) {
 							tableRow.setFloat("Wingspan_ft_without_winglets_sharklets", 
@@ -156,7 +158,7 @@ public class AircraftsDataReader extends AircraftsDataTable {
 						}
 
 						//Length_ft
-						columnIndex = AircraftsDataReader.getAircraftHeadersColumnIndexes().get(4);
+						columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(4);
 						cell = r.getCell(columnIndex);
 						if ( cell.getType().equals(CellType.NUMBER) ) {
 							tableRow.setFloat("Length_ft", 
@@ -164,7 +166,7 @@ public class AircraftsDataReader extends AircraftsDataTable {
 						}
 
 						//Tail_Height_at_OEW_ft
-						columnIndex = AircraftsDataReader.getAircraftHeadersColumnIndexes().get(5);
+						columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(5);
 						cell = r.getCell(columnIndex);
 						if ( cell.getType().equals(CellType.NUMBER) ) {
 							tableRow.setFloat("Tail_Height_at_OEW_ft", 
@@ -172,7 +174,7 @@ public class AircraftsDataReader extends AircraftsDataTable {
 						}
 
 						//Wheelbase_ft
-						columnIndex = AircraftsDataReader.getAircraftHeadersColumnIndexes().get(6);
+						columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(6);
 						cell = r.getCell(columnIndex);
 						if ( cell.getType().equals(CellType.NUMBER) ) {
 							tableRow.setFloat("Wheelbase_ft", 
@@ -180,7 +182,7 @@ public class AircraftsDataReader extends AircraftsDataTable {
 						}
 
 						//float Cockpit_to_Main_Gear_ft,
-						columnIndex = AircraftsDataReader.getAircraftHeadersColumnIndexes().get(7);
+						columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(7);
 						cell = r.getCell(columnIndex);
 						if ( cell.getType().equals(CellType.NUMBER) ) {
 							tableRow.setFloat("Cockpit_to_Main_Gear_ft", 
@@ -188,7 +190,7 @@ public class AircraftsDataReader extends AircraftsDataTable {
 						}
 
 						//float Main_Gear_Width_ft,
-						columnIndex = AircraftsDataReader.getAircraftHeadersColumnIndexes().get(8);
+						columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(8);
 						cell = r.getCell(columnIndex);
 						if ( cell.getType().equals(CellType.NUMBER) ) {
 							tableRow.setFloat("Main_Gear_Width_ft", 
@@ -196,7 +198,7 @@ public class AircraftsDataReader extends AircraftsDataTable {
 						}
 
 						// MTOW_lb Maximum take-off weight
-						columnIndex = AircraftsDataReader.getAircraftHeadersColumnIndexes().get(9);
+						columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(9);
 						cell = r.getCell(columnIndex);
 						if ( cell.getType().equals(CellType.NUMBER) ) {
 							double doubleValue = (double) utils.Utils.getDoubleFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) ;
@@ -205,7 +207,7 @@ public class AircraftsDataReader extends AircraftsDataTable {
 						}
 
 						//double MALW_lb,						
-						columnIndex = AircraftsDataReader.getAircraftHeadersColumnIndexes().get(10);
+						columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(10);
 						cell = r.getCell(columnIndex);
 						if ( cell.getType().equals(CellType.NUMBER) ) {
 							double doubleValue = (double) utils.Utils.getDoubleFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) ;
@@ -214,7 +216,7 @@ public class AircraftsDataReader extends AircraftsDataTable {
 						}
 
 						//float Parking_Area_ft2
-						columnIndex = AircraftsDataReader.getAircraftHeadersColumnIndexes().get(11);
+						columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(11);
 						cell = r.getCell(columnIndex);
 						if ( cell.getType().equals(CellType.NUMBER) ) {
 							tableRow.setFloat("Parking_Area_ft2", 
@@ -223,6 +225,7 @@ public class AircraftsDataReader extends AircraftsDataTable {
 
 					}
 				}
+				System.out.println( this.aircraftsDataTable.structure() );
 				System.out.println( this.aircraftsDataTable.print(10) );
 			} 
 			wb.close();
