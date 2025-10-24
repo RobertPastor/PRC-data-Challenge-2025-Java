@@ -8,7 +8,6 @@ public class Constants {
 	public static double nautical_miles_to_kilometers = 1.609344;
 	
 	
-	
 	public static double EARTH_RADIUS_kilometers = 6371.0;
 	public static double Kilometers_to_Nautical_Miles = 0.6213711922 ;
 

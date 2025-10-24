@@ -2,6 +2,26 @@ package utils;
 
 public class Utils {
 	
+	public static double getDoubleFromBigDecimal ( java.math.BigDecimal bigDecimal  ) {
+		
+		try {
+			Double doubleValue = bigDecimal.doubleValue();
+			return doubleValue;
+		} catch(Exception e) {
+			return (double)0.0;
+		}
+	}
+	
+	public static float getFloatFromBigDecimal( java.math.BigDecimal bigDecimal ) {
+		
+		try {
+			Float floatValue = bigDecimal.floatValue();
+			return floatValue;
+		} catch(Exception e) {
+			  return (float)0.0;
+		}
+	}
+	
 	// https://www.baeldung.com/cs/haversine-formula
 	
 	public static double haversine(double val) {

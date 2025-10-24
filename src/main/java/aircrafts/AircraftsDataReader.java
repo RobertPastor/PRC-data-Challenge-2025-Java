@@ -17,6 +17,9 @@ import org.dhatim.fastexcel.reader.ReadableWorkbook;
 import org.dhatim.fastexcel.reader.Row;
 import org.dhatim.fastexcel.reader.Sheet;
 
+import utils.Constants;
+
+
 
 public class AircraftsDataReader extends AircraftsDataTable {
 
@@ -33,19 +36,25 @@ public class AircraftsDataReader extends AircraftsDataTable {
 	private static final Logger logger = Logger.getLogger(AircraftsDataReader.class.getName());
 
 	private static String aircraftsFileName = "FAA-Aircraft-Char-DB-AC-150-5300-13B-App-2023-09-07.xlsx";
+
 	private static String aircraftsFolderPath = "C:/Users/rober/eclipse-2025-09/eclipse-jee-2025-09-R-win32-x86_64/Data-Challenge-2025/documents";
 
-	private static List<String> aircraftsHeaders = Arrays.asList("ICAO_Code","Num_Engines","Num_Engines","Approach_Speed_knot","Wingspan_ft_without_winglets_sharklets",
-			"Length_ft" , "Tail_Height_at_OEW_ft" , "Wheelbase_ft" ,"Cockpit_to_Main_Gear_ft" , "Main_Gear_Width_ft" , "MTOW_lb","MTOW_lb", "Parking_Area_ft2");
+	private static List<String> aircraftsExpectedHeaders = Arrays.asList("ICAO_Code","Num_Engines","Approach_Speed_knot","Wingspan_ft_without_winglets_sharklets",
+			"Length_ft" , "Tail_Height_at_OEW_ft" , "Wheelbase_ft" ,"Cockpit_to_Main_Gear_ft" , "Main_Gear_Width_ft" , "MTOW_lb","MALW_lb", "Parking_Area_ft2");
 
-	private static List<Integer> aircraftHeadersColumnIndexex = new ArrayList<Integer>();
+	private static List<Integer> aircraftsFoundHeadersColumnIndexes = new ArrayList<Integer>();
+	private static List<String> aircraftsFoundHeaders = new ArrayList<String>();
 
-	public static List<Integer> getAircraftHeadersColumnIndexes() {
-		return aircraftHeadersColumnIndexex;
+	public static List<String> getAircraftsFoundHeaders() {
+		return aircraftsFoundHeaders;
 	}
 
-	public static List<String> getAircraftsHeaders() {
-		return aircraftsHeaders;
+	public static List<Integer> getAircraftHeadersColumnIndexes() {
+		return aircraftsFoundHeadersColumnIndexes;
+	}
+
+	public static List<String> getAircraftsExpectedHeaders() {
+		return aircraftsExpectedHeaders;
 	}
 
 	public static String getAircraftsFileName() {
@@ -99,51 +108,119 @@ public class AircraftsDataReader extends AircraftsDataTable {
 								if ( cell.getType().equals(CellType.STRING)) {
 									String headerNameFound =  cell.getRawValue();
 									System.out.println("header found = " + headerNameFound );
-									if ( AircraftsDataReader.getAircraftsHeaders().contains(headerNameFound)) {
+									if ( AircraftsDataReader.getAircraftsExpectedHeaders().contains(headerNameFound)) {
+										AircraftsDataReader.getAircraftsFoundHeaders().add(headerNameFound);
 										AircraftsDataReader.getAircraftHeadersColumnIndexes().add(cell.getColumnIndex());
 									}
 								}
 							}
 						}
-						System.out.println(AircraftsDataReader.getAircraftsHeaders());
+						System.out.println(AircraftsDataReader.getAircraftsExpectedHeaders());
+						System.out.println(AircraftsDataReader.getAircraftsFoundHeaders());
 						System.out.println(AircraftsDataReader.getAircraftHeadersColumnIndexes());
 
 					} else {
 						//logger.info( String.valueOf( r.getRowNum() ) );
-						//this.appendRowToAircraftsDataTable(r);
 
 						tech.tablesaw.api.Row tableRow = this.aircraftsDataTable.appendRow();
 
+						//ICAO_Code
 						int columnIndex = AircraftsDataReader.getAircraftHeadersColumnIndexes().get(0);
 						Cell cell = r.getCell(columnIndex);
 						tableRow.setString("ICAO_Code", cell.getRawValue());
-						
+
+						//Num_Engines
 						columnIndex = AircraftsDataReader.getAircraftHeadersColumnIndexes().get(1);
 						cell = r.getCell(columnIndex);
-						tableRow.setInt("Num_Engines", (Integer)cell.getValue());
-						
+						if ( cell.getType().equals(CellType.NUMBER) ) {
+							java.math.BigDecimal bigDecimal = (java.math.BigDecimal)cell.getValue();
+							long longValue = bigDecimal.longValueExact();
+							int intValue = Math.toIntExact(longValue);
+							tableRow.setInt("Num_Engines", intValue );
+						}
+
+						//Approach_Speed_knot
 						columnIndex = AircraftsDataReader.getAircraftHeadersColumnIndexes().get(2);
 						cell = r.getCell(columnIndex);
-						tableRow.setFloat("Approach_Speed_knot", (float)cell.getValue());
+						if ( cell.getType().equals(CellType.NUMBER) ) {
+							tableRow.setFloat("Approach_Speed_knot", 
+									(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
+						}
 
+						//Wingspan_ft_without_winglets_sharklets
+						columnIndex = AircraftsDataReader.getAircraftHeadersColumnIndexes().get(3);
+						cell = r.getCell(columnIndex);
+						if ( cell.getType().equals(CellType.NUMBER) ) {
+							tableRow.setFloat("Wingspan_ft_without_winglets_sharklets", 
+									(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
+						}
 
+						//Length_ft
+						columnIndex = AircraftsDataReader.getAircraftHeadersColumnIndexes().get(4);
+						cell = r.getCell(columnIndex);
+						if ( cell.getType().equals(CellType.NUMBER) ) {
+							tableRow.setFloat("Length_ft", 
+									(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
+						}
 
-						/*
-								for (Cell cell : r) {
-									if (cell != null) {
-										//System.out.println(cell.getAddress().toString());
-										if ( AircraftsDataReader.getAircraftHeadersColumnIndexes().contains(cell.getColumnIndex())) {
-											//String columnName = AircraftsDataReader.getAircraftsHeaders().get(0);
-											//tableRow.
+						//Tail_Height_at_OEW_ft
+						columnIndex = AircraftsDataReader.getAircraftHeadersColumnIndexes().get(5);
+						cell = r.getCell(columnIndex);
+						if ( cell.getType().equals(CellType.NUMBER) ) {
+							tableRow.setFloat("Tail_Height_at_OEW_ft", 
+									(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
+						}
 
-										}
-										//System.out.println("column index = " + cell.getColumnIndex() + " cell type = " + cell.getType());
-										//System.out.println( " -> " + r.getRowNum() + " -> " + cell.getRawValue());
-										//data.get(r.getRowNum()).add(cell.getRawValue());
-									}
-									//logger.info( cell.getRawValue() );
-								}
-						 */
+						//Wheelbase_ft
+						columnIndex = AircraftsDataReader.getAircraftHeadersColumnIndexes().get(6);
+						cell = r.getCell(columnIndex);
+						if ( cell.getType().equals(CellType.NUMBER) ) {
+							tableRow.setFloat("Wheelbase_ft", 
+									(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
+						}
+
+						//float Cockpit_to_Main_Gear_ft,
+						columnIndex = AircraftsDataReader.getAircraftHeadersColumnIndexes().get(7);
+						cell = r.getCell(columnIndex);
+						if ( cell.getType().equals(CellType.NUMBER) ) {
+							tableRow.setFloat("Cockpit_to_Main_Gear_ft", 
+									(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
+						}
+
+						//float Main_Gear_Width_ft,
+						columnIndex = AircraftsDataReader.getAircraftHeadersColumnIndexes().get(8);
+						cell = r.getCell(columnIndex);
+						if ( cell.getType().equals(CellType.NUMBER) ) {
+							tableRow.setFloat("Main_Gear_Width_ft", 
+									(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
+						}
+
+						// MTOW_lb Maximum take-off weight
+						columnIndex = AircraftsDataReader.getAircraftHeadersColumnIndexes().get(9);
+						cell = r.getCell(columnIndex);
+						if ( cell.getType().equals(CellType.NUMBER) ) {
+							double doubleValue = (double) utils.Utils.getDoubleFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) ;
+							tableRow.setDouble("MTOW_lb", doubleValue);
+							tableRow.setDouble("MTOW_kg", doubleValue * Constants.lbs_to_kilograms);
+						}
+
+						//double MALW_lb,						
+						columnIndex = AircraftsDataReader.getAircraftHeadersColumnIndexes().get(10);
+						cell = r.getCell(columnIndex);
+						if ( cell.getType().equals(CellType.NUMBER) ) {
+							double doubleValue = (double) utils.Utils.getDoubleFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) ;
+							tableRow.setDouble("MALW_lb", doubleValue );
+							tableRow.setDouble("MALW_kg", doubleValue * Constants.lbs_to_kilograms);
+						}
+
+						//float Parking_Area_ft2
+						columnIndex = AircraftsDataReader.getAircraftHeadersColumnIndexes().get(11);
+						cell = r.getCell(columnIndex);
+						if ( cell.getType().equals(CellType.NUMBER) ) {
+							tableRow.setFloat("Parking_Area_ft2", 
+									(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
+						}
+
 					}
 				}
 				System.out.println( this.aircraftsDataTable.print(10) );

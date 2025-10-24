@@ -32,7 +32,7 @@ public class AircraftsDataSchema {
 			return MTOW_kg;
 		}
 
-		    public double MALW_kg() {
+		public double MALW_kg() {
 			return MALW_kg;
 		}
 
