@@ -28,7 +28,7 @@ public class FuelData extends FuelDataTable {
 		super(value);
 	}
 	
-	public void generateParquetFileFor() throws IOException {
+	public void generateParquetFileFor( ) throws IOException {
 		
 		String currentDateTimeAsStr = Utils.getCurrentDateTimeasStr();
 		String folderStr = "C:/Users/rober/eclipse-2025-09/eclipse-jee-2025-09-R-win32-x86_64/Data-Challenge-2025/documents";

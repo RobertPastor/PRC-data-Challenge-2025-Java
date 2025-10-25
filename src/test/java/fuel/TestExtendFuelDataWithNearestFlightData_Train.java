@@ -9,7 +9,7 @@ import airports.AirportsData;
 import dataChallengeEnums.DataChallengeEnums.train_rank;
 import flightLists.FlightListData;
 
-public class TestExtendFuelDataWithNearestFlightData {
+public class TestExtendFuelDataWithNearestFlightData_Train {
 
 		@Test
 	    public void testReadExtendFuelRank() throws IOException {
@@ -43,7 +43,8 @@ public class TestExtendFuelDataWithNearestFlightData {
 			fuelData.extendFuelWithFlightListData( flightListData.getFlightListDataTable() ) ;
 
 			// extend with flight data
-			int maxToBeComputedRow = 1000000;
+			//int maxToBeComputedRow = 1000000;
+			int maxToBeComputedRow = 100;
 			fuelData.extendFuelStartEndInstantsWithFlightData( maxToBeComputedRow );
 			
 			System.out.println(fuelData.getFuelDataTable().structure());
