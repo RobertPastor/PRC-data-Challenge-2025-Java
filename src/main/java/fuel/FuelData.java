@@ -48,7 +48,7 @@ public class FuelData extends FuelDataTable {
 	        				row.getInstant("start"),
 	        				row.getInstant("end") ,
 	        				
-	        				row.getDouble("time_diff_seconds") , 
+	        				row.getLong("time_diff_seconds") , 
 	        				row.getFloat("fuel_flow_kg_sec") ,
 	        				
 	        				// informations taken from the flight data between fuel start and fuel end
@@ -58,11 +58,13 @@ public class FuelData extends FuelDataTable {
 	        				row.getDouble("aircraft_latitude_at_fuel_end"),
 	        				row.getDouble("aircraft_longitude_at_fuel_end"),
 	        				
+	        				// computed distance flown
 	        				row.getDouble("aircraft_distance_flown_Nm"),
 	        				
 	        				row.getFloat("aircraft_altitude_ft_at_fuel_start"),
 	        				row.getFloat("aircraft_altitude_ft_at_fuel_end"),
 	        				
+	        				// computed vertical rate
 	        				row.getFloat("aircraft_computed_vertical_rate_ft_min"),
 	        				
 	        				row.getFloat("aircraft_groundspeed_kt_at_fuel_start"),
@@ -80,7 +82,24 @@ public class FuelData extends FuelDataTable {
 	        				
 	        				// flight distance and flight duration
 	        				row.getDouble("flight_distance_Nm"),
-	        				row.getLong("flight_duration_sec")
+	        				row.getLong("flight_duration_sec"),
+	        				
+	        				row.getLong("fuel_burnt_start_relative_to_takeoff_sec"),
+	        				row.getLong("fuel_burnt_end_relative_to_takeoff_sec"),
+	        				row.getLong("fuel_burnt_end_relative_to_landed_sec"),
+	        				
+	        				row.getInt("Num_Engines"),
+	        				
+	        				row.getFloat("Approach_Speed_knot"),
+	        				row.getFloat("Wingspan_ft_without_winglets_sharklets"),
+	        				row.getFloat("Length_ft"),
+	        				row.getFloat("Tail_Height_at_OEW_ft"),
+	        				row.getFloat("Wheelbase_ft"),
+	        				row.getFloat("Cockpit_to_Main_Gear_ft"),
+	        				row.getFloat("Main_Gear_Width_ft"),
+	        				row.getFloat("MTOW_kg"),
+	        				row.getFloat("MALW_kg"),
+	        				row.getFloat("Parking_Area_ft2")
 	        				
 	        				) ;
 	        	

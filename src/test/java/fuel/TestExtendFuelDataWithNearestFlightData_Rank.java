@@ -41,6 +41,9 @@ public class TestExtendFuelDataWithNearestFlightData_Rank {
 
 		// merge fuel with flight list
 		fuelData.extendFuelWithFlightListData( flightListData.getFlightListDataTable() ) ;
+		
+		// as flight take-off and landed are now available use them to compute relative delta from burnt start and stop
+		fuelData.extendRelativeStartEndFromFlightTakeoff();
 
 		// extend with flight data
 		int maxToBeComputedRow = 1000000;

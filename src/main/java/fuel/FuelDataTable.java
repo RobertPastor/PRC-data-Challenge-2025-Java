@@ -18,6 +18,7 @@ import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.FloatColumn;
 import tech.tablesaw.api.InstantColumn;
 import tech.tablesaw.api.IntColumn;
+import tech.tablesaw.api.LongColumn;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
@@ -74,6 +75,9 @@ public class FuelDataTable extends Table {
 		// Perform an left outer join on the "id" column
 		// Left Outer Join: Keeps all rows from the left table and matches from the right.
 		this.setFuelDataTable( this.fuelDataTable.joinOn("flight_id").leftOuter(flightListDataTable));
+		System.out.println( this.getFuelDataTable().structure() );
+		
+		
 	}
 	
 	/**
@@ -89,6 +93,7 @@ public class FuelDataTable extends Table {
 		
 		Instant start = record.start();
 		row.setInstant("start", start);
+		
 		Instant end = record.end();
 		row.setInstant("end", end);
 		
@@ -100,7 +105,7 @@ public class FuelDataTable extends Table {
 	
 	public void extendFuelWithEndStartDifference( ) {
 		
-		DoubleColumn time_diff_seconds_column = DoubleColumn.create("time_diff_seconds");
+		LongColumn time_diff_seconds_column = LongColumn.create("time_diff_seconds");
 		this.fuelDataTable.addColumns(time_diff_seconds_column);
 		
 		System.out.println( this.fuelDataTable.structure() );
@@ -113,10 +118,10 @@ public class FuelDataTable extends Table {
 			Instant start = row.getInstant("start");
 			Instant end = row.getInstant("end");
 			
-			double difference = Duration.between(start, end).toSeconds();
-			row.setDouble("time_diff_seconds" , difference);
+			long difference = Duration.between(start, end).toSeconds();
+			row.setLong("time_diff_seconds" , difference);
 		}
-		System.out.println( this.fuelDataTable.print(10) );
+		//System.out.println( this.fuelDataTable.print(10) );
 	}
 	
 	/**
@@ -244,7 +249,7 @@ public class FuelDataTable extends Table {
 			row.setFloat("aircraft_altitude_ft_at_fuel_end" , altitude_end);
 			
 			// computed vertical rate feet per minutes
-			double time_diff_sec = row.getDouble("time_diff_seconds");
+			long time_diff_sec = row.getLong("time_diff_seconds");
 			float computed_vertical_rate = (altitude_end - altitude_start)/ (float)time_diff_sec;
 			row.setFloat("aircraft_computed_vertical_rate_ft_min" , computed_vertical_rate);
 
@@ -260,13 +265,61 @@ public class FuelDataTable extends Table {
 			
 			float vertical_rate_ft_min_start = flightData.getFloatFlightDataAtNearestFuelInstant("vertical_rate" ,start);
 			row.setFloat("aircraft_vertical_rate_ft_min_at_fuel_start" , vertical_rate_ft_min_start);
+			
 			float vertical_rate_ft_min_end = flightData.getFloatFlightDataAtNearestFuelInstant("vertical_rate" , end);
 			row.setFloat("aircraft_vertical_rate_ft_min_at_fuel_end" , vertical_rate_ft_min_end);
 		}
+	}
+	
+	public void extendRelativeStartEndFromFlightTakeoff() {
+
+		LongColumn fuel_burnt_start_relative_to_takeoff_sec_column = LongColumn.create("fuel_burnt_start_relative_to_takeoff_sec");
+		this.fuelDataTable.addColumns(fuel_burnt_start_relative_to_takeoff_sec_column);
 		
+		LongColumn fuel_burnt_end_relative_to_takeoff_sec_column = LongColumn.create("fuel_burnt_end_relative_to_takeoff_sec");
+		this.fuelDataTable.addColumns(fuel_burnt_end_relative_to_takeoff_sec_column);
 		
-		
-		
+		LongColumn fuel_burnt_end_relative_to_landed_sec_column = LongColumn.create("fuel_burnt_end_relative_to_landed_sec");
+		this.fuelDataTable.addColumns(fuel_burnt_end_relative_to_landed_sec_column );
+
+		Iterator<Row> iter = this.fuelDataTable.iterator();
+		while ( iter.hasNext()) {
+			Row row = iter.next();
+			
+			Instant start = row.getInstant("start");
+			Instant end = row.getInstant("end");
+			assert start.isBefore(end);
+			
+			Instant takeoff = row.getInstant("takeoff");
+			Instant landed = row.getInstant("landed");
+			assert takeoff.isBefore(landed);
+			
+			if ( ( takeoff != null ) && takeoff.isBefore(start) ) {
+				assert takeoff.isBefore(start);
+				long duration_sec = Duration.between(takeoff, start).toSeconds();
+				row.setLong("fuel_burnt_start_relative_to_takeoff_sec" , duration_sec);
+			} else {
+				System.out.println("Error takeoff = " + takeoff + " -- not before fuel burnt start = " + start);
+			}
+			
+			if ( ( takeoff != null ) && takeoff.isBefore(end) ) {
+				assert takeoff.isBefore(end);
+				long duration_sec = Duration.between(takeoff, end).toSeconds();
+				row.setLong("fuel_burnt_end_relative_to_takeoff_sec" , duration_sec);
+			} else {
+				System.out.println("Error takeoff = " + takeoff + " -- not before fuel burnt end = " + end);
+			}
+			
+			if ( ( landed != null ) && ( landed.getEpochSecond() > 0 )) {
+				if ( end.isBefore(landed) ) {
+					long duration_sec = Duration.between(end, landed).toSeconds();
+					row.setLong("fuel_burnt_end_relative_to_landed_sec" , duration_sec);
+				}
+			} else {
+				System.out.println("Error fuel burnt end = " + end + " -- not before landed = " + landed);
+			}
+			
+		}
 	}
 	
 	public void extendFuelStartEndInstantsWithFlightsGroundSpeeds( final FlightDataTable flightDataTable ) {

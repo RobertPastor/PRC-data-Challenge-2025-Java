@@ -13,7 +13,7 @@ public class FuelDataSchema {
 			Instant start, 
 			Instant end,
 			
-			double time_diff_seconds,
+			long time_diff_seconds,
 			float fuel_flow_kg_sec,
 			
 			// latitude and longitude at fuel start
@@ -47,11 +47,42 @@ public class FuelDataSchema {
 			float destination_elevation_feet,
 			
 			double flight_distance_Nm,			
-			long flight_duration_sec
-	
+			long flight_duration_sec,
+			
+			// using flight take-off and flight landed , compute relate duration in second
+			long fuel_burnt_start_relative_to_takeoff_sec,
+			long fuel_burnt_end_relative_to_takeoff_sec,
+			long fuel_burnt_end_relative_to_landed_sec,
+			
+			int Num_Engines,
+			
+			float Approach_Speed_knot,
+			float Wingspan_ft_without_winglets_sharklets,
+			float Length_ft,
+			float Tail_Height_at_OEW_ft,
+			float Wheelbase_ft,
+			float Cockpit_to_Main_Gear_ft,
+			float Main_Gear_Width_ft,
+			
+			float MTOW_kg,
+			float MALW_kg,
+			float Parking_Area_ft2
+
 			
 			) {
 		
+		public long fuel_burnt_start_relative_to_takeoff_sec() {
+			return fuel_burnt_start_relative_to_takeoff_sec;
+		}
+
+		    public long fuel_burnt_end_relative_to_takeoff_sec() {
+			return fuel_burnt_end_relative_to_takeoff_sec;
+		}
+
+		    public long fuel_burnt_end_relative_to_landed_sec() {
+			return fuel_burnt_end_relative_to_landed_sec;
+		}
+
 		public double flight_distance_Nm() {
 			return flight_distance_Nm;
 		}

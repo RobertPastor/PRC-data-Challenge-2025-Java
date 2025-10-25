@@ -12,7 +12,7 @@ import flightLists.FlightListData;
 public class TestExtendFuelDataWithNearestFlightData_Train {
 
 		@Test
-	    public void testReadExtendFuelRank() throws IOException {
+	    public void testReadExtendFuelTrain() throws IOException {
 			
 			train_rank train_rank_value = train_rank.train;
 			
@@ -41,9 +41,12 @@ public class TestExtendFuelDataWithNearestFlightData_Train {
 			
 			// merge fuel with flight list
 			fuelData.extendFuelWithFlightListData( flightListData.getFlightListDataTable() ) ;
-
+			
+			// as flight take-off and landed are now available use them to compute relative delta from burnt start and stop
+			fuelData.extendRelativeStartEndFromFlightTakeoff();
+			
 			// extend with flight data
-			//int maxToBeComputedRow = 1000000;
+			// int maxToBeComputedRow = 1000000;
 			int maxToBeComputedRow = 100;
 			fuelData.extendFuelStartEndInstantsWithFlightData( maxToBeComputedRow );
 			
