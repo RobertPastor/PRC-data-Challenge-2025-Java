@@ -68,10 +68,10 @@ public class AircraftsData extends AircraftsDataTable {
 	private void buildHeadersInformations ( final Row r ) {
 		for (Cell cell : r) {
 			if (cell != null) {
-				System.out.println("column index = " + cell.getColumnIndex() + " cell type = " + cell.getType());
+				//System.out.println("column index = " + cell.getColumnIndex() + " cell type = " + cell.getType());
 				if ( cell.getType().equals(CellType.STRING)) {
 					String headerNameFound =  cell.getRawValue();
-					System.out.println("header found = " + headerNameFound );
+					//System.out.println("header found = " + headerNameFound );
 					if ( AircraftsData.getAircraftsExpectedHeaders().contains(headerNameFound)) {
 						AircraftsData.getAircraftsFoundHeaders().add(headerNameFound);
 						AircraftsData.getAircraftHeadersColumnIndexes().add(cell.getColumnIndex());
@@ -79,16 +79,16 @@ public class AircraftsData extends AircraftsDataTable {
 				}
 			}
 		}
-		System.out.println(AircraftsData.getAircraftsExpectedHeaders());
-		System.out.println(AircraftsData.getAircraftsFoundHeaders());
-		System.out.println(AircraftsData.getAircraftHeadersColumnIndexes());
+		//System.out.println(AircraftsData.getAircraftsExpectedHeaders());
+		//System.out.println(AircraftsData.getAircraftsFoundHeaders());
+		//System.out.println(AircraftsData.getAircraftHeadersColumnIndexes());
 
 	}
 	
 	private void fillTableRow(final Row r) {
 		
 		tech.tablesaw.api.Row tableRow = this.aircraftsDataTable.appendRow();
-		logger.info ("---> " + this.aircraftsDataTable.rowCount());
+		//logger.info ("---> " + this.aircraftsDataTable.rowCount());
 
 		//ICAO_Code
 		int columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(0);

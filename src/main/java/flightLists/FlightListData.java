@@ -19,7 +19,7 @@ private train_rank train_rank_value;
 		return train_rank_value;
 	}
 	
-	FlightListData( train_rank value ) {
+	public FlightListData( train_rank value ) {
 		this.train_rank_value = value;
 	}
 	

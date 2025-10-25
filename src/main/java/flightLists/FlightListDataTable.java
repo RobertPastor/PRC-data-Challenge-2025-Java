@@ -161,7 +161,6 @@ public class FlightListDataTable extends Table {
 		System.out.println(aircraftsData.getAircraftDataTable().structure());
 
 		// Rename the column
-		// Rename the column
 		aircraftsData.getAircraftDataTable().column("ICAO_Code").setName("aircraft_type");
 		System.out.println(aircraftsData.getAircraftDataTable().structure());
 		
@@ -204,7 +203,6 @@ public class FlightListDataTable extends Table {
 
 		DoubleColumn destination_longitude_sine_column = DoubleColumn.create("destination_longitude_sine");
 		this.flightListDataTable.addColumns(destination_longitude_sine_column);
-		
 		
 		System.out.println( this.flightListDataTable.structure() );
 		

@@ -5,6 +5,9 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Iterator;
 
+import dataChallengeEnums.DataChallengeEnums.train_rank;
+import flightLists.FlightListData;
+import flightLists.FlightListDataTable;
 import flights.FlightDataTable;
 import fuel.FuelDataSchema.FuelDataRecord;
 import tech.tablesaw.api.DoubleColumn;
@@ -18,6 +21,10 @@ import tech.tablesaw.api.Table;
 public class FuelDataTable extends Table {
  
 	public Table fuelDataTable = null;
+
+	public void setFuelDataTable(Table fuelDataTable) {
+		this.fuelDataTable = fuelDataTable;
+	}
 
 	public Table getFuelDataTable() {
 		return this.fuelDataTable;
@@ -40,26 +47,37 @@ public class FuelDataTable extends Table {
 
 	}
 	
-	
+	@SuppressWarnings("deprecation")
+	public void extendFuelWithFlightListData (  final Table flightListDataTable ) {
+		
+		// apply join using  flight_id
+		// use left outer join from fuel table to flight list table
+		// from flight list data use column ("flight_id")
+		
+		// Perform an left outer join on the "id" column
+		// Left Outer Join: Keeps all rows from the left table and matches from the right.
+		this.setFuelDataTable( this.fuelDataTable.joinOn("flight_id").leftOuter(flightListDataTable));
+		
+	}
 	
 	/**
 	 * used during reading of the input parquet rows , hence records
-	 * @param r
+	 * @param record
 	 */
-	public void appendRowToFuelDataTable( FuelDataRecord r ) {
+	public void appendRowToFuelDataTable( final FuelDataRecord record ) {
 
 		Row row = this.fuelDataTable.appendRow();
 		
-		row.setInt ("idx", r.idx());
-		row.setString("flight_id", r.flight_id());
+		row.setInt ("idx", record.idx());
+		row.setString("flight_id", record.flight_id());
 		
-		row.setInstant("start", r.start());
-		row.setInstant("end", r.end());
+		row.setInstant("start", record.start());
+		row.setInstant("end", record.end());
 		
-		row.setFloat ("fuel_kg", r.fuel_kg());
+		row.setFloat ("fuel_kg", record.fuel_kg());
 	}
 	
-	public void extendWithEndStartDifference( ) {
+	public void extendFuelWithEndStartDifference( ) {
 		
 		DoubleColumn time_diff_seconds_column = DoubleColumn.create("time_diff_seconds");
 		this.fuelDataTable.addColumns(time_diff_seconds_column);
@@ -106,11 +124,16 @@ public class FuelDataTable extends Table {
 		System.out.println( this.fuelDataTable.print(10));
 	}
 	
-	public void extendFuelStartEndInstantwithFlightsPositions( FlightDataTable flightDataTable ) {
+	public void extendFuelStartEndInstantswithFlightsPositions( final FlightDataTable flightDataTable ) {
 		
 		// find the nearest instant from a fuel table of a flight id
 		// given a fuel start or stop instant
 		
+		
+		
+	}
+	
+	public void extendFuelStartEndInstantsWithFlightsGroundSpeeds( final FlightDataTable flightDataTable ) {
 		
 		
 	}
