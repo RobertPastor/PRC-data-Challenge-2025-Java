@@ -42,8 +42,39 @@ public class FuelData extends FuelDataTable {
         try {
 	        	List<FuelExtendedDataRecord> fuelRecords = new ArrayList<FuelExtendedDataRecord>();
 	        	this.getFuelDataTable().stream().forEach(row -> {
-	        		FuelExtendedDataRecord record = new FuelExtendedDataRecord(row.getInt("idx"),
-	        				row.getString("flight_id") , row.getInstant("start"), row.getInstant("end"));
+	        		FuelExtendedDataRecord record = new FuelExtendedDataRecord(
+	        				row.getInt("idx"),
+	        				row.getString("flight_id") , 
+	        				row.getInstant("start"),
+	        				row.getInstant("end") ,
+	        				
+	        				row.getDouble("time_diff_seconds") , 
+	        				row.getFloat("fuel_flow_kg_sec") ,
+	        				
+	        				row.getDouble("aircraft_latitude_at_fuel_start"),
+	        				row.getDouble("aircraft_longitude_at_fuel_start"),
+	        				
+	        				row.getDouble("aircraft_latitude_at_fuel_end"),
+	        				row.getDouble("aircraft_longitude_at_fuel_end"),
+	        				
+	        				row.getDouble("aircraft_distance_flown_Nm"),
+	        				
+	        				row.getFloat("aircraft_altitude_ft_at_fuel_start"),
+	        				row.getFloat("aircraft_altitude_ft_at_fuel_end"),
+	        				
+	        				row.getFloat("aircraft_computed_vertical_rate_ft_min"),
+	        				
+	        				row.getFloat("aircraft_groundspeed_kt_at_fuel_start"),
+	        				row.getFloat("aircraft_groundspeed_kt_at_fuel_end"),
+	        				
+	        				row.getFloat("aircraft_track_angle_deg_at_fuel_start"),
+	        				row.getFloat("aircraft_track_angle_deg_at_fuel_end"),
+	        				
+	        				row.getFloat("aircraft_vertical_rate_ft_min_at_fuel_start"),
+	        				row.getFloat("aircraft_vertical_rate_ft_min_at_fuel_end")
+	        				) ;
+	        		
+	     
 	        		fuelRecords.add(record);
 	        		
 	        	});;
@@ -59,7 +90,7 @@ public class FuelData extends FuelDataTable {
             ex.printStackTrace(System.out);
         }
         
-        System.out.println("Parquet file written successfully!");
+        System.out.println("Parquet file <<" + file.getAbsolutePath() + ">> written successfully!");
 	 }
 
 	/**

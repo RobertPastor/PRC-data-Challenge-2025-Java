@@ -34,7 +34,9 @@ public class TestExtendFuelDataWithFlightListData_Test {
 		fuelData.extendFuelWithEndStartDifference();
 		fuelData.extendFuelFlowKgSeconds();
 		
+		// merge fuel with flight list
 		fuelData.extendFuelWithFlightListData( flightListData.getFlightListDataTable() ) ;
+		
 		System.out.println(fuelData.getFuelDataTable().structure());
 		System.out.println(fuelData.getFuelDataTable().print(10));
 		System.out.println("train-rank -> " + train_rank_value + " ---> " +fuelData.getFuelDataTable().shape());
