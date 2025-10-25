@@ -1,13 +1,17 @@
 package fuel;
 
 
+import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Iterator;
+import java.util.logging.Logger;
 
+import aircrafts.AircraftsData;
 import dataChallengeEnums.DataChallengeEnums.train_rank;
 import flightLists.FlightListData;
 import flightLists.FlightListDataTable;
+import flights.FlightData;
 import flights.FlightDataTable;
 import fuel.FuelDataSchema.FuelDataRecord;
 import tech.tablesaw.api.DoubleColumn;
@@ -19,6 +23,18 @@ import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
 
 public class FuelDataTable extends Table {
+	
+	private static final Logger logger = Logger.getLogger(FuelDataTable.class.getName());
+
+	protected train_rank train_rank_value;
+
+	public void setTrain_rank_value(train_rank train_rank_value) {
+		this.train_rank_value = train_rank_value;
+	}
+
+	public train_rank getTrain_rank_value() {
+		return train_rank_value;
+	}
  
 	public Table fuelDataTable = null;
 
@@ -30,8 +46,9 @@ public class FuelDataTable extends Table {
 		return this.fuelDataTable;
 	}
 
-	FuelDataTable() {
+	protected FuelDataTable(train_rank train_rank_value) {
 		super("Fuel Data");
+		this.setTrain_rank_value(train_rank_value);
 	}
 	
 	public void createEmptyFuelDataTable( ) {
@@ -44,7 +61,6 @@ public class FuelDataTable extends Table {
 				InstantColumn.create("end"),
 
 				FloatColumn.create("fuel_kg"));
-
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -57,7 +73,6 @@ public class FuelDataTable extends Table {
 		// Perform an left outer join on the "id" column
 		// Left Outer Join: Keeps all rows from the left table and matches from the right.
 		this.setFuelDataTable( this.fuelDataTable.joinOn("flight_id").leftOuter(flightListDataTable));
-		
 	}
 	
 	/**
@@ -71,8 +86,13 @@ public class FuelDataTable extends Table {
 		row.setInt ("idx", record.idx());
 		row.setString("flight_id", record.flight_id());
 		
-		row.setInstant("start", record.start());
-		row.setInstant("end", record.end());
+		Instant start = record.start();
+		row.setInstant("start", start);
+		Instant end = record.end();
+		row.setInstant("end", end);
+		
+		//assertion start is before end
+		assert start.isBefore(end);
 		
 		row.setFloat ("fuel_kg", record.fuel_kg());
 	}
@@ -88,8 +108,10 @@ public class FuelDataTable extends Table {
 		Iterator<Row> iter = this.fuelDataTable.iterator();
 		while ( iter.hasNext()) {
 			Row row = iter.next();
+			
 			Instant start = row.getInstant("start");
 			Instant end = row.getInstant("end");
+			
 			double difference = Duration.between(start, end).toSeconds();
 			row.setDouble("time_diff_seconds" , difference);
 		}
@@ -113,6 +135,9 @@ public class FuelDataTable extends Table {
 			
 			Instant start = row.getInstant("start");
 			Instant end = row.getInstant("end");
+			// warning - assertion to clean the data
+			assert start.isBefore(end);
+			
 			long difference = Duration.between(start, end).toSeconds();
 
 			float fuel_flow_kg_seconds = (float) 0.0;
@@ -124,10 +149,109 @@ public class FuelDataTable extends Table {
 		System.out.println( this.fuelDataTable.print(10));
 	}
 	
-	public void extendFuelStartEndInstantswithFlightsPositions( final FlightDataTable flightDataTable ) {
+	public void extendFuelStartEndInstantsWithFlightData( ) throws IOException {
+		
+		DoubleColumn aircraft_latitude_at_fuel_start_column = DoubleColumn.create("aircraft_latitude_at_fuel_start");
+		this.fuelDataTable.addColumns(aircraft_latitude_at_fuel_start_column);
+
+		DoubleColumn aircraft_longitude_at_fuel_start_column = DoubleColumn.create("aircraft_longitude_at_fuel_start");
+		this.fuelDataTable.addColumns(aircraft_longitude_at_fuel_start_column);
+		
+		// latitude
+		DoubleColumn aircraft_latitude_at_fuel_end_column = DoubleColumn.create("aircraft_latitude_at_fuel_end");
+		this.fuelDataTable.addColumns(aircraft_latitude_at_fuel_end_column);
+
+		DoubleColumn aircraft_longitude_at_fuel_end_column = DoubleColumn.create("aircraft_longitude_at_fuel_end");
+		this.fuelDataTable.addColumns(aircraft_longitude_at_fuel_end_column);
+		
+		// ------------- altitude
+		FloatColumn aircraft_altitude_start_column = FloatColumn.create("aircraft_altitude_ft_at_fuel_start");
+		this.fuelDataTable.addColumns(aircraft_altitude_start_column);
+		
+		FloatColumn aircraft_altitude_end_column = FloatColumn.create("aircraft_altitude_ft_at_fuel_end");
+		this.fuelDataTable.addColumns(aircraft_altitude_end_column);
+
+
+		FloatColumn aircraft_groundspeed_start_column = FloatColumn.create("aircraft_groundspeed_kt_at_fuel_start");
+		this.fuelDataTable.addColumns(aircraft_groundspeed_start_column);
+		
+		FloatColumn aircraft_groundspeed_end_column = FloatColumn.create("aircraft_groundspeed_kt_at_fuel_end");
+		this.fuelDataTable.addColumns(aircraft_groundspeed_end_column);
+
+		FloatColumn aircraft_track_angle_start_column = FloatColumn.create("aircraft_track_angle_deg_at_fuel_start");
+		this.fuelDataTable.addColumns(aircraft_track_angle_start_column);
+		
+		FloatColumn aircraft_track_angle_end_column = FloatColumn.create("aircraft_track_angle_deg_at_fuel_end");
+		this.fuelDataTable.addColumns(aircraft_track_angle_end_column);
+
+
+		FloatColumn aircraft_vertical_rate_start_column = FloatColumn.create("aircraft_vertical_rate_ft_min_at_fuel_start");
+		this.fuelDataTable.addColumns(aircraft_vertical_rate_start_column);
+		
+		FloatColumn aircraft_vertical_rate_end_column = FloatColumn.create("aircraft_vertical_rate_ft_min_at_fuel_end");
+		this.fuelDataTable.addColumns(aircraft_vertical_rate_end_column);
 		
 		// find the nearest instant from a fuel table of a flight id
 		// given a fuel start or stop instant
+		train_rank train_rank_value = this.getTrain_rank_value();
+		
+		Iterator<Row> iter = this.fuelDataTable.iterator();
+		int counter = 0;
+		int maxCounter = 100;
+		while ( iter.hasNext() && ( counter < maxCounter )) {
+			counter++;
+			Row row = iter.next();
+			
+			Instant start = row.getInstant("start");
+			Instant end = row.getInstant("end");
+			
+			String flight_id = row.getString ("flight_id");
+			FlightData flightData = new FlightData( train_rank_value , flight_id );
+			flightData.readParquet();
+			
+			System.out.println("--------------------------------------");
+			System.out.println("----------------- row count = "+ counter + " / max = " + this.fuelDataTable.rowCount() + " ---------------------");
+			System.out.println("--------------------------------------");
+			
+			//Instant flightNearestInstantFromFuelStart = flightData.findNearestIntantFromFlightTimeStamps (start);
+			//Instant flightNearestInstantFromFuelEnd = flightData.findNearestIntantFromFlightTimeStamps (end);
+			
+			//logger.info("nearest from fuel start = " + flightNearestInstantFromFuelStart);
+			//logger.info("nearest from fuel end = " + flightNearestInstantFromFuelEnd);
+			
+			double ac_lat_fuel_start = flightData.getDoubleFlightDataAtNearestFuelInstant("latitude" , start);
+			double ac_lon_fuel_start = flightData.getDoubleFlightDataAtNearestFuelInstant("longitude",start);
+			
+			double ac_lat_fuel_end = flightData.getDoubleFlightDataAtNearestFuelInstant("latitude" , end);
+			double ac_lon_fuel_end = flightData.getDoubleFlightDataAtNearestFuelInstant("longitude" , end);
+			
+			row.setDouble("aircraft_latitude_at_fuel_start" , ac_lat_fuel_start);
+			row.setDouble("aircraft_longitude_at_fuel_start" , ac_lon_fuel_start);
+			
+			row.setDouble("aircraft_latitude_at_fuel_end" , ac_lat_fuel_end);
+			row.setDouble("aircraft_longitude_at_fuel_end" , ac_lon_fuel_end);
+			
+			float altitude_start = flightData.getFloatFlightDataAtNearestFuelInstant("altitude" , start);
+			row.setFloat("aircraft_altitude_ft_at_fuel_start" , altitude_start);
+			float altitude_end = flightData.getFloatFlightDataAtNearestFuelInstant("altitude" , end);
+			row.setFloat("aircraft_altitude_ft_at_fuel_end" , altitude_end);
+
+			float groundSpeed_start = flightData.getFloatFlightDataAtNearestFuelInstant("groundspeed", start);
+			row.setFloat("aircraft_groundspeed_kt_at_fuel_start" , groundSpeed_start);
+			float groundSpeed_end = flightData.getFloatFlightDataAtNearestFuelInstant("groundspeed" , end);
+			row.setFloat("aircraft_groundspeed_kt_at_fuel_end" , groundSpeed_end);
+			
+			float track_angle_deg_start = flightData.getFloatFlightDataAtNearestFuelInstant("track" , start);
+			row.setFloat("aircraft_track_angle_deg_at_fuel_start" , track_angle_deg_start);
+			float track_angle_deg_end =flightData.getFloatFlightDataAtNearestFuelInstant("track" , end);
+			row.setFloat("aircraft_track_angle_deg_at_fuel_end" ,  track_angle_deg_end);
+			
+			float vertical_rate_ft_min_start = flightData.getFloatFlightDataAtNearestFuelInstant("vertical_rate" ,start);
+			row.setFloat("aircraft_vertical_rate_ft_min_at_fuel_start" , vertical_rate_ft_min_start);
+			float vertical_rate_ft_min_end = flightData.getFloatFlightDataAtNearestFuelInstant("vertical_rate" , end);
+			row.setFloat("aircraft_vertical_rate_ft_min_at_fuel_start" , vertical_rate_ft_min_end);
+		}
+		
 		
 		
 		

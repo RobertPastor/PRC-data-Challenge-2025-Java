@@ -26,7 +26,7 @@ public class TestExtendFuelDataWithFlightListData_Test {
 		
 		flightListData.extendWithAircraftsData( aircraftsData );
 		flightListData.extendWithAirportData( airportsData );
-		flightListData.extendWithSinusCosinusOfLatitudeLongitude();
+		flightListData.extendWithAirportsSinusCosinusOfLatitudeLongitude();
 
 		FuelData fuelData = new FuelData(train_rank_value );
 		fuelData.readParquet();
@@ -57,7 +57,7 @@ public class TestExtendFuelDataWithFlightListData_Test {
 		
 		flightListData.extendWithAircraftsData( aircraftsData );
 		flightListData.extendWithAirportData( airportsData );
-		flightListData.extendWithSinusCosinusOfLatitudeLongitude();
+		flightListData.extendWithAirportsSinusCosinusOfLatitudeLongitude();
 
 		FuelData fuelData = new FuelData(train_rank_value );
 		fuelData.readParquet();

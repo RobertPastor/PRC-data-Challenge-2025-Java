@@ -17,7 +17,7 @@ public class AircraftsDataTable extends Table {
 		return aircraftsDataTable;
 	}
 
-	AircraftsDataTable() {
+	protected AircraftsDataTable() {
 		super("Aircrafts Data");
 	}
 

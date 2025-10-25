@@ -5,6 +5,7 @@ import dataChallengeEnums.DataChallengeEnums.train_rank;
 import flights.FlightDataSchema.FlightDataRecord;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.Iterator;
 import java.util.logging.Logger;
 
@@ -19,21 +20,8 @@ public class FlightData extends FlightDataTable {
 	
     private static final Logger logger = Logger.getLogger(FlightDataTable.class.getName());
 
-	private String flight_id = "";
-	
-	public String getFlight_id() {
-		return flight_id;
-	}
-	
-	private train_rank train_rank_value;
-	
-	public train_rank getTrain_rank_value() {
-		return train_rank_value;
-	}
-	
-	public FlightData( train_rank value , final String flight_id) {
-		this.flight_id = flight_id;
-		this.train_rank_value = value;
+	public FlightData( train_rank train_rank_value , final String flight_id ) {
+		super(train_rank_value , flight_id);
 	}
 	
 	public void extendFlightDataTable() {
@@ -44,14 +32,14 @@ public class FlightData extends FlightDataTable {
 		 +---
 		 */
 	}
-	
 
 	public void readParquet() throws IOException {
-		this.createEmptyFlightDataTable();
 		
+		this.createEmptyFlightDataTable();
+		FolderDiscovery folderDiscovery = new FolderDiscovery();
+
 		String fileName = this.getFlight_id() + ".parquet";
 		try {
-			FolderDiscovery folderDiscovery = new FolderDiscovery();
 			
 			File file = folderDiscovery.getFlightFileFromFileName(this.train_rank_value , fileName);
 			var reader = new CarpetReader<>(file, FlightDataRecord.class);
@@ -68,18 +56,21 @@ public class FlightData extends FlightDataTable {
 			    }
 			    count = count + 1;
 			}
-			System.out.println(this.flightDataTable.print(10));
-			logger.info("Row count = " + this.flightDataTable.rowCount());
+			//System.out.println(this.flightDataTable.print(10));
+			///logger.info("Row count = " + this.flightDataTable.rowCount());
 
 		} catch (Exception ex) {
             ex.printStackTrace(System.out);
         }
-        System.out.println("Parquet file <<" + fileName + ">> read successfully!");
-		
+        logger.info("Parquet file <<" + folderDiscovery.getFlightPath(this.train_rank_value , fileName) + ">> read successfully!");
 	}
 	
 	public void writeParquet( )throws IOException {
 	
 	}
+
+	
+
+	
 
 }

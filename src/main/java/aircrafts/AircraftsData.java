@@ -62,6 +62,7 @@ public class AircraftsData extends AircraftsDataTable {
 	}
 
 	public AircraftsData() {
+		super();
 		logger.info("file = " + getAircraftsFileName());
 	}
 	

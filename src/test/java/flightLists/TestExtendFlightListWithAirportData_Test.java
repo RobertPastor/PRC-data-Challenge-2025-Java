@@ -20,7 +20,7 @@ public class TestExtendFlightListWithAirportData_Test {
 		
 		flightListData.extendWithAirportData(airportsData);
 		
-		flightListData.extendWithSinusCosinusOfLatitudeLongitude();
+		flightListData.extendWithAirportsSinusCosinusOfLatitudeLongitude();
 	}
 
 }

@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import aircrafts.AircraftsData;
 import airports.AirportsDataTable;
+import dataChallengeEnums.DataChallengeEnums.train_rank;
 import flightLists.FlightListDataSchema.FlightListDataRecord;
 import tech.tablesaw.api.DateColumn;
 import tech.tablesaw.api.DoubleColumn;
@@ -19,6 +20,12 @@ import java.time.Duration;
 import java.time.Instant;
 
 public class FlightListDataTable extends Table {
+	
+	protected train_rank train_rank_value;
+	
+	public train_rank getTrain_rank_value() {
+		return train_rank_value;
+	}
 	
 	public Table flightListDataTable = null;
 
@@ -174,7 +181,7 @@ public class FlightListDataTable extends Table {
 
 	}
 	
-	public void extendWithSinusCosinusOfLatitudeLongitude() {
+	public void extendWithAirportsSinusCosinusOfLatitudeLongitude() {
 		
 		// origin
 		

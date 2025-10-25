@@ -1,14 +1,41 @@
 package flights;
 
 import tech.tablesaw.api.*;
+import tech.tablesaw.selection.Selection;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.time.Instant;
 import java.util.List;
+
+import dataChallengeEnums.DataChallengeEnums.train_rank;
 import flights.FlightDataSchema.FlightDataRecord;
 
 public class FlightDataTable extends Table {
+	
+	protected train_rank train_rank_value;
+	
+	public train_rank getTrain_rank_value() {
+		return train_rank_value;
+	}
+	
+	protected String flight_id = "";
+	
+	public void setTrain_rank_value(train_rank train_rank_value) {
+		this.train_rank_value = train_rank_value;
+	}
+
+	public void setFlight_id(String flight_id) {
+		this.flight_id = flight_id;
+	}
+
+	public void setFlightDataTable(Table flightDataTable) {
+		this.flightDataTable = flightDataTable;
+	}
+
+	public String getFlight_id() {
+		return flight_id;
+	}
 	
 	public Table flightDataTable = null;
 
@@ -16,8 +43,10 @@ public class FlightDataTable extends Table {
 		return this.flightDataTable;
 	}
 	
-	FlightDataTable() {
-		super("FlightData");
+	protected FlightDataTable(final train_rank train_rank_value , final String flight_id) {
+		super("Flight Data");
+		this.setFlight_id(flight_id);
+		this.setTrain_rank_value(train_rank_value);
 	}
 
 	public void createEmptyFlightDataTable( ) {
@@ -53,6 +82,35 @@ public class FlightDataTable extends Table {
 		return ( filtered.rowCount() > 0);
 	}
 	
+	public double getDoubleFlightDataAtNearestFuelInstant(final String columnName , Instant start_end) {
+		Instant nearestInstand = this.findNearestIntantFromFlightTimeStamps(start_end);
+		
+		Selection selection = this.flightDataTable.instantColumn("timestamp").isEqualTo(nearestInstand);
+		Table filtered = this.flightDataTable.where(selection);
+		
+		//assert filtered.rowCount() == 1;
+		if ( filtered.rowCount()  >= 1) {
+			return filtered.doubleColumn(columnName).get(0);
+		} else {
+			return (double)0.0;
+		}
+	}
+	
+	public float getFloatFlightDataAtNearestFuelInstant(final String columnName , Instant start_end) {
+		Instant nearestInstand = this.findNearestIntantFromFlightTimeStamps(start_end);
+		
+		Selection selection = this.flightDataTable.instantColumn("timestamp").isEqualTo(nearestInstand);
+		Table filtered = this.flightDataTable.where(selection);
+		
+		//assert filtered.rowCount() == 1;
+		if ( filtered.rowCount() >= 1) {
+			return filtered.floatColumn(columnName).get(0) == null ? (float)0.0 : filtered.floatColumn(columnName).get(0);
+		} else {
+			return (float) 0.0;
+		}
+	}
+	
+	
 	public Instant findNearestIntantFromFlightTimeStamps( final Instant fuelInstant ) {
 		
 		List<Instant> listOfFlightTimeStamps = new ArrayList<Instant>();
@@ -62,13 +120,15 @@ public class FlightDataTable extends Table {
 			// assumption : instants in the flight records are never nulls
 			listOfFlightTimeStamps.add(row.getInstant("timestamp"));
 		}
-		System.out.println("List of instants -> size = " + listOfFlightTimeStamps.size());
-		return listOfFlightTimeStamps.stream()
+		//System.out.println("List of instants -> size = " + listOfFlightTimeStamps.size());
+		Instant nearestInstantFound = listOfFlightTimeStamps.stream()
                 .min((i1, i2) -> Long.compare(
                         Math.abs(i1.toEpochMilli() - fuelInstant.toEpochMilli()),
                         Math.abs(i2.toEpochMilli() - fuelInstant.toEpochMilli())
                 ))
                 .orElse(null); // Return null if the list is empty
+		//System.out.println("nearest found = " + nearestInstantFound);
+		return nearestInstantFound;
 	}
 	
 	public void appendRowToFlightDataTable(  FlightDataRecord r ) {
@@ -94,6 +154,19 @@ public class FlightDataTable extends Table {
 	/**
 	 * do not provide latitude and longitudes to the model
 	 * instead convert latitude and longitude using sine and cosine
+	 * 
+	 * warning range of latitude is Latitude:
+	 * Values range from -90° to +90°.
+	 * Lines of latitude run east-west and are parallel to each other.
+	 * The equator is at 0° latitude.
+	 * 
+	 * Longitude:
+	 * Values range from -180° to +180°.
+	 * Lines of longitude run north-south and converge at the poles.
+	 * The prime meridian (0° longitude) runs through Greenwich, England.
+	 * These ranges define the geographic coordinate system used to specify locations on Earth.
+	 * 
+	 * same function to compute latitude and longitude of airports location
 	 */
 	public void extendWithLatitudeLongitudeCosineSine( ) {
 	
@@ -117,7 +190,8 @@ public class FlightDataTable extends Table {
 			
 			double origin_latitude_degrees = row.getDouble("latitude");
 			double origin_longitude_degrees = row.getDouble("longitude");
-			
+			//@TODO
+			// need to change value range to 0.0 360.0 for cosinus and sinus to work without discontinuity
 			row.setDouble ("latitude_cosine" , Math.cos(Math.toRadians(origin_latitude_degrees)));
 			row.setDouble("latitude_sine" , Math.sin(Math.toRadians(origin_latitude_degrees)));
 			

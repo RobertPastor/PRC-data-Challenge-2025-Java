@@ -3,10 +3,15 @@ package folderDiscovery;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.logging.Logger;
 
 import dataChallengeEnums.DataChallengeEnums.train_rank;
+import fuel.FuelDataTable;
 
 public class FolderDiscovery {
+	
+	private static final Logger logger = Logger.getLogger(FolderDiscovery.class.getName());
+
 	
 	String className = "";
 	
@@ -71,7 +76,7 @@ public class FolderDiscovery {
 	
 	public File getFlightFileFromFileName ( train_rank train_rank_value , String fileName ) {
 		
-		System.out.println(this.className + " --- " + fileName );
+		//logger.info(this.className + " --- " + fileName );
 		if (!fileName.endsWith("parquet")) {
 			fileName = fileName + ".parquet";
 		}
@@ -117,7 +122,6 @@ public class FolderDiscovery {
 		return null;
 	}
 	
-	
 	public void discover() {
 		this.flightTrainFolder = new File(flightTrainFolderStr);
 		this.flightRankFolder = new File(flightRankFolderStr);
@@ -128,7 +132,6 @@ public class FolderDiscovery {
 		if ( this.flightRankFolder.exists() && this.flightRankFolder.isDirectory()) {
 			this.setFlightRankFiles(this.flightRankFolder.listFiles());
 		}
-		
 	}
 	
 	public int getFlightFolderNbFiles( train_rank train_rank_value ) {
@@ -146,7 +149,6 @@ public class FolderDiscovery {
 	public int getRankFolderNbFiles() {
 		return this.flightRankFiles.length;
 	}
-
 
 	public File[] getFlightTrainFiles() {
 		return flightTrainFiles;
@@ -179,6 +181,21 @@ public class FolderDiscovery {
 		File file = path.toFile();
 		if ( file.exists() && file.isFile()) {
 			return file;
+		}
+		return null;
+	}
+
+	public String getFlightPath(train_rank train_rank_value, String fileName) {
+		String folder = "";
+		if ( train_rank_value == train_rank.rank) {
+			folder = flightRankFolderStr;
+		} else {
+			folder = flightTrainFolderStr;
+		}
+		Path path = Paths.get(folder , fileName);
+		File file = path.toFile();
+		if ( file.exists() && file.isFile()) {
+			return file.getAbsolutePath();
 		}
 		return null;
 	}

@@ -4,6 +4,30 @@ import java.time.Instant;
 
 public class FuelDataSchema {
 	
+	public static record FuelExtendedDataRecord(
+			int idx,
+			String flight_id, 
+			Instant start, 
+			Instant end
+			) {
+		
+		public int idx() {
+			return idx;
+		}
+
+		public String flight_id() {
+			return flight_id;
+		}
+
+		public Instant start() {
+			return start;
+		}
+
+		public Instant end() {
+			return end;
+		}
+	}
+	
 	public static record FuelDataRecord(
 			int idx, 
 			String flight_id, 
@@ -28,7 +52,7 @@ public class FuelDataSchema {
 			return end;
 		}
 
-		    public float fuel_kg() {
+		public float fuel_kg() {
 			return fuel_kg;
 		}
 	}
