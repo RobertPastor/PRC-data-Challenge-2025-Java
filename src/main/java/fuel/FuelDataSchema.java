@@ -2,6 +2,9 @@ package fuel;
 
 import java.time.Instant;
 
+import tech.tablesaw.api.DoubleColumn;
+import tech.tablesaw.api.LongColumn;
+
 public class FuelDataSchema {
 	
 	public static record FuelExtendedDataRecord(
@@ -38,10 +41,33 @@ public class FuelDataSchema {
 			float aircraft_track_angle_deg_at_fuel_end,
 			
 			float aircraft_vertical_rate_ft_min_at_fuel_start,
-			float aircraft_vertical_rate_ft_min_at_fuel_end
+			float aircraft_vertical_rate_ft_min_at_fuel_end,
+			
+			float origin_elevation_feet,
+			float destination_elevation_feet,
+			
+			double flight_distance_Nm,			
+			long flight_duration_sec
+	
 			
 			) {
 		
+		public double flight_distance_Nm() {
+			return flight_distance_Nm;
+		}
+
+		public long flight_duration_sec() {
+			return flight_duration_sec;
+		}
+
+		public float origin_elevation_feet() {
+			return origin_elevation_feet;
+		}
+
+		    public float destination_elevation_feet() {
+			return destination_elevation_feet;
+		}
+
 		public float aircraft_computed_vertical_rate_ft_min() {
 			return aircraft_computed_vertical_rate_ft_min;
 		}

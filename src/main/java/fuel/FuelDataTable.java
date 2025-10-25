@@ -150,7 +150,7 @@ public class FuelDataTable extends Table {
 		System.out.println( this.fuelDataTable.print(10));
 	}
 	
-	public void extendFuelStartEndInstantsWithFlightData( ) throws IOException {
+	public void extendFuelStartEndInstantsWithFlightData( final int maxComputedRow ) throws IOException {
 		
 		DoubleColumn aircraft_latitude_at_fuel_start_column = DoubleColumn.create("aircraft_latitude_at_fuel_start");
 		this.fuelDataTable.addColumns(aircraft_latitude_at_fuel_start_column);
@@ -178,7 +178,6 @@ public class FuelDataTable extends Table {
 		FloatColumn aircraft_computed_vertical_rate = FloatColumn.create("aircraft_computed_vertical_rate_ft_min");
 		this.fuelDataTable.addColumns(aircraft_computed_vertical_rate);
 		
-
 		// ground speed
 		FloatColumn aircraft_groundspeed_start_column = FloatColumn.create("aircraft_groundspeed_kt_at_fuel_start");
 		this.fuelDataTable.addColumns(aircraft_groundspeed_start_column);
@@ -201,8 +200,7 @@ public class FuelDataTable extends Table {
 		
 		Iterator<Row> iter = this.fuelDataTable.iterator();
 		int counter = 0;
-		int maxCounter = 100;
-		while ( iter.hasNext() && ( counter < maxCounter )) {
+		while ( iter.hasNext() && ( counter < maxComputedRow )) {
 			counter++;
 			Row row = iter.next();
 			

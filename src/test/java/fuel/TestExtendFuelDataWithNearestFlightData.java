@@ -25,9 +25,11 @@ public class TestExtendFuelDataWithNearestFlightData {
 			FlightListData flightListData = new FlightListData(train_rank_value);
 			flightListData.readParquet();
 			
-			flightListData.extendWithAircraftsData( aircraftsData );
 			flightListData.extendWithAirportData( airportsData );
-			flightListData.extendWithAirportsSinusCosinusOfLatitudeLongitude();
+			//flightListData.extendWithAirportsSinusCosinusOfLatitudeLongitude();
+
+			//flightListData.extendWithAircraftsData( aircraftsData );
+			//flightListData.extendWithAirportsSinusCosinusOfLatitudeLongitude();
 			
 			FuelData fuelData = new FuelData( train_rank_value );
 			fuelData.readParquet();
@@ -39,10 +41,10 @@ public class TestExtendFuelDataWithNearestFlightData {
 			
 			// merge fuel with flight list
 			fuelData.extendFuelWithFlightListData( flightListData.getFlightListDataTable() ) ;
-			
 
 			// extend with flight data
-			fuelData.extendFuelStartEndInstantsWithFlightData();
+			int maxToBeComputedRow = 1000000;
+			fuelData.extendFuelStartEndInstantsWithFlightData( maxToBeComputedRow );
 			
 			System.out.println(fuelData.getFuelDataTable().structure());
 			System.out.println(fuelData.getFuelDataTable().print(10));

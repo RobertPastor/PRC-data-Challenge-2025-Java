@@ -51,6 +51,7 @@ public class FuelData extends FuelDataTable {
 	        				row.getDouble("time_diff_seconds") , 
 	        				row.getFloat("fuel_flow_kg_sec") ,
 	        				
+	        				// informations taken from the flight data between fuel start and fuel end
 	        				row.getDouble("aircraft_latitude_at_fuel_start"),
 	        				row.getDouble("aircraft_longitude_at_fuel_start"),
 	        				
@@ -71,10 +72,18 @@ public class FuelData extends FuelDataTable {
 	        				row.getFloat("aircraft_track_angle_deg_at_fuel_end"),
 	        				
 	        				row.getFloat("aircraft_vertical_rate_ft_min_at_fuel_start"),
-	        				row.getFloat("aircraft_vertical_rate_ft_min_at_fuel_end")
+	        				row.getFloat("aircraft_vertical_rate_ft_min_at_fuel_end"),
+	        				
+	        				// airports departure and arrival elevation feet
+	        				row.getFloat("origin_elevation_feet"),
+	        				row.getFloat("destination_elevation_feet"),
+	        				
+	        				// flight distance and flight duration
+	        				row.getDouble("flight_distance_Nm"),
+	        				row.getLong("flight_duration_sec")
+	        				
 	        				) ;
-	        		
-	     
+	        	
 	        		fuelRecords.add(record);
 	        		
 	        	});;
