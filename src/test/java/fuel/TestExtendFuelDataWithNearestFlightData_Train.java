@@ -24,13 +24,17 @@ public class TestExtendFuelDataWithNearestFlightData_Train {
 			
 			FlightListData flightListData = new FlightListData(train_rank_value);
 			flightListData.readParquet();
+			System.out.println(flightListData.getFlightListDataTable().shape());
+			flightListData.extendWithFlightDateData();
 			
 			flightListData.extendWithAirportData( airportsData );
 			//flightListData.extendWithAirportsSinusCosinusOfLatitudeLongitude();
+			System.out.println(flightListData.getFlightListDataTable().shape());
 
-			//flightListData.extendWithAircraftsData( aircraftsData );
+			flightListData.extendWithAircraftsData( aircraftsData );
 			//flightListData.extendWithAirportsSinusCosinusOfLatitudeLongitude();
-			
+			System.out.println(flightListData.getFlightListDataTable().shape());
+
 			FuelData fuelData = new FuelData( train_rank_value );
 			fuelData.readParquet();
 			
@@ -41,19 +45,20 @@ public class TestExtendFuelDataWithNearestFlightData_Train {
 			
 			// merge fuel with flight list
 			fuelData.extendFuelWithFlightListData( flightListData.getFlightListDataTable() ) ;
-			
+
 			// as flight take-off and landed are now available use them to compute relative delta from burnt start and stop
 			fuelData.extendRelativeStartEndFromFlightTakeoff();
-			
+
 			// extend with flight data
-			// int maxToBeComputedRow = 1000000;
+			//int maxToBeComputedRow = 1000000;
 			int maxToBeComputedRow = 100;
 			fuelData.extendFuelStartEndInstantsWithFlightData( maxToBeComputedRow );
 			
-			System.out.println(fuelData.getFuelDataTable().structure());
-			System.out.println(fuelData.getFuelDataTable().print(10));
+			//System.out.println(fuelData.getFuelDataTable().structure());
+			//System.out.println(fuelData.getFuelDataTable().print(10));
 			
 			fuelData.generateParquetFileFor();
+			System.out.println(fuelData.getFuelDataTable().print(100));
 
 		}
 }

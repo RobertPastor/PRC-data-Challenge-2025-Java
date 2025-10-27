@@ -2,7 +2,6 @@ package airports;
 
 public class AirportsDataSchema {
 
-	
 	public static record AirportDataRecord(
 			
 			String icao, 
@@ -27,5 +26,4 @@ public class AirportsDataSchema {
 			return elevation;
 		}
 	}
-			
 }

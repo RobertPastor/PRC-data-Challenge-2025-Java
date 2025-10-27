@@ -57,16 +57,18 @@ public class FlightDataTable extends Table {
                 DoubleColumn.create("longitude"),
                 DoubleColumn.create("latitude"),
                 
-                FloatColumn.create("altitude"),
-                FloatColumn.create("groundspeed"),
+                DoubleColumn.create("altitude"),
+                DoubleColumn.create("groundspeed"),
                 
-                FloatColumn.create("track"),
+                DoubleColumn.create("track"),
                 
-                FloatColumn.create("vertical_rate"),
-                FloatColumn.create("mach"),
+                DoubleColumn.create("vertical_rate"),
+                DoubleColumn.create("mach"),
+                
                 StringColumn.create("typecode"),
-                FloatColumn.create("TAS"),
-                FloatColumn.create("CAS"),
+                
+                DoubleColumn.create("TAS"),
+                DoubleColumn.create("CAS"),
 				StringColumn.create("source"));
 		
 	}
@@ -82,21 +84,24 @@ public class FlightDataTable extends Table {
 		return ( filtered.rowCount() > 0);
 	}
 	
-	public double getDoubleFlightDataAtNearestFuelInstant(final String columnName , Instant start_end) {
-		Instant nearestInstand = this.findNearestIntantFromFlightTimeStamps(start_end);
+	public double getDoubleFlightDataAtNearestFuelInstant(final String columnName , final String startEnd , final Instant start_end) {
 		
-		Selection selection = this.flightDataTable.instantColumn("timestamp").isEqualTo(nearestInstand);
-		Table filtered = this.flightDataTable.where(selection);
-		
-		//assert filtered.rowCount() == 1;
-		if ( filtered.rowCount()  >= 1) {
-			return filtered.doubleColumn(columnName).get(0);
-		} else {
-			return (double)0.0;
+		String interpolatedColumnName = "interpolated_" + columnName + "_" + startEnd;
+
+		if ( !this.flightDataTable.containsColumn(interpolatedColumnName) ) {
+			double[] listOfDoubles = this.flightDataTable.doubleColumn(columnName).asDoubleArray();
+			
+			// create an interpolate column
+			DoubleColumn interpolatedColumn = (DoubleColumn) DoubleColumn
+							.create( interpolatedColumnName , listOfDoubles)
+							.interpolate()
+							.frontfill()
+							.interpolate()
+							.backfill();
+			// add temporary column to the flight table
+			this.flightDataTable.addColumns(interpolatedColumn);
 		}
-	}
-	
-	public float getFloatFlightDataAtNearestFuelInstant(final String columnName , Instant start_end) {
+		
 		Instant nearestInstand = this.findNearestIntantFromFlightTimeStamps(start_end);
 		
 		Selection selection = this.flightDataTable.instantColumn("timestamp").isEqualTo(nearestInstand);
@@ -104,7 +109,42 @@ public class FlightDataTable extends Table {
 		
 		//assert filtered.rowCount() == 1;
 		if ( filtered.rowCount() >= 1) {
-			return filtered.floatColumn(columnName).get(0) == null ? (float)0.0 : filtered.floatColumn(columnName).get(0);
+			return filtered.doubleColumn(interpolatedColumnName).get(0) == null ?
+					(double)0.0 : filtered.doubleColumn(interpolatedColumnName).get(0);
+		} else {
+			return (double)0.0;
+		}
+	}
+	
+	public float getFloatFlightDataAtNearestFuelInstant(final String columnName , final String startEnd, final Instant start_end) {
+		
+		String interpolatedColumnName = "interpolated_" + columnName + "_" + startEnd;
+		if ( !this.flightDataTable.containsColumn(interpolatedColumnName) ) {
+		
+			float[] listOfFloats = this.flightDataTable.floatColumn(columnName).asFloatArray();
+			
+			// create an interpolate column
+			FloatColumn interpolatedColumn = (FloatColumn) FloatColumn
+					.create( interpolatedColumnName , listOfFloats)
+					.interpolate()
+					.frontfill()
+					.interpolate()
+					.backfill();
+			// add temporary column to the flight table
+			this.flightDataTable.addColumns(interpolatedColumn);
+		}
+		
+		// nearest instant to find
+		Instant nearestInstand = this.findNearestIntantFromFlightTimeStamps(start_end);
+		
+		// filtering condition on the table
+		Selection selection = this.flightDataTable.instantColumn("timestamp").isEqualTo(nearestInstand);
+		Table filtered = this.flightDataTable.where(selection);
+		
+		//assert filtered.rowCount() == 1;
+		if ( filtered.rowCount() >= 1) {
+			return filtered.floatColumn(interpolatedColumnName).get(0) == null ? 
+					(float)0.0 : filtered.floatColumn(interpolatedColumnName).get(0);
 		} else {
 			return (float) 0.0;
 		}
@@ -131,24 +171,27 @@ public class FlightDataTable extends Table {
 		return nearestInstantFound;
 	}
 	
-	public void appendRowToFlightDataTable(  FlightDataRecord r ) {
+	public void appendRowToFlightDataTable(  FlightDataRecord record ) {
 		
 		Row row = this.flightDataTable.appendRow();
-        row.setString("flight_id", r.flight_id());
-        row.setInstant("timestamp", r.timestamp());
+        row.setString("flight_id", record.flight_id());
+        row.setInstant("timestamp", record.timestamp());
         
-        row.setDouble("longitude", r.longitude());
-        row.setDouble("latitude", r.latitude());
+        row.setDouble("longitude", record.longitude());
+        row.setDouble("latitude", record.latitude());
         
-        row.setFloat("altitude", r.altitude());
+        row.setDouble("altitude", record.altitude());
         
-        row.setFloat("groundspeed", r.groundspeed());
-        row.setFloat("vertical_rate", r.vertical_rate());
-        row.setFloat("mach", r.mach());
-        row.setString("typecode", r.typecode());
-        row.setFloat("TAS", r.TAS());
-        row.setFloat("CAS", r.CAS());
-        row.setString("source", r.source());
+        row.setDouble("groundspeed", record.groundspeed());
+        row.setDouble("vertical_rate", record.vertical_rate());
+        row.setDouble("mach", record.mach());
+        
+        row.setString("typecode", record.typecode());
+        
+        row.setDouble("TAS", record.TAS());
+        row.setDouble("CAS", record.CAS());
+        
+        row.setString("source", record.source());
 	}
 	
 	/**

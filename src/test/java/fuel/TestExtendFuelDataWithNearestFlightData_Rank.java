@@ -24,11 +24,12 @@ public class TestExtendFuelDataWithNearestFlightData_Rank {
 
 		FlightListData flightListData = new FlightListData(train_rank_value);
 		flightListData.readParquet();
+		flightListData.extendWithFlightDateData();
 
 		flightListData.extendWithAirportData( airportsData );
 		//flightListData.extendWithAirportsSinusCosinusOfLatitudeLongitude();
 
-		//flightListData.extendWithAircraftsData( aircraftsData );
+		flightListData.extendWithAircraftsData( aircraftsData );
 		//flightListData.extendWithAirportsSinusCosinusOfLatitudeLongitude();
 
 		FuelData fuelData = new FuelData( train_rank_value );

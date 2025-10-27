@@ -6,56 +6,56 @@ import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.LongColumn;
 
 public class FuelDataSchema {
-	
+
 	public static record FuelExtendedDataRecord(
 			int idx,
 			String flight_id, 
 			Instant start, 
 			Instant end,
-			
+
 			long time_diff_seconds,
 			float fuel_flow_kg_sec,
-			
+
 			// latitude and longitude at fuel start
 			double aircraft_latitude_at_fuel_start,
 			double aircraft_longitude_at_fuel_start,
-			
+
 			// latitude and longitude at fuel end
 			double aircraft_latitude_at_fuel_end,
 			double aircraft_longitude_at_fuel_end,
-			
+
 			// distance flown between fuel start and fuel end
 			double aircraft_distance_flown_Nm,
-			
+
 			// altitude at fuel start and fuel stop
 			float aircraft_altitude_ft_at_fuel_start,
 			float aircraft_altitude_ft_at_fuel_end,
-			
+
 			// computed vertical rate feet per minutes
 			float aircraft_computed_vertical_rate_ft_min,
-			
+
 			float aircraft_groundspeed_kt_at_fuel_start,
 			float aircraft_groundspeed_kt_at_fuel_end,
-			
+
 			float aircraft_track_angle_deg_at_fuel_start,
 			float aircraft_track_angle_deg_at_fuel_end,
-			
+
 			float aircraft_vertical_rate_ft_min_at_fuel_start,
 			float aircraft_vertical_rate_ft_min_at_fuel_end,
-			
+
 			float origin_elevation_feet,
 			float destination_elevation_feet,
-			
+
 			double flight_distance_Nm,			
 			long flight_duration_sec,
-			
+
 			// using flight take-off and flight landed , compute relate duration in second
 			long fuel_burnt_start_relative_to_takeoff_sec,
 			long fuel_burnt_end_relative_to_takeoff_sec,
 			long fuel_burnt_end_relative_to_landed_sec,
-			
+
 			int Num_Engines,
-			
+
 			float Approach_Speed_knot,
 			float Wingspan_ft_without_winglets_sharklets,
 			float Length_ft,
@@ -63,23 +63,82 @@ public class FuelDataSchema {
 			float Wheelbase_ft,
 			float Cockpit_to_Main_Gear_ft,
 			float Main_Gear_Width_ft,
-			
-			float MTOW_kg,
-			float MALW_kg,
-			float Parking_Area_ft2
 
-			
+			double MTOW_kg,
+			double MALW_kg,
+			float Parking_Area_ft2,
+
+			int flight_date_year,
+			int flight_date_month,
+			int flight_date_day_of_the_year
+
 			) {
-		
+
+		public int flight_date_year() {
+			return flight_date_year;
+		}
+
+		public int flight_date_month() {
+			return flight_date_month;
+		}
+
+		public int flight_date_day_of_the_year() {
+			return flight_date_day_of_the_year;
+		}
+
+		public int Num_Engines() {
+			return Num_Engines;
+		}
+
+		public float Approach_Speed_knot() {
+			return Approach_Speed_knot;
+		}
+
+		public float Wingspan_ft_without_winglets_sharklets() {
+			return Wingspan_ft_without_winglets_sharklets;
+		}
+
+		public float Length_ft() {
+			return Length_ft;
+		}
+
+		public float Tail_Height_at_OEW_ft() {
+			return Tail_Height_at_OEW_ft;
+		}
+
+		public float Wheelbase_ft() {
+			return Wheelbase_ft;
+		}
+
+		public float Cockpit_to_Main_Gear_ft() {
+			return Cockpit_to_Main_Gear_ft;
+		}
+
+		public float Main_Gear_Width_ft() {
+			return Main_Gear_Width_ft;
+		}
+
+		public double MTOW_kg() {
+			return MTOW_kg;
+		}
+
+		public double MALW_kg() {
+			return MALW_kg;
+		}
+
+		public float Parking_Area_ft2() {
+			return Parking_Area_ft2;
+		}
+
 		public long fuel_burnt_start_relative_to_takeoff_sec() {
 			return fuel_burnt_start_relative_to_takeoff_sec;
 		}
 
-		    public long fuel_burnt_end_relative_to_takeoff_sec() {
+		public long fuel_burnt_end_relative_to_takeoff_sec() {
 			return fuel_burnt_end_relative_to_takeoff_sec;
 		}
 
-		    public long fuel_burnt_end_relative_to_landed_sec() {
+		public long fuel_burnt_end_relative_to_landed_sec() {
 			return fuel_burnt_end_relative_to_landed_sec;
 		}
 
@@ -95,7 +154,7 @@ public class FuelDataSchema {
 			return origin_elevation_feet;
 		}
 
-		    public float destination_elevation_feet() {
+		public float destination_elevation_feet() {
 			return destination_elevation_feet;
 		}
 
@@ -122,64 +181,64 @@ public class FuelDataSchema {
 		public Instant end() {
 			return end;
 		}
-		
-		public double time_diff_seconds() {
+
+		public long time_diff_seconds() {
 			return time_diff_seconds;
 		}
 
-		    public float fuel_flow_kg_sec() {
+		public float fuel_flow_kg_sec() {
 			return fuel_flow_kg_sec;
 		}
 
-		    public double aircraft_latitude_at_fuel_start() {
+		public double aircraft_latitude_at_fuel_start() {
 			return aircraft_latitude_at_fuel_start;
 		}
 
-		    public double aircraft_longitude_at_fuel_start() {
+		public double aircraft_longitude_at_fuel_start() {
 			return aircraft_longitude_at_fuel_start;
 		}
 
-		    public double aircraft_latitude_at_fuel_end() {
+		public double aircraft_latitude_at_fuel_end() {
 			return aircraft_latitude_at_fuel_end;
 		}
 
-		    public double aircraft_longitude_at_fuel_end() {
+		public double aircraft_longitude_at_fuel_end() {
 			return aircraft_longitude_at_fuel_end;
 		}
 
-		    public float aircraft_altitude_ft_at_fuel_start() {
+		public float aircraft_altitude_ft_at_fuel_start() {
 			return aircraft_altitude_ft_at_fuel_start;
 		}
 
-		    public float aircraft_altitude_ft_at_fuel_end() {
+		public float aircraft_altitude_ft_at_fuel_end() {
 			return aircraft_altitude_ft_at_fuel_end;
 		}
 
-		    public float aircraft_groundspeed_kt_at_fuel_start() {
+		public float aircraft_groundspeed_kt_at_fuel_start() {
 			return aircraft_groundspeed_kt_at_fuel_start;
 		}
 
-		    public float aircraft_groundspeed_kt_at_fuel_end() {
+		public float aircraft_groundspeed_kt_at_fuel_end() {
 			return aircraft_groundspeed_kt_at_fuel_end;
 		}
 
-		    public float aircraft_track_angle_deg_at_fuel_start() {
+		public float aircraft_track_angle_deg_at_fuel_start() {
 			return aircraft_track_angle_deg_at_fuel_start;
 		}
 
-		    public float aircraft_track_angle_deg_at_fuel_end() {
+		public float aircraft_track_angle_deg_at_fuel_end() {
 			return aircraft_track_angle_deg_at_fuel_end;
 		}
 
-		    public float aircraft_vertical_rate_ft_min_at_fuel_start() {
+		public float aircraft_vertical_rate_ft_min_at_fuel_start() {
 			return aircraft_vertical_rate_ft_min_at_fuel_start;
 		}
 
-		    public float aircraft_vertical_rate_ft_min_at_fuel_end() {
+		public float aircraft_vertical_rate_ft_min_at_fuel_end() {
 			return aircraft_vertical_rate_ft_min_at_fuel_end;
 		}
 	}
-	
+
 	public static record FuelDataRecord(
 			int idx, 
 			String flight_id, 

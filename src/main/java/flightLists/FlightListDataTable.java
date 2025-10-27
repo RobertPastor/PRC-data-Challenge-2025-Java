@@ -10,6 +10,7 @@ import tech.tablesaw.api.DateColumn;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.FloatColumn;
 import tech.tablesaw.api.InstantColumn;
+import tech.tablesaw.api.IntColumn;
 import tech.tablesaw.api.LongColumn;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.StringColumn;
@@ -18,6 +19,9 @@ import utils.Utils;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 public class FlightListDataTable extends Table {
 	
@@ -34,7 +38,7 @@ public class FlightListDataTable extends Table {
 	}
 
 	public Table getFlightListDataTable() {
-		return flightListDataTable;
+		return this.flightListDataTable;
 	}
 
 	FlightListDataTable() {
@@ -45,6 +49,7 @@ public class FlightListDataTable extends Table {
 		this.flightListDataTable = Table.create("Flight List Data",
 
 				StringColumn.create("flight_id"),
+				// assumption is UTC or Zulu Date ???
 				DateColumn.create("flight_date"),
 
 				InstantColumn.create("takeoff"),
@@ -57,28 +62,68 @@ public class FlightListDataTable extends Table {
 				StringColumn.create("destination_icao"),
 				StringColumn.create("destination_name"),
 
-				StringColumn.create("aircraft_type"));
+				StringColumn.create("aircraft_type")
+				
+				);
+	}
+	
+	/**
+	 * added 26 October 2025
+	 */
+	public void extendWithFlightDateData( ) {
+		
+		IntColumn flight_date_year_column = IntColumn.create("flight_date_year");
+		this.flightListDataTable.addColumns(flight_date_year_column);
+
+		IntColumn flight_date_month_column = IntColumn.create("flight_date_month");
+		this.flightListDataTable.addColumns(flight_date_month_column);
+
+		IntColumn flight_date_day_of_the_year_column = IntColumn.create("flight_date_day_of_the_year");
+		this.flightListDataTable.addColumns(flight_date_day_of_the_year_column);
+
+		Iterator<Row> iter = this.flightListDataTable.iterator();
+		while ( iter.hasNext()) {
+			Row row = iter.next();
+			
+			// assumption date is UTC
+			ZonedDateTime zonedFlightDateTime = row.getDate("flight_date").atStartOfDay(ZoneId.of("UTC"));
+			int year = zonedFlightDateTime.getYear();
+			assert year > 2020 && year < 2026;
+			row.setInt( "flight_date_year" , year);
+			
+			int month = zonedFlightDateTime.getMonth().ordinal()+1;
+			assert (month >= 1) && (month <= 12);
+			row.setInt( "flight_date_month" , month);
+			
+			int day_of_the_year = zonedFlightDateTime.getDayOfYear();
+			// 366 for the leap year
+			assert (day_of_the_year >= 1 ) && (day_of_the_year <= 366 );
+			row.setInt( "flight_date_day_of_the_year" , day_of_the_year);
+			
+		}
 	}
 
-	public void appendRowToFlightListDataTable(  FlightListDataRecord r ) {
+	public void appendRowToFlightListDataTable(  FlightListDataRecord record ) {
 
 		Row row = this.flightListDataTable.appendRow();
 		
-		row.setString("flight_id", r.flight_id());
-		row.setDate("flight_date", r.flight_date());
+		row.setString("flight_id", record.flight_id());
+		row.setDate("flight_date", record.flight_date());
 		
-		row.setInstant("takeoff", r.takeoff());
+		row.setInstant("takeoff", record.takeoff());
 		
-		row.setString("origin_icao", r.origin_icao());
-		row.setString("origin_name", r.origin_name());
+		row.setString("origin_icao", record.origin_icao());
+		row.setString("origin_name", record.origin_name());
 		
-		row.setInstant("landed", r.landed());
+		row.setInstant("landed", record.landed());
 
-		row.setString("destination_icao", r.destination_icao());
-		row.setString("destination_name", r.destination_name());
+		row.setString("destination_icao", record.destination_icao());
+		row.setString("destination_name", record.destination_name());
 
-		row.setString("aircraft_type", r.aircraft_type());
-	}
+		row.setString("aircraft_type", record.aircraft_type());
+		
+	};
+	
 	
 	/*
 	 * origin_longitude |   origin_latitude |   origin_elevation |   destination_longitude | 

@@ -46,9 +46,4 @@ public class FlightListData extends FlightListDataTable {
 		System.out.println("Parquet file <<" + this.getTrain_rank_value() + ">> Flight List <<" + file.getAbsolutePath() +">> read successfully!");
 
 	}
-
-
-	public void writeParquet( )throws IOException {
-
-	}
 }

@@ -49,32 +49,31 @@ public class AircraftsDataTable extends Table {
 				FloatColumn.create("Parking_Area_ft2"));
 	}
 	
-	public void appendRowToAircraftsDataTable(  AircraftsDataRecord r ) {
+	public void appendRowToAircraftsDataTable(  AircraftsDataRecord record ) {
 
 		Row row = this.aircraftsDataTable.appendRow();
 
-		row.setString("ICAO_Code", r.ICAO_Code());
-		row.setInt("Num_Engines", r.Num_Engines());
+		row.setString("ICAO_Code", record.ICAO_Code());
+		row.setInt("Num_Engines", record.Num_Engines());
 		
-		row.setFloat("Approach_Speed_knot", r.Approach_Speed_knot());
-		row.setFloat("Wingspan_ft_without_winglets_sharklets", r.Wingspan_ft_without_winglets_sharklets());
+		row.setFloat("Approach_Speed_knot", record.Approach_Speed_knot());
+		row.setFloat("Wingspan_ft_without_winglets_sharklets", record.Wingspan_ft_without_winglets_sharklets());
 		
-		row.setFloat("Length_ft", r.Length_ft());
-		row.setFloat("Tail_Height_at_OEW_ft", r.Tail_Height_at_OEW_ft());
+		row.setFloat("Length_ft", record.Length_ft());
+		row.setFloat("Tail_Height_at_OEW_ft", record.Tail_Height_at_OEW_ft());
 		
-		row.setFloat("Wheelbase_ft", r.Wheelbase_ft());
-		row.setFloat("Cockpit_to_Main_Gear_ft", r.Cockpit_to_Main_Gear_ft());
+		row.setFloat("Wheelbase_ft", record.Wheelbase_ft());
+		row.setFloat("Cockpit_to_Main_Gear_ft", record.Cockpit_to_Main_Gear_ft());
 		
-		row.setFloat("Main_Gear_Width_ft", r.Main_Gear_Width_ft());
+		row.setFloat("Main_Gear_Width_ft", record.Main_Gear_Width_ft());
 		
-		row.setDouble("MTOW_lb", r.MTOW_lb());
-		row.setDouble("MTOW_kg" , r.MTOW_lb() * Constants.lbs_to_kilograms);
+		row.setDouble("MTOW_lb", record.MTOW_lb());
+		row.setDouble("MTOW_kg" , record.MTOW_lb() * Constants.lbs_to_kilograms);
 		
-		row.setDouble("MALW_lb", r.MALW_lb());
-		row.setDouble("MALW_kg", r.MALW_lb() * Constants.lbs_to_kilograms);
+		row.setDouble("MALW_lb", record.MALW_lb());
+		row.setDouble("MALW_kg", record.MALW_lb() * Constants.lbs_to_kilograms);
 		
-		row.setFloat("Parking_Area_ft2", r.Parking_Area_ft2());
-
+		row.setFloat("Parking_Area_ft2", record.Parking_Area_ft2());
 	}
 	
 }

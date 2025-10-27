@@ -97,9 +97,16 @@ public class FuelData extends FuelDataTable {
 	        				row.getFloat("Wheelbase_ft"),
 	        				row.getFloat("Cockpit_to_Main_Gear_ft"),
 	        				row.getFloat("Main_Gear_Width_ft"),
-	        				row.getFloat("MTOW_kg"),
-	        				row.getFloat("MALW_kg"),
-	        				row.getFloat("Parking_Area_ft2")
+	        				// these data types are consistent with those use in the aircrafs data reader
+	        				row.getDouble("MTOW_kg"),
+	        				row.getDouble("MALW_kg"),
+	        				
+	        				row.getFloat("Parking_Area_ft2"),
+	        				
+	        				// 26th October 2025
+	        				row.getInt("flight_date_year"),
+	        				row.getInt("flight_date_month"),
+	        				row.getInt("flight_date_day_of_the_year")
 	        				
 	        				) ;
 	        	

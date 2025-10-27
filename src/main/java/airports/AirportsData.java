@@ -43,7 +43,4 @@ public class AirportsData extends AirportsDataTable {
 		
 	}
 	
-	public void writeParquet( )throws IOException {
-	
-	}
 }

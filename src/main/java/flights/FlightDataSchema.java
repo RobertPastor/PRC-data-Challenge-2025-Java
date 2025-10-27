@@ -1,6 +1,11 @@
 package flights;
 
 import java.time.Instant;
+import java.util.Optional;
+
+import org.apache.parquet.variant.Variant;
+
+
 
 public class FlightDataSchema {
 
@@ -9,19 +14,20 @@ public class FlightDataSchema {
 		String flight_id, 
 		Instant timestamp,
 		
-		double longitude,
-		double latitude,
+		Double longitude,
+		Double latitude,
 		
-		float altitude,
-		float groundspeed,
+		Double altitude,
+		Double groundspeed,
 		
-		float track,
-		float vertical_rate,
+		Double track,
+		Double vertical_rate,
 		
-		float mach,
+		Double  mach,
 		String typecode,
-		float TAS,
-		float CAS,
+		
+		Double TAS,
+		Double CAS,
 		String source
 		
 	) {
@@ -34,31 +40,31 @@ public class FlightDataSchema {
 			return timestamp;
 		}
 
-		public double longitude() {
+		public Double longitude() {
 			return longitude;
 		}
 
-		public double latitude() {
+		public Double latitude() {
 			return latitude;
 		}
 
-		public float altitude() {
+		public Double altitude() {
 			return altitude;
 		}
 
-		public float groundspeed() {
+		public Double groundspeed() {
 			return groundspeed;
 		}
 
-		public float track() {
+		public Double track() {
 			return track;
 		}
 
-		public float vertical_rate() {
+		public Double vertical_rate() {
 			return vertical_rate;
 		}
 
-		public float mach() {
+		public Double mach() {
 			return mach;
 		}
 
@@ -66,11 +72,11 @@ public class FlightDataSchema {
 			return typecode;
 		}
 
-		public float TAS() {
+		public Double TAS() {
 			return TAS;
 		}
 
-		public float CAS() {
+		public Double CAS() {
 			return CAS;
 		}
 

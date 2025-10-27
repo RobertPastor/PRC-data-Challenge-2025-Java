@@ -30,12 +30,6 @@
 		    <version>0.18.1</version>
 		</dependency>
 		
-		<dependency>
-			<groupId>tech.tablesaw</groupId>
-			<artifactId>tablesaw-core</artifactId>
-			<version>0.44.4</version>
-		</dependency>
-		
   
 	  <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
 		<dependency>
@@ -99,7 +93,6 @@
         
         <!-- https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-common -->
 
-
         <dependency>
 			<groupId>org.apache.parquet</groupId>
 			<artifactId>parquet-avro</artifactId>
@@ -125,7 +118,6 @@
 			<scope>compile</scope>
 		</dependency>
 	
-        
 	    <dependency>
 	      <groupId>org.apache.maven</groupId>
 	      <artifactId>maven-artifact</artifactId>
