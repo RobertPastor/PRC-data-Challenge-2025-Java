@@ -84,24 +84,8 @@ public class FlightDataTable extends Table {
 		return ( filtered.rowCount() > 0);
 	}
 	
-	public double getDoubleFlightDataAtNearestFuelInstant(final String columnName , final String startEnd , final Instant start_end) {
-		
-		String interpolatedColumnName = "interpolated_" + columnName + "_" + startEnd;
-
-		if ( !this.flightDataTable.containsColumn(interpolatedColumnName) ) {
-			double[] listOfDoubles = this.flightDataTable.doubleColumn(columnName).asDoubleArray();
-			
-			// create an interpolate column
-			DoubleColumn interpolatedColumn = (DoubleColumn) DoubleColumn
-							.create( interpolatedColumnName , listOfDoubles)
-							.interpolate()
-							.frontfill()
-							.interpolate()
-							.backfill();
-			// add temporary column to the flight table
-			this.flightDataTable.addColumns(interpolatedColumn);
-		}
-		
+	public double getDoubleFlightDataAtNearestFuelInstant(final String columnName , final Instant start_end) {
+				
 		Instant nearestInstand = this.findNearestIntantFromFlightTimeStamps(start_end);
 		
 		Selection selection = this.flightDataTable.instantColumn("timestamp").isEqualTo(nearestInstand);
@@ -109,30 +93,14 @@ public class FlightDataTable extends Table {
 		
 		//assert filtered.rowCount() == 1;
 		if ( filtered.rowCount() >= 1) {
-			return filtered.doubleColumn(interpolatedColumnName).get(0) == null ?
-					(double)0.0 : filtered.doubleColumn(interpolatedColumnName).get(0);
+			return filtered.doubleColumn(columnName).get(0) == null ?
+					(double)0.0 : filtered.doubleColumn(columnName).get(0);
 		} else {
 			return (double)0.0;
 		}
 	}
 	
-	public float getFloatFlightDataAtNearestFuelInstant(final String columnName , final String startEnd, final Instant start_end) {
-		
-		String interpolatedColumnName = "interpolated_" + columnName + "_" + startEnd;
-		if ( !this.flightDataTable.containsColumn(interpolatedColumnName) ) {
-		
-			float[] listOfFloats = this.flightDataTable.floatColumn(columnName).asFloatArray();
-			
-			// create an interpolate column
-			FloatColumn interpolatedColumn = (FloatColumn) FloatColumn
-					.create( interpolatedColumnName , listOfFloats)
-					.interpolate()
-					.frontfill()
-					.interpolate()
-					.backfill();
-			// add temporary column to the flight table
-			this.flightDataTable.addColumns(interpolatedColumn);
-		}
+	public float getFloatFlightDataAtNearestFuelInstant(final String columnName , final Instant start_end) {
 		
 		// nearest instant to find
 		Instant nearestInstand = this.findNearestIntantFromFlightTimeStamps(start_end);
@@ -143,8 +111,8 @@ public class FlightDataTable extends Table {
 		
 		//assert filtered.rowCount() == 1;
 		if ( filtered.rowCount() >= 1) {
-			return filtered.floatColumn(interpolatedColumnName).get(0) == null ? 
-					(float)0.0 : filtered.floatColumn(interpolatedColumnName).get(0);
+			return filtered.floatColumn(columnName).get(0) == null ? 
+					(float)0.0 : filtered.floatColumn(columnName).get(0);
 		} else {
 			return (float) 0.0;
 		}

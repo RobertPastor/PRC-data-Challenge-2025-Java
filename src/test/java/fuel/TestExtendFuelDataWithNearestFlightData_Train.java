@@ -24,6 +24,7 @@ public class TestExtendFuelDataWithNearestFlightData_Train {
 			
 			FlightListData flightListData = new FlightListData(train_rank_value);
 			flightListData.readParquet();
+			
 			System.out.println(flightListData.getFlightListDataTable().shape());
 			flightListData.extendWithFlightDateData();
 			
@@ -50,15 +51,15 @@ public class TestExtendFuelDataWithNearestFlightData_Train {
 			fuelData.extendRelativeStartEndFromFlightTakeoff();
 
 			// extend with flight data
-			//int maxToBeComputedRow = 1000000;
-			int maxToBeComputedRow = 100;
+			int maxToBeComputedRow = 1000000;
+			//int maxToBeComputedRow = 100;
 			fuelData.extendFuelStartEndInstantsWithFlightData( maxToBeComputedRow );
 			
 			//System.out.println(fuelData.getFuelDataTable().structure());
 			//System.out.println(fuelData.getFuelDataTable().print(10));
 			
 			fuelData.generateParquetFileFor();
-			System.out.println(fuelData.getFuelDataTable().print(100));
+			System.out.println(fuelData.getFuelDataTable().print(10));
 
 		}
 }

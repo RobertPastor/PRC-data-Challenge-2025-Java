@@ -164,6 +164,11 @@ public class FlightData extends FlightDataTable {
 			for ( String columnName : list) {
 				//System.out.println(columnName);
 				this.interpolateDoubleColumnsFromMissingRecords(columnName);
+				// drop old columns 
+				this.getFlightDataTable().removeColumns(columnName);
+				// rename from interpolate to origin names
+				String interpolated_column_name = columnName + "_" + "interpolated";
+				this.getFlightDataTable().column(interpolated_column_name).setName(columnName);
 			}
 			
 			System.out.println( this.getFlightDataTable().print(10));
@@ -205,8 +210,11 @@ public class FlightData extends FlightDataTable {
         while ( iterFrontFill.hasNext() ) {
         		interpolated_column.set(i++, iterFrontFill.next());
         }
-		
 	}
+	/**
+	 * not used
+	 * @throws IOException
+	 */
 	public void readParquetWithNulls() throws IOException {
 
 		logger.info("----------- start read parquet with nulls ------");
@@ -227,7 +235,7 @@ public class FlightData extends FlightDataTable {
 				FlightDataRecord record;		
 				while ( ( record = reader.read() ) != null ) {
 					//System.out.println( record.altitude().getClass().getCanonicalName() );
-					
+					System.out.println( record.timestamp());
 				}
 				reader.close();
 			}

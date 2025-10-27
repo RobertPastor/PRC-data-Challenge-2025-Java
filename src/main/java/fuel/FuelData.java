@@ -45,6 +45,7 @@ public class FuelData extends FuelDataTable {
 	        		FuelExtendedDataRecord record = new FuelExtendedDataRecord(
 	        				row.getInt("idx"),
 	        				row.getString("flight_id") , 
+	        				
 	        				row.getInstant("start"),
 	        				row.getInstant("end") ,
 	        				
@@ -54,27 +55,40 @@ public class FuelData extends FuelDataTable {
 	        				// informations taken from the flight data between fuel start and fuel end
 	        				row.getDouble("aircraft_latitude_at_fuel_start"),
 	        				row.getDouble("aircraft_longitude_at_fuel_start"),
-	        				
+	        				// at fuel end
 	        				row.getDouble("aircraft_latitude_at_fuel_end"),
 	        				row.getDouble("aircraft_longitude_at_fuel_end"),
 	        				
 	        				// computed distance flown
 	        				row.getDouble("aircraft_distance_flown_Nm"),
 	        				
-	        				row.getFloat("aircraft_altitude_ft_at_fuel_start"),
-	        				row.getFloat("aircraft_altitude_ft_at_fuel_end"),
+	        				// altitude
+	        				row.getDouble("aircraft_altitude_ft_at_fuel_start"),
+	        				row.getDouble("aircraft_altitude_ft_at_fuel_end"),
 	        				
 	        				// computed vertical rate
-	        				row.getFloat("aircraft_computed_vertical_rate_ft_min"),
+	        				row.getDouble("aircraft_computed_vertical_rate_ft_min"),
 	        				
-	        				row.getFloat("aircraft_groundspeed_kt_at_fuel_start"),
-	        				row.getFloat("aircraft_groundspeed_kt_at_fuel_end"),
+	        				// ground speed
+	        				row.getDouble("aircraft_groundspeed_kt_at_fuel_start"),
+	        				row.getDouble("aircraft_groundspeed_kt_at_fuel_end"),
 	        				
-	        				row.getFloat("aircraft_track_angle_deg_at_fuel_start"),
-	        				row.getFloat("aircraft_track_angle_deg_at_fuel_end"),
+	        				// track angle
+	        				row.getDouble("aircraft_track_angle_deg_at_fuel_start"),
+	        				row.getDouble("aircraft_track_angle_deg_at_fuel_end"),
 	        				
-	        				row.getFloat("aircraft_vertical_rate_ft_min_at_fuel_start"),
-	        				row.getFloat("aircraft_vertical_rate_ft_min_at_fuel_end"),
+	        				// vertical rate
+	        				row.getDouble("aircraft_vertical_rate_ft_min_at_fuel_start"),
+	        				row.getDouble("aircraft_vertical_rate_ft_min_at_fuel_end"),
+	        				
+	        				row.getDouble("aircraft_mach_at_fuel_start"),
+	        				row.getDouble("aircraft_mach_at_fuel_end"),
+
+	        				row.getDouble("aircraft_TAS_at_fuel_start"),
+	        				row.getDouble("aircraft_TAS_at_fuel_end"),
+
+	        				row.getDouble("aircraft_CAS_at_fuel_start"),
+	        				row.getDouble("aircraft_CAS_at_fuel_end"),
 	        				
 	        				// airports departure and arrival elevation feet
 	        				row.getFloat("origin_elevation_feet"),

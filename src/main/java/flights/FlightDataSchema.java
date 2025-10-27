@@ -24,10 +24,12 @@ public class FlightDataSchema {
 		Double vertical_rate,
 		
 		Double  mach,
+		
 		String typecode,
 		
 		Double TAS,
 		Double CAS,
+		
 		String source
 		
 	) {

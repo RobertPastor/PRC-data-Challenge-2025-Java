@@ -170,6 +170,7 @@ public class FuelDataTable extends Table {
 		// latitude
 		DoubleColumn aircraft_latitude_at_fuel_end_column = DoubleColumn.create("aircraft_latitude_at_fuel_end");
 		this.fuelDataTable.addColumns(aircraft_latitude_at_fuel_end_column);
+		
 		DoubleColumn aircraft_longitude_at_fuel_end_column = DoubleColumn.create("aircraft_longitude_at_fuel_end");
 		this.fuelDataTable.addColumns(aircraft_longitude_at_fuel_end_column);
 		
@@ -178,32 +179,58 @@ public class FuelDataTable extends Table {
 		this.fuelDataTable.addColumns(aircraft_distance_flown_column);
 		
 		// ------------- altitude
-		FloatColumn aircraft_altitude_start_column = FloatColumn.create("aircraft_altitude_ft_at_fuel_start");
+		DoubleColumn aircraft_altitude_start_column = DoubleColumn.create("aircraft_altitude_ft_at_fuel_start");
 		this.fuelDataTable.addColumns(aircraft_altitude_start_column);
-		FloatColumn aircraft_altitude_end_column = FloatColumn.create("aircraft_altitude_ft_at_fuel_end");
+		
+		DoubleColumn aircraft_altitude_end_column = DoubleColumn.create("aircraft_altitude_ft_at_fuel_end");
 		this.fuelDataTable.addColumns(aircraft_altitude_end_column);
 		
 		// computed vertical rate feet per minutes
-		FloatColumn aircraft_computed_vertical_rate = FloatColumn.create("aircraft_computed_vertical_rate_ft_min");
+		DoubleColumn aircraft_computed_vertical_rate = DoubleColumn.create("aircraft_computed_vertical_rate_ft_min");
 		this.fuelDataTable.addColumns(aircraft_computed_vertical_rate);
 		
 		// ground speed
-		FloatColumn aircraft_groundspeed_start_column = FloatColumn.create("aircraft_groundspeed_kt_at_fuel_start");
+		DoubleColumn aircraft_groundspeed_start_column = DoubleColumn.create("aircraft_groundspeed_kt_at_fuel_start");
 		this.fuelDataTable.addColumns(aircraft_groundspeed_start_column);
-		FloatColumn aircraft_groundspeed_end_column = FloatColumn.create("aircraft_groundspeed_kt_at_fuel_end");
+		
+		DoubleColumn aircraft_groundspeed_end_column = DoubleColumn.create("aircraft_groundspeed_kt_at_fuel_end");
 		this.fuelDataTable.addColumns(aircraft_groundspeed_end_column);
 
-		FloatColumn aircraft_track_angle_start_column = FloatColumn.create("aircraft_track_angle_deg_at_fuel_start");
+		// track angle
+		DoubleColumn aircraft_track_angle_start_column = DoubleColumn.create("aircraft_track_angle_deg_at_fuel_start");
 		this.fuelDataTable.addColumns(aircraft_track_angle_start_column);
-		FloatColumn aircraft_track_angle_end_column = FloatColumn.create("aircraft_track_angle_deg_at_fuel_end");
+		
+		DoubleColumn aircraft_track_angle_end_column = DoubleColumn.create("aircraft_track_angle_deg_at_fuel_end");
 		this.fuelDataTable.addColumns(aircraft_track_angle_end_column);
-
-		FloatColumn aircraft_vertical_rate_start_column = FloatColumn.create("aircraft_vertical_rate_ft_min_at_fuel_start");
+		
+		// vertical rate
+		DoubleColumn aircraft_vertical_rate_start_column = DoubleColumn.create("aircraft_vertical_rate_ft_min_at_fuel_start");
 		this.fuelDataTable.addColumns(aircraft_vertical_rate_start_column);
 		
-		FloatColumn aircraft_vertical_rate_end_column = FloatColumn.create("aircraft_vertical_rate_ft_min_at_fuel_end");
+		DoubleColumn aircraft_vertical_rate_end_column = DoubleColumn.create("aircraft_vertical_rate_ft_min_at_fuel_end");
 		this.fuelDataTable.addColumns(aircraft_vertical_rate_end_column);
 		
+		// mach at start and end
+		DoubleColumn aircraft_mach_start_column = DoubleColumn.create("aircraft_mach_at_fuel_start");
+		this.fuelDataTable.addColumns(aircraft_mach_start_column);
+		
+		DoubleColumn aircraft_mach_end_column = DoubleColumn.create("aircraft_mach_at_fuel_end");
+		this.fuelDataTable.addColumns(aircraft_mach_end_column);
+		
+		// TAS
+		DoubleColumn aircraft_TAS_start_column = DoubleColumn.create("aircraft_TAS_at_fuel_start");
+		this.fuelDataTable.addColumns(aircraft_TAS_start_column);
+		
+		DoubleColumn aircraft_TAS_end_column = DoubleColumn.create("aircraft_TAS_at_fuel_end");
+		this.fuelDataTable.addColumns(aircraft_TAS_end_column);
+		
+		// CAS
+		DoubleColumn aircraft_CAS_start_column = DoubleColumn.create("aircraft_CAS_at_fuel_start");
+		this.fuelDataTable.addColumns(aircraft_CAS_start_column);
+		
+		DoubleColumn aircraft_CAS_end_column = DoubleColumn.create("aircraft_CAS_at_fuel_end");
+		this.fuelDataTable.addColumns(aircraft_CAS_end_column);
+
 		// find the nearest instant from a fuel table of a flight id
 		// given a fuel start or stop instant
 		train_rank train_rank_value = this.getTrain_rank_value();
@@ -219,23 +246,18 @@ public class FuelDataTable extends Table {
 			
 			String flight_id = row.getString ("flight_id");
 			FlightData flightData = new FlightData( train_rank_value , flight_id );
-			flightData.readParquet();
+			// 27th October 2025 - use new stream reader capable of filling empty values
+			flightData.readParquetWithStream();
 			
 			System.out.println("--------------------------------------");
 			System.out.println("----------------- row count = "+ counter + " / max = " + this.fuelDataTable.rowCount() + " ---------------------");
 			System.out.println("--------------------------------------");
 			
-			//Instant flightNearestInstantFromFuelStart = flightData.findNearestIntantFromFlightTimeStamps (start);
-			//Instant flightNearestInstantFromFuelEnd = flightData.findNearestIntantFromFlightTimeStamps (end);
+			double ac_lat_fuel_start = flightData.getDoubleFlightDataAtNearestFuelInstant("latitude" , start);
+			double ac_lon_fuel_start = flightData.getDoubleFlightDataAtNearestFuelInstant("longitude" ,start);
 			
-			//logger.info("nearest from fuel start = " + flightNearestInstantFromFuelStart);
-			//logger.info("nearest from fuel end = " + flightNearestInstantFromFuelEnd);
-			
-			double ac_lat_fuel_start = flightData.getDoubleFlightDataAtNearestFuelInstant("latitude" , "start" , start);
-			double ac_lon_fuel_start = flightData.getDoubleFlightDataAtNearestFuelInstant("longitude", "start" ,start);
-			
-			double ac_lat_fuel_end = flightData.getDoubleFlightDataAtNearestFuelInstant("latitude" , "end" ,end);
-			double ac_lon_fuel_end = flightData.getDoubleFlightDataAtNearestFuelInstant("longitude" , "end" ,end);
+			double ac_lat_fuel_end = flightData.getDoubleFlightDataAtNearestFuelInstant("latitude"  ,end);
+			double ac_lon_fuel_end = flightData.getDoubleFlightDataAtNearestFuelInstant("longitude"  ,end);
 			
 			row.setDouble("aircraft_latitude_at_fuel_start" , ac_lat_fuel_start);
 			row.setDouble("aircraft_longitude_at_fuel_start" , ac_lon_fuel_start);
@@ -247,34 +269,60 @@ public class FuelDataTable extends Table {
 			double distanceFlownBetweenStartEnd = Utils.calculateHaversineDistanceNauticalMiles( ac_lat_fuel_start, ac_lon_fuel_start, ac_lat_fuel_end, ac_lon_fuel_end); 
 			row.setDouble("aircraft_distance_flown_Nm" , distanceFlownBetweenStartEnd);
 					
-			float altitude_start = flightData.getFloatFlightDataAtNearestFuelInstant("altitude" , "start" , start);
-			row.setFloat("aircraft_altitude_ft_at_fuel_start" , altitude_start);
+			double altitude_start = flightData.getDoubleFlightDataAtNearestFuelInstant("altitude" ,  start);
+			row.setDouble("aircraft_altitude_ft_at_fuel_start" , altitude_start);
 			
-			float altitude_end = flightData.getFloatFlightDataAtNearestFuelInstant("altitude" , "end" , end);
-			row.setFloat("aircraft_altitude_ft_at_fuel_end" , altitude_end);
+			double altitude_end = flightData.getDoubleFlightDataAtNearestFuelInstant("altitude" ,  end);
+			row.setDouble("aircraft_altitude_ft_at_fuel_end" , altitude_end);
 			
 			// computed vertical rate feet per minutes
 			long time_diff_sec = row.getLong("time_diff_seconds");
-			float computed_vertical_rate = (altitude_end - altitude_start)/ (float)time_diff_sec;
-			row.setFloat("aircraft_computed_vertical_rate_ft_min" , computed_vertical_rate);
+			
+			double computed_vertical_rate = (altitude_end - altitude_start)/ (float)time_diff_sec;
+			row.setDouble("aircraft_computed_vertical_rate_ft_min" , computed_vertical_rate);
 
-			float groundSpeed_start = flightData.getFloatFlightDataAtNearestFuelInstant("groundspeed", "start" , start);
-			row.setFloat("aircraft_groundspeed_kt_at_fuel_start" , groundSpeed_start);
+			// ground speed
+			double groundSpeed_start = flightData.getDoubleFlightDataAtNearestFuelInstant("groundspeed",  start);
+			row.setDouble("aircraft_groundspeed_kt_at_fuel_start" , groundSpeed_start);
 			
-			float groundSpeed_end = flightData.getFloatFlightDataAtNearestFuelInstant("groundspeed" , "end" , end);
-			row.setFloat("aircraft_groundspeed_kt_at_fuel_end" , groundSpeed_end);
+			double groundSpeed_end = flightData.getDoubleFlightDataAtNearestFuelInstant("groundspeed" ,  end);
+			row.setDouble("aircraft_groundspeed_kt_at_fuel_end" , groundSpeed_end);
 			
-			float track_angle_deg_start = flightData.getFloatFlightDataAtNearestFuelInstant("track" , "start" , start);
-			row.setFloat("aircraft_track_angle_deg_at_fuel_start" , track_angle_deg_start);
+			// track angle
+			double track_angle_deg_start = flightData.getDoubleFlightDataAtNearestFuelInstant("track" ,  start);
+			row.setDouble("aircraft_track_angle_deg_at_fuel_start" , track_angle_deg_start);
 			
-			float track_angle_deg_end =flightData.getFloatFlightDataAtNearestFuelInstant("track" , "end", end);
-			row.setFloat("aircraft_track_angle_deg_at_fuel_end" ,  track_angle_deg_end);
+			double track_angle_deg_end =flightData.getDoubleFlightDataAtNearestFuelInstant("track" ,  end);
+			row.setDouble("aircraft_track_angle_deg_at_fuel_end" ,  track_angle_deg_end);
 			
-			float vertical_rate_ft_min_start = flightData.getFloatFlightDataAtNearestFuelInstant("vertical_rate" , "start" , start);
-			row.setFloat("aircraft_vertical_rate_ft_min_at_fuel_start" , vertical_rate_ft_min_start);
+			// vertical rate
+			double vertical_rate_ft_min_start = flightData.getDoubleFlightDataAtNearestFuelInstant("vertical_rate" ,  start);
+			row.setDouble("aircraft_vertical_rate_ft_min_at_fuel_start" , vertical_rate_ft_min_start);
 			
-			float vertical_rate_ft_min_end = flightData.getFloatFlightDataAtNearestFuelInstant("vertical_rate" , "end" , end);
-			row.setFloat("aircraft_vertical_rate_ft_min_at_fuel_end" , vertical_rate_ft_min_end);
+			double vertical_rate_ft_min_end = flightData.getDoubleFlightDataAtNearestFuelInstant("vertical_rate" ,  end);
+			row.setDouble("aircraft_vertical_rate_ft_min_at_fuel_end" , vertical_rate_ft_min_end);
+			
+			// mach
+			double mach_start = flightData.getDoubleFlightDataAtNearestFuelInstant("mach" ,  start);
+			row.setDouble("aircraft_mach_at_fuel_start" , mach_start);
+			
+			double mach_end = flightData.getDoubleFlightDataAtNearestFuelInstant("mach" ,  end);
+			row.setDouble("aircraft_mach_at_fuel_end" , mach_end);
+			
+			// TAS
+			double TAS_start = flightData.getDoubleFlightDataAtNearestFuelInstant("TAS" ,  start);
+			row.setDouble("aircraft_TAS_at_fuel_start" , TAS_start);
+			
+			double TAS_end = flightData.getDoubleFlightDataAtNearestFuelInstant("TAS" ,  end);
+			row.setDouble("aircraft_TAS_at_fuel_end" , TAS_end);
+			
+			// CAS
+			double CAS_start = flightData.getDoubleFlightDataAtNearestFuelInstant("CAS" ,  start);
+			row.setDouble("aircraft_CAS_at_fuel_start" , CAS_start);
+			
+			double CAS_end = flightData.getDoubleFlightDataAtNearestFuelInstant("CAS" ,  end);
+			row.setDouble("aircraft_CAS_at_fuel_end" , CAS_end);
+		
 		}
 	}
 	
