@@ -53,29 +53,46 @@ public class FuelData extends FuelDataTable {
 	        				row.getFloat("fuel_flow_kg_sec") ,
 	        				
 	        				// informations taken from the flight data between fuel start and fuel end
-	        				row.getDouble("aircraft_latitude_at_fuel_start"),
-	        				row.getDouble("aircraft_longitude_at_fuel_start"),
+	        				row.getDouble("aircraft_latitude_deg_at_fuel_start"),
+	        				row.getDouble("aircraft_latitude_rad_at_fuel_start"),
+	        				row.getDouble("aircraft_longitude_deg_at_fuel_start"),
+	        				row.getDouble("aircraft_longitude_rad_at_fuel_start"),
+	        				
 	        				// at fuel end
-	        				row.getDouble("aircraft_latitude_at_fuel_end"),
-	        				row.getDouble("aircraft_longitude_at_fuel_end"),
+	        				row.getDouble("aircraft_latitude_deg_at_fuel_end"),
+	        				row.getDouble("aircraft_latitude_rad_at_fuel_end"),
+	        				row.getDouble("aircraft_longitude_deg_at_fuel_end"),
+	        				row.getDouble("aircraft_longitude_rad_at_fuel_end"),
 	        				
 	        				// computed distance flown
 	        				row.getDouble("aircraft_distance_flown_Nm"),
 	        				
-	        				// altitude
+	        				// altitude at fuel start and stop
 	        				row.getDouble("aircraft_altitude_ft_at_fuel_start"),
 	        				row.getDouble("aircraft_altitude_ft_at_fuel_end"),
 	        				
-	        				// computed vertical rate
+	        				// computed vertical rate between fuel start and fuel stop
 	        				row.getDouble("aircraft_computed_vertical_rate_ft_min"),
 	        				
 	        				// ground speed
 	        				row.getDouble("aircraft_groundspeed_kt_at_fuel_start"),
 	        				row.getDouble("aircraft_groundspeed_kt_at_fuel_end"),
 	        				
-	        				// track angle
+	        				// ground speed X and Y components using the cosine and sine of the track angle
+	        				row.getDouble("aircraft_groundspeed_kt_at_fuel_start"),
+	        				row.getDouble("aircraft_groundspeed_kt_at_fuel_end"),
+	        				
+	        				// ground speed projection using cosine and sine of the track angle
+	        				row.getDouble("aircraft_groundspeed_kt_X_at_fuel_start"),
+	        				row.getDouble("aircraft_groundspeed_kt_Y_at_fuel_end"),
+	        				
+	        				// track angle degrees
 	        				row.getDouble("aircraft_track_angle_deg_at_fuel_start"),
 	        				row.getDouble("aircraft_track_angle_deg_at_fuel_end"),
+	        				
+	        				// track angle radians
+	        				row.getDouble("aircraft_track_angle_rad_at_fuel_start"),
+	        				row.getDouble("aircraft_track_angle_rad_at_fuel_end"),
 	        				
 	        				// vertical rate
 	        				row.getDouble("aircraft_vertical_rate_ft_min_at_fuel_start"),

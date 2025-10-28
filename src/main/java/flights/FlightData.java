@@ -10,6 +10,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.apache.commons.math3.analysis.interpolation.LinearInterpolator;
+import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
 import org.apache.parquet.example.data.simple.SimpleGroup;
 import org.apache.parquet.hadoop.ParquetReader;
 import org.apache.parquet.hadoop.api.ReadSupport;
@@ -72,6 +74,58 @@ public class FlightData extends FlightDataTable {
 	}
 	*/
 	
+	/**
+	 * https://www.bing.com/search?q=java+linear+interpolation+with+x+as+instant&setmkt=fr-FR&PC=EMMX01&form=LBT003&scope=web
+	 */
+	public void interpolateFlightDataMissingColumnsValues() {
+		
+		// create a list of instants as X values in the interpolation
+		Instant[] xInstants =  (Instant[]) this.getFlightDataTable().column("timestamp").asObjectArray();
+		
+		// Convert Instants to seconds since epoch
+        double[] xSeconds = new double[xInstants.length];
+        for (int i = 0; i < xInstants.length; i++) {
+            xSeconds[i] = xInstants[i].getEpochSecond();
+        }
+		
+		//System.out.println( this.getFlightDataTable().print(10));
+		// list of columns to interpolate
+		List<String> list = List.of("latitude","longitude", "altitude","groundspeed", "track", "vertical_rate","mach", "TAS", "CAS");
+
+		// interpolate all these list of floating point columns
+		for ( String columnName : list) {
+			
+			// Y values to interpolate
+			Double[] yValues = (Double[]) this.getFlightDataTable().column(columnName).asObjectArray();
+			// need to convert Double[] to double[]
+			double[] yValuesPimitiveArray = new double[yValues.length];
+
+			for (int i = 0; i < yValuesPimitiveArray.length; i++) {
+				yValuesPimitiveArray[i] = yValuesPimitiveArray[i]; // Auto-unboxing
+			}
+
+			// Perform interpolation
+	        LinearInterpolator interpolator = new LinearInterpolator();
+	        PolynomialSplineFunction function = interpolator.interpolate(xSeconds, yValuesPimitiveArray);
+
+			
+			//System.out.println(columnName);
+			this.interpolateDoubleColumnsFromMissingRecords(columnName);
+			
+			// drop old columns 
+			this.getFlightDataTable().removeColumns(columnName);
+			
+			// rename from interpolated to origin names
+			String interpolated_column_name = columnName + "_" + "interpolated";
+			this.getFlightDataTable().column(interpolated_column_name).setName(columnName);
+		}
+		
+	}
+	
+	/**
+	 * new method of reading parquet files and managing missing values (holes)
+	 * @throws IOException
+	 */
 	public void readParquetWithStream() throws IOException {
 
 		logger.info("----------- start read parquet with stream ------");
@@ -94,6 +148,7 @@ public class FlightData extends FlightDataTable {
 				row.setString("flight_id", record.flight_id());
 				row.setInstant("timestamp", record.timestamp());
 				
+				// assumption no holes in latitude nor in longitude
 				if (record.latitude() == null) {
 					//System.out.println("row = " + record.timestamp() + " -> longitude --> null found");
 					//System.out.println("--- do nothing - do not fill empty cell ---");
@@ -107,7 +162,9 @@ public class FlightData extends FlightDataTable {
 				} else {
 					row.setDouble("longitude", record.longitude());
 				}
-						
+				/**
+				 * managing holes in the floating values of altitude
+				 */
 				if ( record.altitude() == null) {
 					//System.out.println("row = " + record.timestamp() + " -> altitude --> null found");
 					//System.out.println("--- do nothing - do not fill empty cell ---");
@@ -158,26 +215,13 @@ public class FlightData extends FlightDataTable {
 				}
 			});
 			// interpolate
-			//System.out.println( this.getFlightDataTable().print(10));
-			List<String> list = List.of("latitude","longitude", "altitude","groundspeed", "track", "vertical_rate","mach", "TAS", "CAS");
-
-			for ( String columnName : list) {
-				//System.out.println(columnName);
-				this.interpolateDoubleColumnsFromMissingRecords(columnName);
-				// drop old columns 
-				this.getFlightDataTable().removeColumns(columnName);
-				// rename from interpolate to origin names
-				String interpolated_column_name = columnName + "_" + "interpolated";
-				this.getFlightDataTable().column(interpolated_column_name).setName(columnName);
-			}
+			interpolateFlightDataMissingColumnsValues();
 			
-			System.out.println( this.getFlightDataTable().print(10));
-
+			//System.out.println( this.getFlightDataTable().print(10));
 			
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 	}
 	
 	/**

@@ -19,7 +19,6 @@ public class TestColumnInterpolation {
 		flightData.readParquetWithStream();
 		
 		System.out.println( flightData.getFlightDataTable().print(20));
-		
 		System.out.println( flightData.getFlightDataTable().doubleColumn("altitude").countMissing());
 
 		//String interpolatedColumnName = "interpolated_" + "altitude" + "_" + "start";

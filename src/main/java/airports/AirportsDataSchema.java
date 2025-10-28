@@ -5,24 +5,24 @@ public class AirportsDataSchema {
 	public static record AirportDataRecord(
 			
 			String icao, 
-			float longitude,
-			float latitude,
-			float elevation
+			double longitude,
+			double latitude,
+			double elevation
 			) {
 
 		public String icao() {
 			return icao;
 		}
 		
-		public float longitude() {
+		public double longitude() {
 			return longitude;
 		}
 
-		public float latitude() {
+		public double latitude() {
 			return latitude;
 		}
 
-		public float elevation() {
+		public double elevation() {
 			return elevation;
 		}
 	}

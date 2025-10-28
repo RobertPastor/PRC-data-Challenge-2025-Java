@@ -17,12 +17,18 @@ public class FuelDataSchema {
 			float fuel_flow_kg_sec,
 
 			// latitude and longitude at fuel start
-			double aircraft_latitude_at_fuel_start,
-			double aircraft_longitude_at_fuel_start,
+			double aircraft_latitude_deg_at_fuel_start,
+			double aircraft_latitude_rad_at_fuel_start,
+			
+			double aircraft_longitude_deg_at_fuel_start,
+			double aircraft_longitude_rad_at_fuel_start,
 
 			// latitude and longitude at fuel end
-			double aircraft_latitude_at_fuel_end,
-			double aircraft_longitude_at_fuel_end,
+			double aircraft_latitude_deg_at_fuel_end,
+			double aircraft_latitude_rad_at_fuel_end,
+
+			double aircraft_longitude_deg_at_fuel_end,
+			double aircraft_longitude_rad_at_fuel_end,
 
 			// distance flown between fuel start and fuel end
 			double aircraft_distance_flown_Nm,
@@ -37,15 +43,31 @@ public class FuelDataSchema {
 			// ground speed
 			double aircraft_groundspeed_kt_at_fuel_start,
 			double aircraft_groundspeed_kt_at_fuel_end,
-
+			
 			double aircraft_track_angle_deg_at_fuel_start,
 			double aircraft_track_angle_deg_at_fuel_end,
+			
+			// added 27th October 2025
+			double aircraft_track_angle_rad_at_fuel_start,
+			double aircraft_track_angle_rad_at_fuel_end,
+			
+			// ground speed x from ground speed and cosinus track angle in radians
+			double aircraft_groundspeed_kt_X_at_fuel_start,
+			double aircraft_groundspeed_kt_Y_at_fuel_start,
+			
+			double aircraft_groundspeed_kt_X_at_fuel_end,
+			double aircraft_groundspeed_kt_Y_at_fuel_end,
 
 			double aircraft_vertical_rate_ft_min_at_fuel_start,
 			double aircraft_vertical_rate_ft_min_at_fuel_end,
 			
 			double aircraft_mach_at_fuel_start,
 			double aircraft_mach_at_fuel_end,
+			
+			
+			
+			
+		
 
 			double aircraft_TAS_at_fuel_start,
 			double aircraft_TAS_at_fuel_end,
@@ -84,19 +106,27 @@ public class FuelDataSchema {
 
 			) {
 
+		public double aircraft_track_angle_radians_at_fuel_start() {
+			return aircraft_track_angle_rad_at_fuel_start;
+		}
+
+		public double aircraft_track_angle_radians_at_fuel_end() {
+			return aircraft_track_angle_rad_at_fuel_end;
+		}
+
 		public double aircraft_mach_at_fuel_start() {
 			return aircraft_mach_at_fuel_start;
 		}
 
-		    public double aircraft_mach_at_fuel_end() {
+		public double aircraft_mach_at_fuel_end() {
 			return aircraft_mach_at_fuel_end;
 		}
 
-		    public double aircraft_TAS_at_fuel_start() {
+		public double aircraft_TAS_at_fuel_start() {
 			return aircraft_TAS_at_fuel_start;
 		}
 
-		    public double aircraft_TAS_at_fuel_end() {
+		public double aircraft_TAS_at_fuel_end() {
 			return aircraft_TAS_at_fuel_end;
 		}
 
@@ -191,6 +221,27 @@ public class FuelDataSchema {
 		public float destination_elevation_feet() {
 			return destination_elevation_feet;
 		}
+		
+
+		
+		public double aircraft_groundspeed_kt_Y_at_fuel_start() {
+			return aircraft_groundspeed_kt_Y_at_fuel_start;
+		}
+
+
+		public double aircraft_groundspeed_kt_X_at_fuel_end() {
+			return aircraft_groundspeed_kt_X_at_fuel_end;
+		}
+
+
+		    public double aircraft_groundspeed_kt_Y_at_fuel_end() {
+			return aircraft_groundspeed_kt_Y_at_fuel_end;
+		}
+
+
+		    public double aircraft_groundspeed_kt_X_at_fuel_start() {
+			return aircraft_groundspeed_kt_X_at_fuel_start;
+		}
 
 
 		public int idx() {
@@ -217,20 +268,44 @@ public class FuelDataSchema {
 			return fuel_flow_kg_sec;
 		}
 
-		public double aircraft_latitude_at_fuel_start() {
-			return aircraft_latitude_at_fuel_start;
+		public double aircraft_latitude_deg_at_fuel_start() {
+			return aircraft_latitude_deg_at_fuel_start;
 		}
 
-		public double aircraft_longitude_at_fuel_start() {
-			return aircraft_longitude_at_fuel_start;
+		public double aircraft_longitude_deg_at_fuel_start() {
+			return aircraft_longitude_deg_at_fuel_start;
 		}
 
-		public double aircraft_latitude_at_fuel_end() {
-			return aircraft_latitude_at_fuel_end;
+		public double aircraft_latitude_rad_at_fuel_start() {
+			return aircraft_latitude_rad_at_fuel_start;
 		}
 
-		public double aircraft_longitude_at_fuel_end() {
-			return aircraft_longitude_at_fuel_end;
+		public double aircraft_longitude_rad_at_fuel_start() {
+			return aircraft_longitude_rad_at_fuel_start;
+		}
+
+		public double aircraft_latitude_rad_at_fuel_end() {
+			return aircraft_latitude_rad_at_fuel_end;
+		}
+
+		public double aircraft_longitude_rad_at_fuel_end() {
+			return aircraft_longitude_rad_at_fuel_end;
+		}
+
+		public double aircraft_track_angle_rad_at_fuel_start() {
+			return aircraft_track_angle_rad_at_fuel_start;
+		}
+
+		public double aircraft_track_angle_rad_at_fuel_end() {
+			return aircraft_track_angle_rad_at_fuel_end;
+		}
+
+		public double aircraft_latitude_deg_at_fuel_end() {
+			return aircraft_latitude_deg_at_fuel_end;
+		}
+
+		public double aircraft_longitude_deg_at_fuel_end() {
+			return aircraft_longitude_deg_at_fuel_end;
 		}
 
 		public double aircraft_altitude_ft_at_fuel_start() {
