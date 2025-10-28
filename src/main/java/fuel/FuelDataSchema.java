@@ -16,18 +16,20 @@ public class FuelDataSchema {
 			long time_diff_seconds,
 			float fuel_flow_kg_sec,
 
-			// latitude and longitude at fuel start
+			// latitude and longitude DEGREES at fuel start
 			double aircraft_latitude_deg_at_fuel_start,
-			double aircraft_latitude_rad_at_fuel_start,
-			
 			double aircraft_longitude_deg_at_fuel_start,
+
+			// latitude longitude RADIANS at fuel start
+			double aircraft_latitude_rad_at_fuel_start,
 			double aircraft_longitude_rad_at_fuel_start,
 
-			// latitude and longitude at fuel end
+			// latitude and longitude DEGREES  at fuel end
 			double aircraft_latitude_deg_at_fuel_end,
-			double aircraft_latitude_rad_at_fuel_end,
-
 			double aircraft_longitude_deg_at_fuel_end,
+			
+			// latitude longitude RADIANS at fuel end
+			double aircraft_latitude_rad_at_fuel_end,
 			double aircraft_longitude_rad_at_fuel_end,
 
 			// distance flown between fuel start and fuel end
@@ -44,40 +46,42 @@ public class FuelDataSchema {
 			double aircraft_groundspeed_kt_at_fuel_start,
 			double aircraft_groundspeed_kt_at_fuel_end,
 			
-			double aircraft_track_angle_deg_at_fuel_start,
-			double aircraft_track_angle_deg_at_fuel_end,
-			
-			// added 27th October 2025
-			double aircraft_track_angle_rad_at_fuel_start,
-			double aircraft_track_angle_rad_at_fuel_end,
-			
-			// ground speed x from ground speed and cosinus track angle in radians
+			// ground speed X and Y from cosine and sine with track angles
 			double aircraft_groundspeed_kt_X_at_fuel_start,
 			double aircraft_groundspeed_kt_Y_at_fuel_start,
 			
+			// ground speed X and Y at fuel end
 			double aircraft_groundspeed_kt_X_at_fuel_end,
 			double aircraft_groundspeed_kt_Y_at_fuel_end,
-
+			
+			// track angle DEGREES
+			double aircraft_track_angle_deg_at_fuel_start,
+			double aircraft_track_angle_deg_at_fuel_end,
+			
+			// added 27th October 2025 -RADIANS
+			double aircraft_track_angle_rad_at_fuel_start,
+			double aircraft_track_angle_rad_at_fuel_end,
+			
+			// vertical rate
 			double aircraft_vertical_rate_ft_min_at_fuel_start,
 			double aircraft_vertical_rate_ft_min_at_fuel_end,
 			
+			// mach
 			double aircraft_mach_at_fuel_start,
 			double aircraft_mach_at_fuel_end,
 			
-			
-			
-			
-		
-
+			// TAS
 			double aircraft_TAS_at_fuel_start,
 			double aircraft_TAS_at_fuel_end,
-
+			// CAS
 			double aircraft_CAS_at_fuel_start,
 			double aircraft_CAS_at_fuel_end,
-
+			
+			// origin an destination airport elevation
 			float origin_elevation_feet,
 			float destination_elevation_feet,
-
+			
+			// flight distance
 			double flight_distance_Nm,			
 			long flight_duration_sec,
 

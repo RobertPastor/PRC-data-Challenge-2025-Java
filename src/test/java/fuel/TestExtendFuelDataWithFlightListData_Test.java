@@ -43,7 +43,6 @@ public class TestExtendFuelDataWithFlightListData_Test {
 		
 		fuelData.generateParquetFileFor();
 
-
 	}
 	
 	@Test

@@ -11,12 +11,13 @@ public class TestExtendFuelDataWithNearestFlightData_Rank {
 	@Test
 	public void testReadExtendFuelRank() throws IOException {
 
-		train_rank train_rank_value = train_rank.rank;
+		train_rank train_rank_value = train_rank.train;
 
 		long maxToBeComputedRow = 1000000;
 		//int maxToBeComputedRow = 100;
 
-		CommonToRankAndTrain.CommonToTrainAndRank(train_rank_value, maxToBeComputedRow);
+		FuelData fuelData = new FuelData(train_rank_value);
+		fuelData.CommonToTrainAndRank( maxToBeComputedRow);
 
 	}
 }

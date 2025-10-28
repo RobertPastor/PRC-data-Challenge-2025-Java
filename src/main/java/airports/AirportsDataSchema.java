@@ -7,7 +7,7 @@ public class AirportsDataSchema {
 			String icao, 
 			double longitude,
 			double latitude,
-			double elevation
+			float elevation
 			) {
 
 		public String icao() {
@@ -22,7 +22,7 @@ public class AirportsDataSchema {
 			return latitude;
 		}
 
-		public double elevation() {
+		public float elevation() {
 			return elevation;
 		}
 	}

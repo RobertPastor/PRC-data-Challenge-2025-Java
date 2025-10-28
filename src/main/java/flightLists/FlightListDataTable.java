@@ -167,7 +167,6 @@ public class FlightListDataTable extends Table {
 		
 		//------------------
 
-		
 		FloatColumn destination_elevation_feet_column = FloatColumn.create("destination_elevation_feet");
 		this.flightListDataTable.addColumns(destination_elevation_feet_column);
 		
@@ -189,14 +188,18 @@ public class FlightListDataTable extends Table {
 			
 			// origin airport latitude and longitude
 			double origin_latitude_degrees = airportsDataTable.getAirportDoubleValues(origin_airport_icao_code, "latitude");
-			row.setDouble ("origin_latitude" , origin_latitude_degrees);
+			row.setDouble ("origin_latitude_deg" , origin_latitude_degrees);
 			
 			double origin_longitude_degrees = airportsDataTable.getAirportDoubleValues(origin_airport_icao_code, "longitude");
-			row.setDouble("origin_longitude" , origin_longitude_degrees);
+			row.setDouble("origin_longitude_deg" , origin_longitude_degrees);
 			
+			// -------------- destination airport latitude longitude radians (27/10/2025)
+			row.setDouble("origin_longitude_rad" , ( origin_latitude_degrees * Math.PI ) / 180.0);
+			row.setDouble("origin_latitude_rad" , ( origin_longitude_degrees * Math.PI ) / 180.0);
+
 			// elevation origin airport
-			double origin_elevation_feet = airportsDataTable.getAirportDoubleValues(origin_airport_icao_code, "elevation");
-			row.setDouble("origin_elevation_feet" , origin_elevation_feet);
+			float origin_elevation_feet = airportsDataTable.getAirportFloatValues(origin_airport_icao_code, "elevation");
+			row.setFloat("origin_elevation_feet" , origin_elevation_feet);
 			
 			// icao code
 			String destination_airport_icao_code = row.getString("destination_icao");
@@ -212,10 +215,9 @@ public class FlightListDataTable extends Table {
 			row.setDouble("destination_longitude_rad" , ( destination_latitude_degrees * Math.PI ) / 180.0);
 			row.setDouble("destination_latitude_rad" , ( destination_longitude_degrees * Math.PI ) / 180.0);
 
-			
 			// elevation of the destination airport
-			double destination_elevation_meters = airportsDataTable.getAirportDoubleValues(destination_airport_icao_code, "elevation");
-			row.setDouble("destination_elevation_feet" , destination_elevation_meters);
+			float destination_elevation_meters = airportsDataTable.getAirportFloatValues(destination_airport_icao_code, "elevation");
+			row.setFloat("destination_elevation_feet" , destination_elevation_meters);
 			
 			// distance in Nautical Miles
 			double Distance_Nm = Utils.calculateHaversineDistanceNauticalMiles(origin_latitude_degrees, origin_longitude_degrees, 

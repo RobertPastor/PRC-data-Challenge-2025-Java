@@ -16,7 +16,9 @@ public class TestExtendFuelDataWithNearestFlightData_Train {
 			long maxToBeComputedRow = 1000000;
 			maxToBeComputedRow = 100;
 			
-			CommonToRankAndTrain.CommonToTrainAndRank(train_rank_value, maxToBeComputedRow);
+			FuelData fuelData = new FuelData( train_rank_value );
+			fuelData.readParquet();
+			fuelData.CommonToTrainAndRank( maxToBeComputedRow );
 			
 		}
 }

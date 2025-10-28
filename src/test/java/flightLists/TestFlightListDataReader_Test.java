@@ -10,16 +10,26 @@ import folderDiscovery.FolderDiscovery;
 public class TestFlightListDataReader_Test {
 
 	@Test
-    public void testReadFlightList() throws IOException {
+    public void testReadTrainFlightList() throws IOException {
 
-		FlightListData flightListData = new FlightListData(train_rank.rank );
+		final train_rank train_rank_value = train_rank.train;
+		FlightListData flightListData = new FlightListData( train_rank_value  );
+		flightListData.readParquet();
+	}
+	
+	@Test
+    public void testReadRankFlightList() throws IOException {
+
+		final train_rank train_rank_value = train_rank.rank;
+		FlightListData flightListData = new FlightListData(train_rank_value  );
 		flightListData.readParquet();
 	}
 	
 	@Test
     public void testFlightListTableStructure() throws IOException {
 
-		FlightListData flightListData = new FlightListData(train_rank.rank );
+		final train_rank train_rank_value = train_rank.rank;
+		FlightListData flightListData = new FlightListData( train_rank_value );
 		flightListData.readParquet();
 		System.out.println("structure = " + flightListData.getFlightListDataTable().structure() );
 		

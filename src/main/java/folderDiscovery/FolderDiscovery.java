@@ -24,6 +24,29 @@ public class FolderDiscovery {
 	private static String flightListTrainRankFolderStr = "C:/Users/rober/git/PRCdataChallenge2025/trajectory/FlightList";
 	private static String airportsFolderStr = "C:/Users/rober/git/PRCdataChallenge2025/trajectory/Environment/AirportsDataChallenge";
 	
+	private static String trainRankOutputfolderStr = "C:/Users/rober/eclipse-2025-09/eclipse-jee-2025-09-R-win32-x86_64/Data-Challenge-2025/documents";
+
+
+	public static String getFuelRankFolderStr() {
+		return fuelRankFolderStr;
+	}
+
+	public static String getFlightListTrainRankFolderStr() {
+		return flightListTrainRankFolderStr;
+	}
+
+	public static String getTrainRankOutputfolderStr() {
+		return trainRankOutputfolderStr;
+	}
+
+	public static void setFuelTrainFolderStr(String fuelTrainFolderStr) {
+		FolderDiscovery.fuelTrainFolderStr = fuelTrainFolderStr;
+	}
+
+	public static void setAirportsFolderStr(String airportsFolderStr) {
+		FolderDiscovery.airportsFolderStr = airportsFolderStr;
+	}
+
 	public static String getAirportsFolderStr() {
 		return airportsFolderStr;
 	}

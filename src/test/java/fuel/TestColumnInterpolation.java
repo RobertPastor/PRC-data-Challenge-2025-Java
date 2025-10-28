@@ -1,6 +1,7 @@
 package fuel;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -20,6 +21,10 @@ public class TestColumnInterpolation {
 		
 		System.out.println( flightData.getFlightDataTable().print(20));
 		System.out.println( flightData.getFlightDataTable().doubleColumn("altitude").countMissing());
+		
+		List<String> columnToInterpolatelist = List.of("latitude","longitude", "altitude","groundspeed", "track", "vertical_rate","mach", "TAS", "CAS");
+
+		flightData.generatedInterpolationFunction( columnToInterpolatelist ) ;
 
 		//String interpolatedColumnName = "interpolated_" + "altitude" + "_" + "start";
 

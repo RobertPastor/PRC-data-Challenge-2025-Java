@@ -14,7 +14,10 @@ import com.jerolba.carpet.CarpetReader;
 import com.jerolba.carpet.CarpetWriter;
 import com.jerolba.carpet.io.FileSystemOutputFile;
 
+import aircrafts.AircraftsData;
+import airports.AirportsData;
 import dataChallengeEnums.DataChallengeEnums.train_rank;
+import flightLists.FlightListData;
 import folderDiscovery.FolderDiscovery;
 import fuel.FuelDataSchema.FuelDataRecord;
 import fuel.FuelDataSchema.FuelExtendedDataRecord;
@@ -26,16 +29,71 @@ public class FuelData extends FuelDataTable {
 
 	public FuelData( train_rank value ) {
 		super(value);
+		logger.info("--- constructor ---");
+	}
+	
+	public void CommonToTrainAndRank ( final long maxToBeComputedRow) throws IOException {
+		
+		train_rank train_rank_value = this.getTrain_rank_value();
+		
+		AirportsData airportsData = new AirportsData();
+		airportsData.readParquet();
+
+		AircraftsData aircraftsData = new AircraftsData();
+		aircraftsData.readExcelFile();
+		
+		FlightListData flightListData = new FlightListData(train_rank_value);
+		flightListData.readParquet();
+		flightListData.extendWithFlightDateData();
+
+		System.out.println(flightListData.getFlightListDataTable().shape());
+		
+		flightListData.extendWithAirportData( airportsData );
+		//flightListData.extendWithAirportsSinusCosinusOfLatitudeLongitude();
+		System.out.println(flightListData.getFlightListDataTable().shape());
+		
+		flightListData.extendWithAircraftsData( aircraftsData );
+		//flightListData.extendWithAirportsSinusCosinusOfLatitudeLongitude();
+		System.out.println(flightListData.getFlightListDataTable().shape());
+		
+		//FuelData fuelData = new FuelData( train_rank_value );
+		//fuelData.readParquet();
+		
+		System.out.println("fuel data table - row count = " +  this.getFuelDataTable().rowCount());
+
+		this.extendFuelWithEndStartDifference();
+		this.extendFuelFlowKgSeconds();
+
+		// merge fuel with flight list
+		this.extendFuelWithFlightListData( flightListData.getFlightListDataTable() ) ;
+		
+		// as flight take-off and landed are now available from flight list 
+		// use them to compute relative delta from burnt start and stop
+		this.extendRelativeStartEndFromFlightTakeoff();
+
+		// extend with flight data
+		this.extendFuelStartEndInstantsWithFlightData( maxToBeComputedRow );
+		
+		// generate final parquet file with extended fuel dataframe
+		this.generateParquetFileFor();
+		
+		this.generateListOfErrors();
+		
+			
 	}
 	
 	public void generateParquetFileFor( ) throws IOException {
 		
+		logger.info("--- generate Parquet file <<" + this.getTrain_rank_value() + ">> ---");
+
 		String currentDateTimeAsStr = Utils.getCurrentDateTimeasStr();
-		String folderStr = "C:/Users/rober/eclipse-2025-09/eclipse-jee-2025-09-R-win32-x86_64/Data-Challenge-2025/documents";
 		String fileName  = "ExtendedFuel_" + this.getTrain_rank_value() + "_" + currentDateTimeAsStr + ".parquet";
 		
+		String folderStr = FolderDiscovery.getTrainRankOutputfolderStr();
+
 		Path path = Paths.get(folderStr , fileName );
 		File file = path.toFile();
+		
 		logger.info(fileName);
 		logger.info(file.getAbsolutePath());
 		
@@ -54,16 +112,20 @@ public class FuelData extends FuelDataTable {
 	        				
 	        				// informations taken from the flight data between fuel start and fuel end
 	        				row.getDouble("aircraft_latitude_deg_at_fuel_start"),
-	        				row.getDouble("aircraft_latitude_rad_at_fuel_start"),
 	        				row.getDouble("aircraft_longitude_deg_at_fuel_start"),
+	        				
+	        				// latitude longitude RADIANS at fuel start
+	        				row.getDouble("aircraft_latitude_rad_at_fuel_start"),
 	        				row.getDouble("aircraft_longitude_rad_at_fuel_start"),
 	        				
-	        				// at fuel end
+	        				// latitude and longitude DEGREES at fuel end
 	        				row.getDouble("aircraft_latitude_deg_at_fuel_end"),
-	        				row.getDouble("aircraft_latitude_rad_at_fuel_end"),
 	        				row.getDouble("aircraft_longitude_deg_at_fuel_end"),
-	        				row.getDouble("aircraft_longitude_rad_at_fuel_end"),
 	        				
+	        				// latitude and longitude RADIANS at fuel end
+	        				row.getDouble("aircraft_latitude_rad_at_fuel_end"),
+	        				row.getDouble("aircraft_longitude_rad_at_fuel_end"),
+
 	        				// computed distance flown
 	        				row.getDouble("aircraft_distance_flown_Nm"),
 	        				
@@ -79,11 +141,10 @@ public class FuelData extends FuelDataTable {
 	        				row.getDouble("aircraft_groundspeed_kt_at_fuel_end"),
 	        				
 	        				// ground speed X and Y components using the cosine and sine of the track angle
-	        				row.getDouble("aircraft_groundspeed_kt_at_fuel_start"),
-	        				row.getDouble("aircraft_groundspeed_kt_at_fuel_end"),
-	        				
-	        				// ground speed projection using cosine and sine of the track angle
 	        				row.getDouble("aircraft_groundspeed_kt_X_at_fuel_start"),
+	        				row.getDouble("aircraft_groundspeed_kt_Y_at_fuel_start"),
+	        				
+	        				row.getDouble("aircraft_groundspeed_kt_X_at_fuel_end"),
 	        				row.getDouble("aircraft_groundspeed_kt_Y_at_fuel_end"),
 	        				
 	        				// track angle degrees
@@ -97,13 +158,13 @@ public class FuelData extends FuelDataTable {
 	        				// vertical rate
 	        				row.getDouble("aircraft_vertical_rate_ft_min_at_fuel_start"),
 	        				row.getDouble("aircraft_vertical_rate_ft_min_at_fuel_end"),
-	        				
+	        				// mach 
 	        				row.getDouble("aircraft_mach_at_fuel_start"),
 	        				row.getDouble("aircraft_mach_at_fuel_end"),
-
+	        				// TAS
 	        				row.getDouble("aircraft_TAS_at_fuel_start"),
 	        				row.getDouble("aircraft_TAS_at_fuel_end"),
-
+	        				// CAS
 	        				row.getDouble("aircraft_CAS_at_fuel_start"),
 	        				row.getDouble("aircraft_CAS_at_fuel_end"),
 	        				
@@ -115,10 +176,12 @@ public class FuelData extends FuelDataTable {
 	        				row.getDouble("flight_distance_Nm"),
 	        				row.getLong("flight_duration_sec"),
 	        				
+	        				// difference relative to takeoff
 	        				row.getLong("fuel_burnt_start_relative_to_takeoff_sec"),
 	        				row.getLong("fuel_burnt_end_relative_to_takeoff_sec"),
 	        				row.getLong("fuel_burnt_end_relative_to_landed_sec"),
 	        				
+	        				// aircraft data
 	        				row.getInt("Num_Engines"),
 	        				
 	        				row.getFloat("Approach_Speed_knot"),
@@ -128,7 +191,8 @@ public class FuelData extends FuelDataTable {
 	        				row.getFloat("Wheelbase_ft"),
 	        				row.getFloat("Cockpit_to_Main_Gear_ft"),
 	        				row.getFloat("Main_Gear_Width_ft"),
-	        				// these data types are consistent with those use in the aircrafs data reader
+	        				
+	        				// these data types are consistent with those use in the aircrafts data reader
 	        				row.getDouble("MTOW_kg"),
 	        				row.getDouble("MALW_kg"),
 	        				
@@ -144,7 +208,7 @@ public class FuelData extends FuelDataTable {
 	        		fuelRecords.add(record);
 	        		
 	        	});;
-		      
+	        	// write parquet
 	        	FileSystemOutputFile outputFile = new FileSystemOutputFile(file);
 		        try (CarpetWriter<FuelExtendedDataRecord> writer = new CarpetWriter<>(outputFile, FuelExtendedDataRecord.class)) {
 		        	for (FuelExtendedDataRecord fuelRecord : fuelRecords) {
@@ -155,8 +219,7 @@ public class FuelData extends FuelDataTable {
         } catch (Exception ex) {
             ex.printStackTrace(System.out);
         }
-        
-        System.out.println("Parquet file <<" + file.getAbsolutePath() + ">> written successfully!");
+        logger.info("Parquet file <<" + file.getAbsolutePath() + ">> written successfully!");
 	 }
 
 	/**
@@ -191,14 +254,14 @@ public class FuelData extends FuelDataTable {
 					}
 					count = count + 1;
 				}
-				System.out.println(this.fuelDataTable.print(10));
+				logger.info(this.fuelDataTable.print(10));
 				
 			} else {
-				System.out.println("Error -> file not found -> in repo -> " + this.getTrain_rank_value() );
+				logger.info("Error -> file not found -> in repo -> " + this.getTrain_rank_value() );
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace(System.out);
 		}
-		System.out.println("Parquet file <<" + this.getTrain_rank_value() + ">> Fuel read successfully!");
+		logger.info("Parquet file <<" + this.getTrain_rank_value() + ">> Fuel read successfully!");
 	}
 }

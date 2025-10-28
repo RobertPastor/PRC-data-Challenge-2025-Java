@@ -11,5 +11,6 @@ public class Constants {
 	public static double EARTH_RADIUS_kilometers = 6371.0;
 	public static double Kilometers_to_Nautical_Miles = 0.6213711922 ;
 
-	
+	public static double feet_to_meters = 0.3048;
+	public static double meter_to_feets = 3.2808399;
 }
