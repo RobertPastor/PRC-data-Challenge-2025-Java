@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import dataChallengeEnums.DataChallengeEnums.train_rank;
 
-public class TestExtendFuelDataWithNearestFlightData_Rank {
+public class Test_InterpolateFuelStartEndFromFlightData_Rank {
 
 	@Test
 	public void testReadExtendFuelRank() throws IOException {

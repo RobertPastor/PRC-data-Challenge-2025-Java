@@ -9,10 +9,10 @@ import dataChallengeEnums.DataChallengeEnums.train_rank;
 import fuel.FuelData;
 import tech.tablesaw.api.Table;
 
-public class FindNearestInstantFromFuelInstant_Test {
+public class Test_InterolateFromFuelInstant_Test {
 
 	@Test
-    public void testNearestFlightTimStamp() throws IOException {
+    public void testNearestFlightTimeStamp() throws IOException {
 
 		FuelData fuelData = new FuelData(train_rank.rank );
 		fuelData.readParquet();
@@ -27,7 +27,9 @@ public class FindNearestInstantFromFuelInstant_Test {
         System.out.println("Current Instant: " + now);
 
 		FlightData flightData = new FlightData(train_rank.rank , "prc806615763");
-		flightData.readParquet();
+		flightData.readParquetWithStream();
+		
+		flightData.buildInterpolationFunctions();
 		
 		System.out.println("Row Count -> " + flightData.getFlightDataTable().rowCount() );
 		System.out.println("Shape -> " + flightData.getFlightDataTable().shape() );

@@ -12,7 +12,6 @@ public class FolderDiscovery {
 	
 	private static final Logger logger = Logger.getLogger(FolderDiscovery.class.getName());
 
-	
 	String className = "";
 	
 	private static String flightTrainFolderStr = "C:/Users/rober/git/PRCdataChallenge2025/Data-Download-OpenSkyNetwork/competition-train-data/";
@@ -136,7 +135,7 @@ public class FolderDiscovery {
 			if (!file.exists() || !file.isFile()) {
 				return null;
 			} else {
-				System.out.println(file.getAbsolutePath());
+				logger.info(file.getAbsolutePath());
 				return file;
 			}
 		} catch (Exception ex) {
@@ -193,6 +192,7 @@ public class FolderDiscovery {
 		Path path = Paths.get(FolderDiscovery.flightListTrainRankFolderStr , fileName);
 		File file = path.toFile();
 		if ( file.exists() && file.isFile()) {
+			logger.info(file.getAbsolutePath());
 			return file;
 		}
 		return null;
@@ -203,12 +203,13 @@ public class FolderDiscovery {
 		Path path = Paths.get(FolderDiscovery.getAirportsFolderStr() , fileName);
 		File file = path.toFile();
 		if ( file.exists() && file.isFile()) {
+			logger.info(file.getAbsolutePath());
 			return file;
 		}
 		return null;
 	}
 
-	public String getFlightPath(train_rank train_rank_value, String fileName) {
+	public String getFlightPathAsString(train_rank train_rank_value, String fileName) {
 		String folder = "";
 		if ( train_rank_value == train_rank.rank) {
 			folder = flightRankFolderStr;
@@ -218,6 +219,7 @@ public class FolderDiscovery {
 		Path path = Paths.get(folder , fileName);
 		File file = path.toFile();
 		if ( file.exists() && file.isFile()) {
+			logger.info(file.getAbsolutePath());
 			return file.getAbsolutePath();
 		}
 		return null;

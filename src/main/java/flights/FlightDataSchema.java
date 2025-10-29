@@ -1,10 +1,6 @@
 package flights;
 
 import java.time.Instant;
-import java.util.Optional;
-
-import org.apache.parquet.variant.Variant;
-
 
 
 public class FlightDataSchema {

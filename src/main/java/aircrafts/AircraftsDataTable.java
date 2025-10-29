@@ -98,5 +98,4 @@ public class AircraftsDataTable extends Table {
 		return ( ( first != null ) && !first.isEmpty() );
 		
 	}
-	
 }

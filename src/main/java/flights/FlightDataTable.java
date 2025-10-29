@@ -101,24 +101,33 @@ public class FlightDataTable extends Table {
 		return ( filtered.rowCount() > 0);
 	}
 	
-	public double getDoubleFlightDataAtNearestFuelInstant(final String columnName , final Instant start_end) {
+	public double getDoubleFlightDataAtInterpolatedStartEndFuelInstant(final String columnName , final Instant start_end) {
 				
 		// use interpolation function when start end instant inside the range of the function
 		// 	private Map<String, PolynomialSplineFunction> interpolationFunctionMap = null;
 		
 		if ( interpolationFunctionMap.containsKey(columnName)) {
-			logger.info(" map contains an interpolation function for the column = " + columnName);
+			logger.info("Interpolation map contains an interpolation function for the column = " + columnName);
+		} else {
+			assert (false);
 		}
 
 		PolynomialSplineFunction function = (PolynomialSplineFunction)interpolationFunctionMap.get(columnName);
 		double querySeconds = start_end.getEpochSecond();
 
+		if ( )
         double interpolatedValue = function.value(querySeconds);
         return interpolatedValue;
 		
 	}
 	
-	public float getFloatFlightDataAtNearestFuelInstant(final String columnName , final Instant start_end) {
+	public float getFloatFlightDataAtInterpolatedStartEndFuelInstant(final String columnName , final Instant start_end) {
+		
+		if ( interpolationFunctionMap.containsKey(columnName)) {
+			logger.info("Interpolation map contains an interpolation function for the column = " + columnName);
+		} else {
+			assert (false);
+		}
 		
 		PolynomialSplineFunction function = (PolynomialSplineFunction)interpolationFunctionMap.get(columnName);
 		double querySeconds = start_end.getEpochSecond();

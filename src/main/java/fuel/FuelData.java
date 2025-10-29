@@ -29,7 +29,7 @@ public class FuelData extends FuelDataTable {
 
 	public FuelData( train_rank value ) {
 		super(value);
-		logger.info("--- constructor ---");
+		logger.info("--- constructor for <<" + this.getTrain_rank_value() + ">> ---");
 	}
 	
 	public void CommonToTrainAndRank ( final long maxToBeComputedRow) throws IOException {
@@ -46,36 +46,49 @@ public class FuelData extends FuelDataTable {
 		flightListData.readParquet();
 		flightListData.extendWithFlightDateData();
 
-		System.out.println(flightListData.getFlightListDataTable().shape());
+		logger.info( flightListData.getFlightListDataTable().shape() );
 		
 		flightListData.extendWithAirportData( airportsData );
 		//flightListData.extendWithAirportsSinusCosinusOfLatitudeLongitude();
-		System.out.println(flightListData.getFlightListDataTable().shape());
+		
+		logger.info(flightListData.getFlightListDataTable().shape());
+		logger.info(flightListData.getFlightListDataTable().structure().print());
 		
 		flightListData.extendWithAircraftsData( aircraftsData );
 		//flightListData.extendWithAirportsSinusCosinusOfLatitudeLongitude();
-		System.out.println(flightListData.getFlightListDataTable().shape());
 		
-		System.out.println("fuel data table - row count = " +  this.getFuelDataTable().rowCount());
+		logger.info(flightListData.getFlightListDataTable().shape());
+		logger.info("fuel data table - row count = " +  this.getFuelDataTable().rowCount());
 
+		// extend fuel with end minus start differences
 		this.extendFuelWithEndStartDifference();
+		logger.info(this.getFuelDataTable().shape());
+		logger.info(this.getFuelDataTable().structure().print());
+		
+		// extend fuel with fuel flow in Kilograms per seconds
 		this.extendFuelFlowKgSeconds();
+		logger.info(this.getFuelDataTable().shape());
+		logger.info(this.getFuelDataTable().structure().print());
 
 		// merge fuel with flight list
 		this.extendFuelWithFlightListData( flightListData.getFlightListDataTable() ) ;
+		logger.info(this.getFuelDataTable().shape());
+		logger.info(this.getFuelDataTable().structure().print());
 		
 		// as flight take-off and landed are now available from flight list 
 		// use them to compute relative delta from burnt start and stop
+		// extend fuel with start end differences from takeoff
 		this.extendRelativeStartEndFromFlightTakeoff();
+		logger.info(this.getFuelDataTable().shape());
+		logger.info(this.getFuelDataTable().structure().print());
 
-		// extend with flight data - there is a "merge" between fuel and flight data
+		// extend fuel with flight data - there is a "merge" between fuel and flight data
 		this.extendFuelStartEndInstantsWithFlightData( maxToBeComputedRow );
 		
 		// generate final parquet file with extended fuel dataframe
 		this.generateParquetFileFor();
 		
 		this.generateListOfErrors();
-		
 			
 	}
 	

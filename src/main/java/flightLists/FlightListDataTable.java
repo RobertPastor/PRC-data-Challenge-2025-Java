@@ -1,11 +1,13 @@
 package flightLists;
 
 import java.util.Iterator;
+import java.util.logging.Logger;
 
 import aircrafts.AircraftsData;
 import airports.AirportsDataTable;
 import dataChallengeEnums.DataChallengeEnums.train_rank;
 import flightLists.FlightListDataSchema.FlightListDataRecord;
+import fuel.FuelDataTable;
 import tech.tablesaw.api.DateColumn;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.FloatColumn;
@@ -26,6 +28,8 @@ import java.time.ZonedDateTime;
 
 public class FlightListDataTable extends Table {
 	
+	private static final Logger logger = Logger.getLogger(FlightListDataTable.class.getName());
+
 	protected train_rank train_rank_value;
 	
 	public train_rank getTrain_rank_value() {
@@ -189,7 +193,7 @@ public class FlightListDataTable extends Table {
 		
 		// flight_distance_Nm |   flight_duration_sec
 		
-		System.out.println( this.flightListDataTable.structure() );
+		logger.info( this.flightListDataTable.structure().print());
 				
 		Iterator<Row> iter = this.flightListDataTable.iterator();
 		while ( iter.hasNext()) {
@@ -242,8 +246,8 @@ public class FlightListDataTable extends Table {
 			row.setLong ("flight_duration_sec" , flight_duration_seconds);
 			
 		}
-		System.out.println( this.flightListDataTable.structure());
-		System.out.println( this.flightListDataTable.print(10));
+		logger.info( this.flightListDataTable.structure().print());
+		logger.info( this.flightListDataTable.print());
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -252,20 +256,20 @@ public class FlightListDataTable extends Table {
 		// use left join
 		// aircraft_type -> join column in FlightList table
 		// ICAO_Code -> join column in aircrafts table
-		System.out.println(aircraftsData.getAircraftDataTable().shape());
-		System.out.println(aircraftsData.getAircraftDataTable().structure());
+		logger.info(aircraftsData.getAircraftDataTable().shape());
+		logger.info(aircraftsData.getAircraftDataTable().structure().print());
 
 		// Rename the column
 		aircraftsData.getAircraftDataTable().column("ICAO_Code").setName("aircraft_type");
-		System.out.println(aircraftsData.getAircraftDataTable().structure());
+		logger.info(aircraftsData.getAircraftDataTable().structure().print());
 		
 		// Perform an left outer join on the "id" column
 		// Left Outer Join: Keeps all rows from the left table and matches from the right.
 		Table aircraftsDataTable = aircraftsData.getAircraftDataTable();
         this.setFlightListDataTable( this.flightListDataTable.joinOn("aircraft_type").leftOuter(aircraftsDataTable));
 		
-		System.out.println( this.flightListDataTable.structure());
-		System.out.println( this.flightListDataTable.print(10));
+		logger.info( this.flightListDataTable.structure().print());
+		logger.info( this.flightListDataTable.print(10));
 
 	}
 	

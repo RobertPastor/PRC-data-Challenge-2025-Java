@@ -94,13 +94,13 @@ public class AircraftsData extends AircraftsDataTable {
 	private void fillTableRow(final Row r) {
 		
 		tech.tablesaw.api.Row tableRow = this.aircraftsDataTable.appendRow();
-		logger.info ("---> " + this.aircraftsDataTable.rowCount());
+		logger.info ("row count ---> " + this.aircraftsDataTable.rowCount());
 
 		//ICAO_Code
 		int columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(0);
 		Cell cell = r.getCell(columnIndex);
 		tableRow.setString("ICAO_Code", cell.getRawValue());
-		logger.info("Aircraft ICAO code = " + cell.getRawValue());
+		//logger.info("Aircraft ICAO code = " + cell.getRawValue());
 
 		//Num_Engines
 		columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(1);
@@ -193,9 +193,12 @@ public class AircraftsData extends AircraftsDataTable {
 			tableRow.setFloat("Parking_Area_ft2", 
 					(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
 		}
-		
 	}
 
+	/**
+	 * read an EXCEL file using fastExcel library
+	 * @throws IOException
+	 */
 	public void readExcelFile() throws IOException {
 
 		this.createEmptyAircraftsDataTable();

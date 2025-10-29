@@ -90,9 +90,9 @@ public class FuelDataTable extends Table {
 	@SuppressWarnings("deprecation")
 	public void extendFuelWithFlightListData (  final Table flightListDataTable ) {
 		
-		System.out.println ( flightListDataTable.structure() );
-		System.out.println ( flightListDataTable.shape() );
-		System.out.println ( flightListDataTable.print(10) );
+		logger.info ( flightListDataTable.structure().print() );
+		logger.info ( flightListDataTable.shape() );
+		logger.info( flightListDataTable.print(10) );
 		
 		// apply join using  flight_id
 		// use left outer join from fuel table to flight list table
@@ -101,7 +101,9 @@ public class FuelDataTable extends Table {
 		// Perform an left outer join on the "id" column
 		// Left Outer Join: Keeps all rows from the left table and matches from the right.
 		this.setFuelDataTable( this.fuelDataTable.joinOn("flight_id").leftOuter(flightListDataTable));
-		System.out.println( this.getFuelDataTable().structure() );
+
+		logger.info( this.getFuelDataTable().shape() );
+		logger.info( this.getFuelDataTable().structure().print() );
 		
 	}
 	
@@ -157,7 +159,7 @@ public class FuelDataTable extends Table {
 		FloatColumn fuel_flow_kg_sec_column = FloatColumn.create("fuel_flow_kg_sec");
 		this.fuelDataTable.addColumns(fuel_flow_kg_sec_column);
 		
-		System.out.println( this.fuelDataTable.structure() );
+		logger.info( this.fuelDataTable.structure().print() );
 		
 		Iterator<Row> iter = this.fuelDataTable.iterator();
 		while ( iter.hasNext()) {
@@ -173,7 +175,7 @@ public class FuelDataTable extends Table {
 			assert start.isBefore(end);
 			
 			long instantDifferenceSeconds = Duration.between(start, end).toSeconds();
-
+			// 29 October 2025 - still to demonstrate that fuel flow is a better Y than fuel Kg only
 			float fuel_flow_kg_seconds = (float) 0.0;
 			if ( instantDifferenceSeconds > 0.0 ) {
 				fuel_flow_kg_seconds = fuel_kg / Math.abs(instantDifferenceSeconds);
@@ -183,7 +185,7 @@ public class FuelDataTable extends Table {
 			}
 			row.setFloat("fuel_flow_kg_sec" , fuel_flow_kg_seconds);
 		}
-		System.out.println( this.fuelDataTable.print(10));
+		logger.info( this.fuelDataTable.print(10));
 	}
 	
 	public void extendFuelStartEndInstantsWithFlightData( final long maxToBeComputedRow ) throws IOException {
@@ -191,6 +193,7 @@ public class FuelDataTable extends Table {
 		// latitude degrees at fuel start
 		DoubleColumn aircraft_latitude_deg_at_fuel_start_column = DoubleColumn.create("aircraft_latitude_deg_at_fuel_start");
 		this.fuelDataTable.addColumns(aircraft_latitude_deg_at_fuel_start_column);
+		
 		// latitude radians at fuel start
 		DoubleColumn aircraft_latitude_rad_at_fuel_start_column = DoubleColumn.create("aircraft_latitude_rad_at_fuel_start");
 		this.fuelDataTable.addColumns(aircraft_latitude_rad_at_fuel_start_column);
@@ -198,6 +201,7 @@ public class FuelDataTable extends Table {
 		// longitude degrees at fuel start
 		DoubleColumn aircraft_longitude_deg_at_fuel_start_column = DoubleColumn.create("aircraft_longitude_deg_at_fuel_start");
 		this.fuelDataTable.addColumns(aircraft_longitude_deg_at_fuel_start_column);
+		
 		// longitude radians at fuel start
 		DoubleColumn aircraft_longitude_rad_at_fuel_start_column = DoubleColumn.create("aircraft_longitude_rad_at_fuel_start");
 		this.fuelDataTable.addColumns(aircraft_longitude_rad_at_fuel_start_column);
@@ -205,6 +209,7 @@ public class FuelDataTable extends Table {
 		// latitude degrees at fuel end
 		DoubleColumn aircraft_latitude_deg_at_fuel_end_column = DoubleColumn.create("aircraft_latitude_deg_at_fuel_end");
 		this.fuelDataTable.addColumns(aircraft_latitude_deg_at_fuel_end_column);
+		
 		// latitude radians at fuel end
 		DoubleColumn aircraft_latitude_rad_at_fuel_end_column = DoubleColumn.create("aircraft_latitude_rad_at_fuel_end");
 		this.fuelDataTable.addColumns(aircraft_latitude_rad_at_fuel_end_column);
@@ -212,6 +217,7 @@ public class FuelDataTable extends Table {
 		// longitude degrees at fuel end
 		DoubleColumn aircraft_longitude_deg_at_fuel_end_column = DoubleColumn.create("aircraft_longitude_deg_at_fuel_end");
 		this.fuelDataTable.addColumns(aircraft_longitude_deg_at_fuel_end_column);
+		
 		// longitude radians at fuel end
 		DoubleColumn aircraft_longitude_rad_at_fuel_end_column = DoubleColumn.create("aircraft_longitude_rad_at_fuel_end");
 		this.fuelDataTable.addColumns(aircraft_longitude_rad_at_fuel_end_column);
@@ -311,20 +317,24 @@ public class FuelDataTable extends Table {
 			String flight_id = row.getString ("flight_id");
 			FlightData flightData = new FlightData( train_rank_value , flight_id );
 			// 27th October 2025 - use new stream reader capable of filling empty values
+			// read one flight data parquet file
 			flightData.readParquetWithStream();
+			
+			logger.info(flightData.getFlightDataTable().shape() );
+			logger.info(flightData.getFlightDataTable().structure().print() );
 			
 			// one set of interpolation function for each loaded flight data frame
 			flightData.buildInterpolationFunctions();
 			
-			System.out.println("--------------------------------------");
-			System.out.println("----------------- row count = "+ counter + " / max = " + this.fuelDataTable.rowCount() + " ---------------------");
-			System.out.println("--------------------------------------");
+			logger.info("--------------------------------------");
+			logger.info("----------------- row count = "+ counter + " / max = " + this.fuelDataTable.rowCount() + " ---------------------");
+			logger.info("--------------------------------------");
 			
-			double ac_lat_fuel_start = flightData.getDoubleFlightDataAtNearestFuelInstant("latitude" , start);
-			double ac_lon_fuel_start = flightData.getDoubleFlightDataAtNearestFuelInstant("longitude" ,start);
+			double ac_lat_fuel_start = flightData.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("latitude" , start);
+			double ac_lon_fuel_start = flightData.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("longitude" ,start);
 			
-			double ac_lat_fuel_end = flightData.getDoubleFlightDataAtNearestFuelInstant("latitude"  ,end);
-			double ac_lon_fuel_end = flightData.getDoubleFlightDataAtNearestFuelInstant("longitude"  ,end);
+			double ac_lat_fuel_end = flightData.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("latitude"  ,end);
+			double ac_lon_fuel_end = flightData.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("longitude"  ,end);
 			
 			row.setDouble("aircraft_latitude_deg_at_fuel_start" , ac_lat_fuel_start);
 			row.setDouble("aircraft_latitude_rad_at_fuel_start" , (ac_lat_fuel_start * Math.PI)/180.0);
@@ -342,10 +352,10 @@ public class FuelDataTable extends Table {
 			double distanceFlownBetweenStartEnd = Utils.calculateHaversineDistanceNauticalMiles( ac_lat_fuel_start, ac_lon_fuel_start, ac_lat_fuel_end, ac_lon_fuel_end); 
 			row.setDouble("aircraft_distance_flown_Nm" , distanceFlownBetweenStartEnd);
 					
-			double altitude_start = flightData.getDoubleFlightDataAtNearestFuelInstant("altitude" ,  start);
+			double altitude_start = flightData.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("altitude" ,  start);
 			row.setDouble("aircraft_altitude_ft_at_fuel_start" , altitude_start);
 			
-			double altitude_end = flightData.getDoubleFlightDataAtNearestFuelInstant("altitude" ,  end);
+			double altitude_end = flightData.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("altitude" ,  end);
 			row.setDouble("aircraft_altitude_ft_at_fuel_end" , altitude_end);
 			
 			// computed vertical rate feet per minutes
@@ -355,16 +365,16 @@ public class FuelDataTable extends Table {
 			row.setDouble("aircraft_computed_vertical_rate_ft_min" , computed_vertical_rate);
 
 			// ground speed
-			double groundSpeed_start = flightData.getDoubleFlightDataAtNearestFuelInstant("groundspeed",  start);
+			double groundSpeed_start = flightData.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("groundspeed",  start);
 			row.setDouble("aircraft_groundspeed_kt_at_fuel_start" , groundSpeed_start);
-			double groundSpeed_end = flightData.getDoubleFlightDataAtNearestFuelInstant("groundspeed" ,  end);
+			double groundSpeed_end = flightData.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("groundspeed" ,  end);
 			row.setDouble("aircraft_groundspeed_kt_at_fuel_end" , groundSpeed_end);
 			
 			// track angle degrees
-			double track_angle_deg_start = flightData.getDoubleFlightDataAtNearestFuelInstant("track" ,  start);
+			double track_angle_deg_start = flightData.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("track" ,  start);
 			row.setDouble("aircraft_track_angle_deg_at_fuel_start" , track_angle_deg_start);
 			
-			double track_angle_deg_end = flightData.getDoubleFlightDataAtNearestFuelInstant("track" ,  end);
+			double track_angle_deg_end = flightData.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("track" ,  end);
 			row.setDouble("aircraft_track_angle_deg_at_fuel_end" ,  track_angle_deg_end);
 			
 			// ground speed X and Y projected components
@@ -381,36 +391,48 @@ public class FuelDataTable extends Table {
 			row.setDouble("aircraft_track_angle_rad_at_fuel_end" ,  Math.toRadians(track_angle_deg_end));
 			
 			// vertical rate
-			double vertical_rate_ft_min_start = flightData.getDoubleFlightDataAtNearestFuelInstant("vertical_rate" ,  start);
+			double vertical_rate_ft_min_start = flightData.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("vertical_rate" ,  start);
 			row.setDouble("aircraft_vertical_rate_ft_min_at_fuel_start" , vertical_rate_ft_min_start);
 			
-			double vertical_rate_ft_min_end = flightData.getDoubleFlightDataAtNearestFuelInstant("vertical_rate" ,  end);
+			double vertical_rate_ft_min_end = flightData.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("vertical_rate" ,  end);
 			row.setDouble("aircraft_vertical_rate_ft_min_at_fuel_end" , vertical_rate_ft_min_end);
 			
 			// mach
-			double mach_start = flightData.getDoubleFlightDataAtNearestFuelInstant("mach" ,  start);
+			double mach_start = flightData.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("mach" ,  start);
 			row.setDouble("aircraft_mach_at_fuel_start" , mach_start);
 			
-			double mach_end = flightData.getDoubleFlightDataAtNearestFuelInstant("mach" ,  end);
+			double mach_end = flightData.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("mach" ,  end);
 			row.setDouble("aircraft_mach_at_fuel_end" , mach_end);
 			
 			// TAS
-			double TAS_start = flightData.getDoubleFlightDataAtNearestFuelInstant("TAS" ,  start);
+			double TAS_start = flightData.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("TAS" ,  start);
 			row.setDouble("aircraft_TAS_at_fuel_start" , TAS_start);
 			
-			double TAS_end = flightData.getDoubleFlightDataAtNearestFuelInstant("TAS" ,  end);
+			double TAS_end = flightData.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("TAS" ,  end);
 			row.setDouble("aircraft_TAS_at_fuel_end" , TAS_end);
 			
 			// CAS
-			double CAS_start = flightData.getDoubleFlightDataAtNearestFuelInstant("CAS" ,  start);
+			double CAS_start = flightData.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("CAS" ,  start);
 			row.setDouble("aircraft_CAS_at_fuel_start" , CAS_start);
 			
-			double CAS_end = flightData.getDoubleFlightDataAtNearestFuelInstant("CAS" ,  end);
+			double CAS_end = flightData.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("CAS" ,  end);
 			row.setDouble("aircraft_CAS_at_fuel_end" , CAS_end);
 		
 		}
 	}
 	
+	/**
+	 * 
+	 * check that take off is before fuel start instant
+	 * check that take off is before fuel end instant
+	 * 
+	 * compute difference in seconds between take off and fuel start instant
+	 * compute difference in seconds between take off and fuel end instant
+	 * 
+	 * compute difference between fuel end instant and flight landed instant
+	 * check that fuel end instant is before flight landed instant
+	 * 
+	 */
 	public void extendRelativeStartEndFromFlightTakeoff() {
 
 		LongColumn fuel_burnt_start_relative_to_takeoff_sec_column = LongColumn.create("fuel_burnt_start_relative_to_takeoff_sec");

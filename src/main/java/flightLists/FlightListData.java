@@ -20,19 +20,22 @@ public class FlightListData extends FlightListDataTable {
 		this.train_rank_value = value;
 	}
 
+	/**
+	 * read the flight list from a parquet file
+	 * @throws IOException
+	 */
 	public void readParquet( ) throws IOException {
 		
-		logger.info("--- constructor ---");
-
+		logger.info("----- <<" + this.getTrain_rank_value() + ">> ------");
 		this.createEmptyFlightListDataTable();
 		File file = null;
 		try {
 			FolderDiscovery folderDiscovery = new FolderDiscovery();
-			
 			file = folderDiscovery.getFlightListFileFromFileName(this.getTrain_rank_value() );
+			logger.info(file.getAbsolutePath());
+			
 			var reader = new CarpetReader<>(file, FlightListDataRecord.class);
 			Iterator<FlightListDataRecord> iterator = ((CarpetReader<FlightListDataRecord>) reader).iterator();
-			int count = 0;
 
 			while (iterator.hasNext()) {
 				FlightListDataSchema.FlightListDataRecord record = iterator.next();
@@ -45,16 +48,12 @@ public class FlightListData extends FlightListDataTable {
 				
 				this.appendRowToFlightListDataTable(record);
 
-				if (count > 10) {
-					//break;
-				}
-				count = count + 1;
 			}
-			//System.out.println(this.flightListDataTable.print(10));
+			logger.info( this.flightListDataTable.shape() );
+			logger.info( this.flightListDataTable.structure().print() );
 		} catch (Exception ex) {
 			ex.printStackTrace(System.out);
 		}
-		System.out.println("Parquet file <<" + this.getTrain_rank_value() + ">> Flight List <<" + file.getAbsolutePath() +">> read successfully!");
-
+		logger.info("Parquet file <<" + this.getTrain_rank_value() + ">> Flight List <<" + file.getAbsolutePath() +">> read successfully!");
 	}
 }

@@ -18,7 +18,7 @@ public class AircraftsDataSchema {
 			float Cockpit_to_Main_Gear_ft,
 			float Main_Gear_Width_ft,
 			
-			// Maximum takeoff weight
+			// Maximum take off weight
 			double MTOW_lb,
 			double MTOW_kg,
 			// Maximum landing weight

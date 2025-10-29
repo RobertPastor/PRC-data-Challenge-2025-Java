@@ -51,8 +51,7 @@ class CustomException extends Exception {
 public class FlightData extends FlightDataTable {
 
 	private static final Logger logger = Logger.getLogger(FlightData.class.getName());
-
-
+	// constructor
 	public FlightData( train_rank train_rank_value , final String flight_id ) {
 		super(train_rank_value , flight_id);
 
@@ -65,19 +64,10 @@ public class FlightData extends FlightDataTable {
 		 +---
 	 */
 
-	public PolynomialSplineFunction generatedInterpolationFunction ( final String columnNameToInterpolate ) {
-
-		/**
-		 * LongColumn InstantSeconds_column = LongColumn.create("timestamp_sec");
-		this.flightDataTable.addColumns(InstantSeconds_column);
-		for ( Row row : this.flightDataTable ) {
-			Instant timestampInstant = row.getInstant("timestamp");
-			row.setLong ("timestamp_sec" , timestampInstant.getEpochSecond());
-		}
-		 */
+	public PolynomialSplineFunction generatedInterpolationFunction ( final String columnName ) {
 
 		// filter the table with a selection
-		Selection selectionNotMissing = this.getFlightDataTable().doubleColumn(columnNameToInterpolate).isNotMissing();
+		Selection selectionNotMissing = this.getFlightDataTable().doubleColumn(columnName).isNotMissing();
 		Table filteredTable = this.getFlightDataTable().where(selectionNotMissing);
 
 		// create a list of instants as X values in the interpolation
@@ -89,13 +79,19 @@ public class FlightData extends FlightDataTable {
 		double[] yValues = new double[sizeOfArray];
 
 		// take only first timestamp
-		filteredTable = filteredTable.summarize(columnNameToInterpolate, AggregateFunctions.first).by("timestamp");
+		filteredTable = filteredTable.summarize(columnName, AggregateFunctions.first).by("timestamp");
+		
 		System.out.println( filteredTable.print(10));
+		
+		// rename second column
+		String columnNameToInterpolate = columnName + "_interpolated";
+		filteredTable.column(1).setName( columnNameToInterpolate );
+		System.out.println( filteredTable.structure().print());
+
 		DoubleColumn c = (DoubleColumn) filteredTable.column(columnNameToInterpolate);
 		yValues = c.asDoubleArray();
 
 		// convert Instant to seconds (long)
-
 		for ( int i = 0 ; i < xInstants.length ; i++) {
 			xSeconds[i] = xInstants[i].getEpochSecond();
 		}
@@ -108,8 +104,6 @@ public class FlightData extends FlightDataTable {
 		return function;
 	}
 
-
-
 	/**
 	 * new method of reading parquet files and managing missing values (holes)
 	 * @throws IOException
@@ -119,7 +113,6 @@ public class FlightData extends FlightDataTable {
 		logger.info("----------- start read parquet with stream ------");
 
 		this.createEmptyFlightDataTable();
-
 		FolderDiscovery folderDiscovery = new FolderDiscovery();
 
 		String fileName = this.getFlight_id() + ".parquet";
@@ -211,7 +204,8 @@ public class FlightData extends FlightDataTable {
 	}
 
 	public void buildInterpolationFunctions() {
-		System.out.println("---- build interpolation functions -----");
+		
+		logger.info("---- build interpolation functions -----");
 		// create the interpolation functions
 		List<String> columnsToInterpolateList = Arrays.asList("latitude" , "longitude", "altitude",
 				"groundspeed","track", "vertical_rate", "mach", "TAS", "CAS");
@@ -321,7 +315,7 @@ public class FlightData extends FlightDataTable {
 		} catch (Exception ex) {
 			ex.printStackTrace(System.out);
 		}
-		logger.info("Parquet file <<" + folderDiscovery.getFlightPath(this.train_rank_value , fileName) + ">> read successfully!");
+		logger.info("Parquet file <<" + folderDiscovery.getFlightPathAsString(this.train_rank_value , fileName) + ">> read successfully!");
 	}
 
 	public void writeParquet( )throws IOException {
