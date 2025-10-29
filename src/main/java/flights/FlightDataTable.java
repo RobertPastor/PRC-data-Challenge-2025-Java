@@ -128,7 +128,7 @@ public class FlightDataTable extends Table {
 	}
 	
 	
-	public Instant findNearestIntantFromFlightTimeStamps( final Instant fuelInstant ) {
+	public Instant interpolateFromFuelStartEnd( final Instant fuelInstant ) {
 		
 		List<Instant> listOfFlightTimeStamps = new ArrayList<Instant>();
 		Iterator<Row> iter = this.flightDataTable.iterator();

@@ -313,6 +313,9 @@ public class FuelDataTable extends Table {
 			// 27th October 2025 - use new stream reader capable of filling empty values
 			flightData.readParquetWithStream();
 			
+			// one set of interpolation function for each loaded flight data frame
+			flightData.buildInterpolationFunctions();
+			
 			System.out.println("--------------------------------------");
 			System.out.println("----------------- row count = "+ counter + " / max = " + this.fuelDataTable.rowCount() + " ---------------------");
 			System.out.println("--------------------------------------");

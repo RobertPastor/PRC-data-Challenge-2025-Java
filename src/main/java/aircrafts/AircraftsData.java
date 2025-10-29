@@ -39,8 +39,10 @@ public class AircraftsData extends AircraftsDataTable {
 
 	private static String aircraftsFolderPath = "C:/Users/rober/eclipse-2025-09/eclipse-jee-2025-09-R-win32-x86_64/Data-Challenge-2025/documents";
 
-	private static List<String> aircraftsExpectedHeaders = Arrays.asList("ICAO_Code","Num_Engines","Approach_Speed_knot","Wingspan_ft_without_winglets_sharklets",
-			"Length_ft" , "Tail_Height_at_OEW_ft" , "Wheelbase_ft" ,"Cockpit_to_Main_Gear_ft" , "Main_Gear_Width_ft" , "MTOW_lb","MALW_lb", "Parking_Area_ft2");
+	private static List<String> aircraftsExpectedHeaders = Arrays.asList("ICAO_Code","Num_Engines","Approach_Speed_knot",
+			"Wingspan_ft_without_winglets_sharklets",
+			"Length_ft" , "Tail_Height_at_OEW_ft" , "Wheelbase_ft" ,"Cockpit_to_Main_Gear_ft" , 
+			"Main_Gear_Width_ft" , "MTOW_lb","MALW_lb", "Parking_Area_ft2");
 
 	private static List<Integer> aircraftsFoundHeadersColumnIndexes = new ArrayList<Integer>();
 	private static List<String> aircraftsFoundHeaders = new ArrayList<String>();
@@ -65,14 +67,17 @@ public class AircraftsData extends AircraftsDataTable {
 		super();
 		logger.info("file = " + getAircraftsFileName());
 	}
-	
+	/**
+	 * build the headers while analysing the first row from the EXCEL file
+	 * @param r
+	 */
 	private void buildHeadersInformations ( final Row r ) {
 		for (Cell cell : r) {
 			if (cell != null) {
-				//System.out.println("column index = " + cell.getColumnIndex() + " cell type = " + cell.getType());
+				logger.info("column index = " + cell.getColumnIndex() + " cell type = " + cell.getType());
 				if ( cell.getType().equals(CellType.STRING)) {
 					String headerNameFound =  cell.getRawValue();
-					//System.out.println("header found = " + headerNameFound );
+					logger.info("header name found = " + headerNameFound );
 					if ( AircraftsData.getAircraftsExpectedHeaders().contains(headerNameFound)) {
 						AircraftsData.getAircraftsFoundHeaders().add(headerNameFound);
 						AircraftsData.getAircraftHeadersColumnIndexes().add(cell.getColumnIndex());
@@ -80,21 +85,22 @@ public class AircraftsData extends AircraftsDataTable {
 				}
 			}
 		}
-		//System.out.println(AircraftsData.getAircraftsExpectedHeaders());
-		//System.out.println(AircraftsData.getAircraftsFoundHeaders());
-		//System.out.println(AircraftsData.getAircraftHeadersColumnIndexes());
+		logger.info(AircraftsData.getAircraftsExpectedHeaders().toString());
+		logger.info(AircraftsData.getAircraftsFoundHeaders().toString());
+		logger.info(AircraftsData.getAircraftHeadersColumnIndexes().toString());
 
 	}
 	
 	private void fillTableRow(final Row r) {
 		
 		tech.tablesaw.api.Row tableRow = this.aircraftsDataTable.appendRow();
-		//logger.info ("---> " + this.aircraftsDataTable.rowCount());
+		logger.info ("---> " + this.aircraftsDataTable.rowCount());
 
 		//ICAO_Code
 		int columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(0);
 		Cell cell = r.getCell(columnIndex);
 		tableRow.setString("ICAO_Code", cell.getRawValue());
+		logger.info("Aircraft ICAO code = " + cell.getRawValue());
 
 		//Num_Engines
 		columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(1);
@@ -188,7 +194,6 @@ public class AircraftsData extends AircraftsDataTable {
 					(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
 		}
 		
-		
 	}
 
 	public void readExcelFile() throws IOException {
@@ -197,7 +202,7 @@ public class AircraftsData extends AircraftsDataTable {
 		logger.info(this.aircraftsDataTable.structure().print());
 		
 		logger.info(AircraftsData.getAircraftsFileName());
-
+		// name of the sheet in the EXCEL file
 		String sheetName = "ACD_Data";
 
 		String fileName = AircraftsData.getAircraftsFileName();
@@ -207,7 +212,7 @@ public class AircraftsData extends AircraftsDataTable {
 
 		if ( inputExcelFile.exists() && inputExcelFile.isFile()) {
 
-			System.out.println(inputExcelFile.getAbsolutePath());
+			logger.info(inputExcelFile.getAbsolutePath());
 
 			ReadableWorkbook wb = new ReadableWorkbook(inputExcelFile);
 
@@ -235,12 +240,12 @@ public class AircraftsData extends AircraftsDataTable {
 						this.fillTableRow(r);
 					}
 				}
-				System.out.println( this.aircraftsDataTable.structure() );
-				System.out.println( this.aircraftsDataTable.print(10) );
+				logger.info( this.aircraftsDataTable.structure().print() );
+				logger.info( this.aircraftsDataTable.print(10) );
 			} 
 			wb.close();
 		} else {
-			System.out.println("file <<" + inputExcelFile.getAbsolutePath() + ">> not found or it is not a file");
+			logger.info("file <<" + inputExcelFile.getAbsolutePath() + ">> not found or it is not a file");
 		}
 	}
 }

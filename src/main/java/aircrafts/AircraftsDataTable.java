@@ -1,5 +1,7 @@
 package aircrafts;
 
+import java.util.logging.Logger;
+
 import aircrafts.AircraftsDataSchema.AircraftsDataRecord;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.FloatColumn;
@@ -7,9 +9,12 @@ import tech.tablesaw.api.IntColumn;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
+import tech.tablesaw.selection.Selection;
 import utils.Constants;
 
 public class AircraftsDataTable extends Table {
+	
+	private static final Logger logger = Logger.getLogger(AircraftsDataTable.class.getName());
 	
 	public Table aircraftsDataTable = null;
 
@@ -38,7 +43,7 @@ public class AircraftsDataTable extends Table {
 				
 				FloatColumn.create("Main_Gear_Width_ft"),
 				
-				// Maximum takeoff weight
+				// Maximum take-off weight
 				DoubleColumn.create("MTOW_lb"),
 				DoubleColumn.create("MTOW_kg"),
 				
@@ -74,6 +79,24 @@ public class AircraftsDataTable extends Table {
 		row.setDouble("MALW_kg", record.MALW_lb() * Constants.lbs_to_kilograms);
 		
 		row.setFloat("Parking_Area_ft2", record.Parking_Area_ft2());
+	}
+	
+	/**
+	 * check if a given aircraft ICAO code is in the database
+	 * @param aircraftICAOcode
+	 * @return
+	 */
+	public boolean isAircraftICAOcodeInDatabase(final String aircraftICAOcode ) {
+		
+		Selection selection = this.aircraftsDataTable.stringColumn("ICAO_Code").containsString(aircraftICAOcode);
+		Table filteredTable = this.aircraftsDataTable.where(selection);
+		
+		logger.info(filteredTable.print(2));
+		
+		StringColumn first = filteredTable.stringColumn("ICAO_Code").first(1);
+		logger.info( String.valueOf(( first != null ) && !first.isEmpty() ) );
+		return ( ( first != null ) && !first.isEmpty() );
+		
 	}
 	
 }

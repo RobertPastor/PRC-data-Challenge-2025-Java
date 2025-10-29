@@ -68,7 +68,7 @@ public class FuelData extends FuelDataTable {
 		// use them to compute relative delta from burnt start and stop
 		this.extendRelativeStartEndFromFlightTakeoff();
 
-		// extend with flight data
+		// extend with flight data - there is a "merge" between fuel and flight data
 		this.extendFuelStartEndInstantsWithFlightData( maxToBeComputedRow );
 		
 		// generate final parquet file with extended fuel dataframe

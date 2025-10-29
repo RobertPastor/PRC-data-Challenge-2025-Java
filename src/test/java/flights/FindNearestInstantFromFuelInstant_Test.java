@@ -32,7 +32,7 @@ public class FindNearestInstantFromFuelInstant_Test {
 		System.out.println("Row Count -> " + flightData.getFlightDataTable().rowCount() );
 		System.out.println("Shape -> " + flightData.getFlightDataTable().shape() );
 
-		Instant nearestInstant = flightData.findNearestIntantFromFlightTimeStamps(now);
+		Instant nearestInstant = flightData.interpolateFromFuelStartEnd(now);
 		System.out.println("nearest instant = " + now + " ---> " + nearestInstant);
 		assert 	nearestInstant != null;
 	}

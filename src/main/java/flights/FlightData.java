@@ -51,11 +51,11 @@ class CustomException extends Exception {
 public class FlightData extends FlightDataTable {
 
 	private static final Logger logger = Logger.getLogger(FlightData.class.getName());
-	
+
 
 	public FlightData( train_rank train_rank_value , final String flight_id ) {
 		super(train_rank_value , flight_id);
-		
+
 	}
 
 	/**
@@ -64,9 +64,9 @@ public class FlightData extends FlightDataTable {
 		 |  0 |       1800.04     |           1.38886  |            101.71  |           2.74558 |                 69 |                 4.76389 |                52.3086 |                     -11 |              5533.53 |                 44297 |    560000 |    425000 |             2 |                   144 |                                    197.3 |       206.1 |            43747   |                    36929.4 |                  38729.5 |    45.1833 |    24.35    |    35974.9 |       467     | 302.324 |        0        |   0.86 |     0 |     0 |                    36929.4 |
 		 +---
 	 */
-	
+
 	public PolynomialSplineFunction generatedInterpolationFunction ( final String columnNameToInterpolate ) {
-		
+
 		/**
 		 * LongColumn InstantSeconds_column = LongColumn.create("timestamp_sec");
 		this.flightDataTable.addColumns(InstantSeconds_column);
@@ -74,40 +74,40 @@ public class FlightData extends FlightDataTable {
 			Instant timestampInstant = row.getInstant("timestamp");
 			row.setLong ("timestamp_sec" , timestampInstant.getEpochSecond());
 		}
-		*/
-		
+		 */
+
 		// filter the table with a selection
 		Selection selectionNotMissing = this.getFlightDataTable().doubleColumn(columnNameToInterpolate).isNotMissing();
 		Table filteredTable = this.getFlightDataTable().where(selectionNotMissing);
-				
+
 		// create a list of instants as X values in the interpolation
 		Instant[] xInstants =  (Instant[]) filteredTable.column("timestamp").unique().asObjectArray();
-		
+
 		int sizeOfArray = xInstants.length;
 		double[] xSeconds = new double[sizeOfArray];
-		
+
 		double[] yValues = new double[sizeOfArray];
-		
+
 		// take only first timestamp
 		filteredTable = filteredTable.summarize(columnNameToInterpolate, AggregateFunctions.first).by("timestamp");
 		System.out.println( filteredTable.print(10));
 		DoubleColumn c = (DoubleColumn) filteredTable.column(columnNameToInterpolate);
 		yValues = c.asDoubleArray();
-				
+
 		// convert Instant to seconds (long)
 
-        for ( int i = 0 ; i < xInstants.length ; i++) {
-              xSeconds[i] = xInstants[i].getEpochSecond();
-        }
+		for ( int i = 0 ; i < xInstants.length ; i++) {
+			xSeconds[i] = xInstants[i].getEpochSecond();
+		}
 		// Perform interpolation
 
-        LinearInterpolator interpolator = new LinearInterpolator();
-        PolynomialSplineFunction function = interpolator.interpolate(xSeconds, yValues);
-        
-        // put the function in the map
-        return function;
+		LinearInterpolator interpolator = new LinearInterpolator();
+		PolynomialSplineFunction function = interpolator.interpolate(xSeconds, yValues);
+
+		// put the function in the map
+		return function;
 	}
-	  
+
 
 
 	/**
@@ -202,18 +202,24 @@ public class FlightData extends FlightDataTable {
 					row.setDouble("CAS", record.CAS());
 				}
 			});
-			// create the interpolation functions
-			List<String> columnsToInterpolateList = Arrays.asList("latitude" , "longitude", "altitude",
-					"groundspeed","track", "vertical_rate", "mach", "TAS", "CAS");
-			for ( String columnName : columnsToInterpolateList) {
-				logger.info("build interpolation function for column name = " + columnName);
-				this.interpolationFunctionMap.put(columnName, generatedInterpolationFunction( columnName ));
-			}
-			//System.out.println( this.getFlightDataTable().print(10));
+
+			System.out.println( this.getFlightDataTable().print(10));
 
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void buildInterpolationFunctions() {
+		System.out.println("---- build interpolation functions -----");
+		// create the interpolation functions
+		List<String> columnsToInterpolateList = Arrays.asList("latitude" , "longitude", "altitude",
+				"groundspeed","track", "vertical_rate", "mach", "TAS", "CAS");
+		for ( String columnName : columnsToInterpolateList) {
+			logger.info("build interpolation function for column name = " + columnName);
+			this.interpolationFunctionMap.put(columnName, generatedInterpolationFunction( columnName ));
+		}
+
 	}
 
 	/**
@@ -252,7 +258,7 @@ public class FlightData extends FlightDataTable {
 	 * @throws IOException
 	 * @throws CustomException 
 	 */
-	
+
 	/*
 	public void readParquetWithNulls() throws IOException, CustomException {
 
@@ -284,7 +290,7 @@ public class FlightData extends FlightDataTable {
 			e.printStackTrace();
 		}
 	}
-	*/
+	 */
 
 	public void readParquet() throws IOException {
 

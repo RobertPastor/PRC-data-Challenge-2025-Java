@@ -27,22 +27,19 @@ public class AircraftsDataSchema {
 			
 			float Parking_Area_ft2
 			) {
-
-		public double MTOW_kg() {
-			return MTOW_kg;
-		}
-
-		public double MALW_kg() {
-			return MALW_kg;
-		}
-
+		
 		public String ICAO_Code() {
 			return ICAO_Code;
 		}
+		
 
 		public int Num_Engines() {
 			return Num_Engines;
 		}
+
+
+		
+
 
 		public float Approach_Speed_knot() {
 			return Approach_Speed_knot;
@@ -78,6 +75,14 @@ public class AircraftsDataSchema {
 
 		public double  MALW_lb() {
 			return MALW_lb;
+		}
+		
+		public double MTOW_kg() {
+			return MTOW_kg;
+		}
+
+		public double MALW_kg() {
+			return MALW_kg;
 		}
 
 		public float Parking_Area_ft2() {

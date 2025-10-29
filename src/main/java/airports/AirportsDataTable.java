@@ -62,9 +62,6 @@ public class AirportsDataTable  extends Table {
 				row.setFloat("elevation", record.elevation());
 			}
 		}
-		
-		
-
 	}
 	
 	public double getAirportDoubleValues( final String airport_icao_code , final String airportFieldName ) {
