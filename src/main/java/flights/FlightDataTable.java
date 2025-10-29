@@ -4,19 +4,34 @@ import tech.tablesaw.api.*;
 import tech.tablesaw.selection.Selection;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
+
+import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
 
 import dataChallengeEnums.DataChallengeEnums.train_rank;
 import flights.FlightDataSchema.FlightDataRecord;
 
 public class FlightDataTable extends Table {
 	
+	private static final Logger logger = Logger.getLogger(FlightDataTable.class.getName());
+
+	
 	protected train_rank train_rank_value;
 	
 	public train_rank getTrain_rank_value() {
 		return train_rank_value;
+	}
+	
+	// map of interpolation functions for each interpolated column
+	protected Map<String, PolynomialSplineFunction> interpolationFunctionMap = null;
+
+	public Map<String, PolynomialSplineFunction> getInterpolationFunctionMap() {
+		return interpolationFunctionMap;
 	}
 	
 	protected String flight_id = "";
@@ -42,11 +57,13 @@ public class FlightDataTable extends Table {
 	public Table getFlightDataTable() {
 		return this.flightDataTable;
 	}
-	
+	// constructor
 	protected FlightDataTable(final train_rank train_rank_value , final String flight_id) {
 		super("Flight Data");
 		this.setFlight_id(flight_id);
 		this.setTrain_rank_value(train_rank_value);
+		// map of interpolated function
+		interpolationFunctionMap = new HashMap<>();
 	}
 
 	public void createEmptyFlightDataTable( ) {
@@ -86,36 +103,28 @@ public class FlightDataTable extends Table {
 	
 	public double getDoubleFlightDataAtNearestFuelInstant(final String columnName , final Instant start_end) {
 				
-		Instant nearestInstand = this.findNearestIntantFromFlightTimeStamps(start_end);
+		// use interpolation function when start end instant inside the range of the function
+		// 	private Map<String, PolynomialSplineFunction> interpolationFunctionMap = null;
 		
-		Selection selection = this.flightDataTable.instantColumn("timestamp").isEqualTo(nearestInstand);
-		Table filtered = this.flightDataTable.where(selection);
-		
-		//assert filtered.rowCount() == 1;
-		if ( filtered.rowCount() >= 1) {
-			return filtered.doubleColumn(columnName).get(0) == null ?
-					(double)0.0 : filtered.doubleColumn(columnName).get(0);
-		} else {
-			return (double)0.0;
+		if ( interpolationFunctionMap.containsKey(columnName)) {
+			logger.info(" map contains an interpolation function for the column = " + columnName);
 		}
+
+		PolynomialSplineFunction function = (PolynomialSplineFunction)interpolationFunctionMap.get(columnName);
+		double querySeconds = start_end.getEpochSecond();
+
+        double interpolatedValue = function.value(querySeconds);
+        return interpolatedValue;
+		
 	}
 	
 	public float getFloatFlightDataAtNearestFuelInstant(final String columnName , final Instant start_end) {
 		
-		// nearest instant to find
-		Instant nearestInstand = this.findNearestIntantFromFlightTimeStamps(start_end);
-		
-		// filtering condition on the table
-		Selection selection = this.flightDataTable.instantColumn("timestamp").isEqualTo(nearestInstand);
-		Table filtered = this.flightDataTable.where(selection);
-		
-		//assert filtered.rowCount() == 1;
-		if ( filtered.rowCount() >= 1) {
-			return filtered.floatColumn(columnName).get(0) == null ? 
-					(float)0.0 : filtered.floatColumn(columnName).get(0);
-		} else {
-			return (float) 0.0;
-		}
+		PolynomialSplineFunction function = (PolynomialSplineFunction)interpolationFunctionMap.get(columnName);
+		double querySeconds = start_end.getEpochSecond();
+
+        double interpolatedValue = function.value(querySeconds);
+        return (float)interpolatedValue;
 	}
 	
 	

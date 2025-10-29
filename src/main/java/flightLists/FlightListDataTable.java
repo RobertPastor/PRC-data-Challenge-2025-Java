@@ -15,6 +15,7 @@ import tech.tablesaw.api.LongColumn;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
+import tech.tablesaw.selection.Selection;
 import utils.Utils;
 
 import java.time.Duration;
@@ -45,6 +46,16 @@ public class FlightListDataTable extends Table {
 		super("Flight List Data");
 	}
 
+	public Instant getTakeoffInstant( final String flight_id ) {
+		
+		Selection selection = this.flightListDataTable.stringColumn("flight_id").containsString(flight_id);
+		Table filteredTable = this.flightListDataTable.where(selection);
+		
+		Instant takeoff = filteredTable.instantColumn("takeoff").get(0);
+		return takeoff;
+
+	}
+	
 	public void createEmptyFlightListDataTable( ) {
 		this.flightListDataTable = Table.create("Flight List Data",
 

@@ -28,7 +28,9 @@ import com.jerolba.carpet.impl.read.converter.VariantRead;
 
 import aircrafts.AircraftsData;
 import folderDiscovery.FolderDiscovery;
+import tech.tablesaw.aggregate.AggregateFunctions;
 import tech.tablesaw.api.DoubleColumn;
+import tech.tablesaw.api.LongColumn;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.selection.Selection;
@@ -48,19 +50,12 @@ class CustomException extends Exception {
 
 public class FlightData extends FlightDataTable {
 
-	private static final Logger logger = Logger.getLogger(FlightDataTable.class.getName());
+	private static final Logger logger = Logger.getLogger(FlightData.class.getName());
 	
-	// map of interpolation function
-	private Map<String, PolynomialSplineFunction> interpolationFunctionMap = null;
-
-
-	public Map<String, PolynomialSplineFunction> getInterpolationFunctionMap() {
-		return interpolationFunctionMap;
-	}
 
 	public FlightData( train_rank train_rank_value , final String flight_id ) {
 		super(train_rank_value , flight_id);
-		interpolationFunctionMap = new HashMap<>();
+		
 	}
 
 	/**
@@ -70,18 +65,30 @@ public class FlightData extends FlightDataTable {
 		 +---
 	 */
 	
-	public void generatedInterpolationFunction ( final String columnNameToInterpolate ) {
+	public PolynomialSplineFunction generatedInterpolationFunction ( final String columnNameToInterpolate ) {
+		
+		LongColumn InstantSeconds_column = LongColumn.create("timestamp_sec");
+		this.flightDataTable.addColumns(InstantSeconds_column);
+		for ( Row row : this.flightDataTable ) {
+			Instant timestampInstant = row.getInstant("timestamp");
+			row.setLong ("timestamp_sec" , timestampInstant.getEpochSecond());
+
+		}
 		
 		// filter the table with a selection
-		Table filteredTable = this.getFlightDataTable().where(this.getFlightDataTable().doubleColumn(columnNameToInterpolate).isNotMissing());
-		
+		Selection selectionNotMissing = this.getFlightDataTable().doubleColumn(columnNameToInterpolate).isNotMissing();
+		Table filteredTable = this.getFlightDataTable().where(selectionNotMissing);
+				
 		// create a list of instants as X values in the interpolation
-		Instant[] xInstants =  (Instant[]) filteredTable.column("timestamp").asObjectArray();
+		Instant[] xInstants =  (Instant[]) filteredTable.column("timestamp").unique().asObjectArray();
 		
 		int sizeOfArray = xInstants.length;
 		double[] xSeconds = new double[sizeOfArray];
 		
 		double[] yValues = new double[sizeOfArray];
+		
+		// take only first timestamp
+		filteredTable = filteredTable.summarize(columnNameToInterpolate, AggregateFunctions.first).by("timestamp_sec");
 		DoubleColumn c = (DoubleColumn) filteredTable.column(columnNameToInterpolate);
 		yValues = c.asDoubleArray();
 				
@@ -94,8 +101,9 @@ public class FlightData extends FlightDataTable {
 
         LinearInterpolator interpolator = new LinearInterpolator();
         PolynomialSplineFunction function = interpolator.interpolate(xSeconds, yValues);
-
-        interpolationFunctionMap.put(columnNameToInterpolate, function);
+        
+        // put the function in the map
+        return function;
 	}
 	  
 
@@ -192,13 +200,13 @@ public class FlightData extends FlightDataTable {
 					row.setDouble("CAS", record.CAS());
 				}
 			});
-			// interpolate
-			//interpolateFlightDataMissingColumnsValues();
-			List<String> columnsToInterpolateList = Arrays.asList("altitude", "latitude" , "longitude");
+			// create the interpolation functions
+			List<String> columnsToInterpolateList = Arrays.asList("latitude" , "longitude", "altitude",
+					"groundspeed","track", "vertical_rate", "mach", "TAS", "CAS");
 			for ( String columnName : columnsToInterpolateList) {
-				generatedInterpolationFunction( columnName );
+				logger.info("build interpolation function for column name = " + columnName);
+				this.interpolationFunctionMap.put(columnName, generatedInterpolationFunction( columnName ));
 			}
-
 			//System.out.println( this.getFlightDataTable().print(10));
 
 		}catch (Exception e) {
@@ -211,7 +219,7 @@ public class FlightData extends FlightDataTable {
 	 * that is only filling with the nearest non null value
 	 * @param columnNameToInterpolate
 	 */
-	public void interpolateDoubleColumnsFromMissingRecords ( final String columnNameToInterpolate ) {
+	public void do_not_use_interpolateDoubleColumnsFromMissingRecords ( final String columnNameToInterpolate ) {
 
 		final String interpolated_column_name = columnNameToInterpolate + "_" + "interpolated";
 
@@ -242,6 +250,8 @@ public class FlightData extends FlightDataTable {
 	 * @throws IOException
 	 * @throws CustomException 
 	 */
+	
+	/*
 	public void readParquetWithNulls() throws IOException, CustomException {
 
 		throw new CustomException("do not use this one, use the read Parquet with stream");
@@ -272,6 +282,7 @@ public class FlightData extends FlightDataTable {
 			e.printStackTrace();
 		}
 	}
+	*/
 
 	public void readParquet() throws IOException {
 

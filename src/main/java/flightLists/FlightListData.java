@@ -38,17 +38,19 @@ public class FlightListData extends FlightListDataTable {
 				FlightListDataSchema.FlightListDataRecord record = iterator.next();
 				//System.out.println(r);
 
-				this.appendRowToFlightListDataTable(record);
 				// assert - sanity check
 				assert (record.takeoff() != null ) && (record.takeoff().getEpochSecond() > 0);
 				assert (record.landed() != null) && (record.landed().getEpochSecond() > 0);
 				assert record.landed().isAfter(record.takeoff()) ;
+				
+				this.appendRowToFlightListDataTable(record);
+
 				if (count > 10) {
 					//break;
 				}
 				count = count + 1;
 			}
-			System.out.println(this.flightListDataTable.print(10));
+			//System.out.println(this.flightListDataTable.print(10));
 		} catch (Exception ex) {
 			ex.printStackTrace(System.out);
 		}

@@ -56,8 +56,6 @@ public class FuelData extends FuelDataTable {
 		//flightListData.extendWithAirportsSinusCosinusOfLatitudeLongitude();
 		System.out.println(flightListData.getFlightListDataTable().shape());
 		
-		//FuelData fuelData = new FuelData( train_rank_value );
-		//fuelData.readParquet();
 		
 		System.out.println("fuel data table - row count = " +  this.getFuelDataTable().rowCount());
 
@@ -132,7 +130,7 @@ public class FuelData extends FuelDataTable {
 	        				// altitude at fuel start and stop
 	        				row.getDouble("aircraft_altitude_ft_at_fuel_start"),
 	        				row.getDouble("aircraft_altitude_ft_at_fuel_end"),
-	        				
+	        				// ---
 	        				// computed vertical rate between fuel start and fuel stop
 	        				row.getDouble("aircraft_computed_vertical_rate_ft_min"),
 	        				
@@ -158,6 +156,7 @@ public class FuelData extends FuelDataTable {
 	        				// vertical rate
 	        				row.getDouble("aircraft_vertical_rate_ft_min_at_fuel_start"),
 	        				row.getDouble("aircraft_vertical_rate_ft_min_at_fuel_end"),
+	        				
 	        				// mach 
 	        				row.getDouble("aircraft_mach_at_fuel_start"),
 	        				row.getDouble("aircraft_mach_at_fuel_end"),
