@@ -67,13 +67,14 @@ public class FlightData extends FlightDataTable {
 	
 	public PolynomialSplineFunction generatedInterpolationFunction ( final String columnNameToInterpolate ) {
 		
-		LongColumn InstantSeconds_column = LongColumn.create("timestamp_sec");
+		/**
+		 * LongColumn InstantSeconds_column = LongColumn.create("timestamp_sec");
 		this.flightDataTable.addColumns(InstantSeconds_column);
 		for ( Row row : this.flightDataTable ) {
 			Instant timestampInstant = row.getInstant("timestamp");
 			row.setLong ("timestamp_sec" , timestampInstant.getEpochSecond());
-
 		}
+		*/
 		
 		// filter the table with a selection
 		Selection selectionNotMissing = this.getFlightDataTable().doubleColumn(columnNameToInterpolate).isNotMissing();
@@ -88,7 +89,8 @@ public class FlightData extends FlightDataTable {
 		double[] yValues = new double[sizeOfArray];
 		
 		// take only first timestamp
-		filteredTable = filteredTable.summarize(columnNameToInterpolate, AggregateFunctions.first).by("timestamp_sec");
+		filteredTable = filteredTable.summarize(columnNameToInterpolate, AggregateFunctions.first).by("timestamp");
+		System.out.println( filteredTable.print(10));
 		DoubleColumn c = (DoubleColumn) filteredTable.column(columnNameToInterpolate);
 		yValues = c.asDoubleArray();
 				

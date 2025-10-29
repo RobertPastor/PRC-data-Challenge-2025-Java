@@ -56,7 +56,6 @@ public class FuelData extends FuelDataTable {
 		//flightListData.extendWithAirportsSinusCosinusOfLatitudeLongitude();
 		System.out.println(flightListData.getFlightListDataTable().shape());
 		
-		
 		System.out.println("fuel data table - row count = " +  this.getFuelDataTable().rowCount());
 
 		this.extendFuelWithEndStartDifference();

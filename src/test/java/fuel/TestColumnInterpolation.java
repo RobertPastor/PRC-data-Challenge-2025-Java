@@ -33,6 +33,5 @@ public class TestColumnInterpolation {
 		
 		System.out.println("altitude at takeoff = " + altitude );
 
-		
 	}
 }
