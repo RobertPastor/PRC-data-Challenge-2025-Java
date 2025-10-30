@@ -1,5 +1,6 @@
 package folderDiscovery;
 
+import org.codehaus.plexus.logging.Logger;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,14 +35,14 @@ public class TestFolderDiscovery {
             for (File file : files) {
                 if (file.isFile()) {
                 	count = count + 1;
-                    System.out.println("File: " + file.getName());
+                    logger.info ("File: " + file.getName());
                     if ( count > 10) {
                     	break;
                     }
                 }
             }
         } else {
-            System.out.println("Directory does not exist or is empty.");
+            logger.err("Directory does not exist or is empty.");
         }
 	}
 }

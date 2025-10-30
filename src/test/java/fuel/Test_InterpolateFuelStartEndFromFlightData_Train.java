@@ -21,7 +21,7 @@ public class Test_InterpolateFuelStartEndFromFlightData_Train {
 			System.out.println( fuelData.getFuelDataTable().shape());
 			System.out.println( fuelData.getFuelDataTable().structure().print());
 			
-			fuelData.CommonToTrainAndRank( maxToBeComputedRow );
+			fuelData.prepareBeforeMergeFueltoOtherData( maxToBeComputedRow );
 			
 		}
 }

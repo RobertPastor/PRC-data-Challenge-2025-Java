@@ -19,19 +19,11 @@ import flights.FlightDataSchema.FlightDataRecord;
 public class FlightDataTable extends Table {
 	
 	private static final Logger logger = Logger.getLogger(FlightDataTable.class.getName());
-
 	
 	protected train_rank train_rank_value;
 	
 	public train_rank getTrain_rank_value() {
 		return train_rank_value;
-	}
-	
-	// map of interpolation functions for each interpolated column
-	protected Map<String, PolynomialSplineFunction> interpolationFunctionMap = null;
-
-	public Map<String, PolynomialSplineFunction> getInterpolationFunctionMap() {
-		return interpolationFunctionMap;
 	}
 	
 	protected String flight_id = "";
@@ -57,13 +49,14 @@ public class FlightDataTable extends Table {
 	public Table getFlightDataTable() {
 		return this.flightDataTable;
 	}
+
+	
 	// constructor
 	protected FlightDataTable(final train_rank train_rank_value , final String flight_id) {
 		super("Flight Data");
 		this.setFlight_id(flight_id);
 		this.setTrain_rank_value(train_rank_value);
-		// map of interpolated function
-		interpolationFunctionMap = new HashMap<>();
+		
 	}
 
 	public void createEmptyFlightDataTable( ) {
@@ -89,7 +82,11 @@ public class FlightDataTable extends Table {
 				StringColumn.create("source"));
 		
 	}
-	
+	/**
+	 * check if flight with flidht_id is available in the flight data
+	 * @param flight_id
+	 * @return
+	 */
 	public boolean  flightIdIsExisting( final String flight_id ) {
 		
 		//InstantColumn timestampColumn = this.getFlightDataTable().instantColumn("timestamp");
@@ -99,62 +96,6 @@ public class FlightDataTable extends Table {
 		System.out.println( filtered.shape() );
 				
 		return ( filtered.rowCount() > 0);
-	}
-	
-	public double getDoubleFlightDataAtInterpolatedStartEndFuelInstant(final String columnName , final Instant start_end) {
-				
-		// use interpolation function when start end instant inside the range of the function
-		// 	private Map<String, PolynomialSplineFunction> interpolationFunctionMap = null;
-		
-		if ( interpolationFunctionMap.containsKey(columnName)) {
-			logger.info("Interpolation map contains an interpolation function for the column = " + columnName);
-		} else {
-			assert (false);
-		}
-
-		PolynomialSplineFunction function = (PolynomialSplineFunction)interpolationFunctionMap.get(columnName);
-		double querySeconds = start_end.getEpochSecond();
-
-		if ( )
-        double interpolatedValue = function.value(querySeconds);
-        return interpolatedValue;
-		
-	}
-	
-	public float getFloatFlightDataAtInterpolatedStartEndFuelInstant(final String columnName , final Instant start_end) {
-		
-		if ( interpolationFunctionMap.containsKey(columnName)) {
-			logger.info("Interpolation map contains an interpolation function for the column = " + columnName);
-		} else {
-			assert (false);
-		}
-		
-		PolynomialSplineFunction function = (PolynomialSplineFunction)interpolationFunctionMap.get(columnName);
-		double querySeconds = start_end.getEpochSecond();
-
-        double interpolatedValue = function.value(querySeconds);
-        return (float)interpolatedValue;
-	}
-	
-	
-	public Instant interpolateFromFuelStartEnd( final Instant fuelInstant ) {
-		
-		List<Instant> listOfFlightTimeStamps = new ArrayList<Instant>();
-		Iterator<Row> iter = this.flightDataTable.iterator();
-		while ( iter.hasNext()) {
-			Row row = iter.next();
-			// assumption : instants in the flight records are never nulls
-			listOfFlightTimeStamps.add(row.getInstant("timestamp"));
-		}
-		//System.out.println("List of instants -> size = " + listOfFlightTimeStamps.size());
-		Instant nearestInstantFound = listOfFlightTimeStamps.stream()
-                .min((i1, i2) -> Long.compare(
-                        Math.abs(i1.toEpochMilli() - fuelInstant.toEpochMilli()),
-                        Math.abs(i2.toEpochMilli() - fuelInstant.toEpochMilli())
-                ))
-                .orElse(null); // Return null if the list is empty
-		//System.out.println("nearest found = " + nearestInstantFound);
-		return nearestInstantFound;
 	}
 	
 	public void appendRowToFlightDataTable(  FlightDataRecord record ) {

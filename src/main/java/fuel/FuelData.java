@@ -32,7 +32,7 @@ public class FuelData extends FuelDataTable {
 		logger.info("--- constructor for <<" + this.getTrain_rank_value() + ">> ---");
 	}
 	
-	public void CommonToTrainAndRank ( final long maxToBeComputedRow) throws IOException {
+	public void prepareBeforeMergeFueltoOtherData ( final long maxToBeComputedRow) throws IOException {
 		
 		train_rank train_rank_value = this.getTrain_rank_value();
 		

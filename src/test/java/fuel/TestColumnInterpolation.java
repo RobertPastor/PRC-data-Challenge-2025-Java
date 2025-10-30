@@ -29,7 +29,7 @@ public class TestColumnInterpolation {
 		System.out.println( flightData.getFlightDataTable().print(20));
 		System.out.println( flightData.getFlightDataTable().doubleColumn("altitude").countMissing());
 		
-		double altitude = flightData.getDoubleFlightDataAtNearestFuelInstant("altitude", takeoff);
+		double altitude = flightData.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("altitude", takeoff);
 		
 		System.out.println("altitude at takeoff = " + altitude );
 

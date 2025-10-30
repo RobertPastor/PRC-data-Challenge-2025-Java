@@ -64,46 +64,7 @@ public class FlightData extends FlightDataTable {
 		 +---
 	 */
 
-	public PolynomialSplineFunction generatedInterpolationFunction ( final String columnName ) {
-
-		// filter the table with a selection
-		Selection selectionNotMissing = this.getFlightDataTable().doubleColumn(columnName).isNotMissing();
-		Table filteredTable = this.getFlightDataTable().where(selectionNotMissing);
-
-		// create a list of instants as X values in the interpolation
-		Instant[] xInstants =  (Instant[]) filteredTable.column("timestamp").unique().asObjectArray();
-
-		int sizeOfArray = xInstants.length;
-		double[] xSeconds = new double[sizeOfArray];
-
-		double[] yValues = new double[sizeOfArray];
-
-		// take only first timestamp
-		filteredTable = filteredTable.summarize(columnName, AggregateFunctions.first).by("timestamp");
-		
-		System.out.println( filteredTable.print(10));
-		
-		// rename second column
-		String columnNameToInterpolate = columnName + "_interpolated";
-		filteredTable.column(1).setName( columnNameToInterpolate );
-		System.out.println( filteredTable.structure().print());
-
-		DoubleColumn c = (DoubleColumn) filteredTable.column(columnNameToInterpolate);
-		yValues = c.asDoubleArray();
-
-		// convert Instant to seconds (long)
-		for ( int i = 0 ; i < xInstants.length ; i++) {
-			xSeconds[i] = xInstants[i].getEpochSecond();
-		}
-		// Perform interpolation
-
-		LinearInterpolator interpolator = new LinearInterpolator();
-		PolynomialSplineFunction function = interpolator.interpolate(xSeconds, yValues);
-
-		// put the function in the map
-		return function;
-	}
-
+	
 	/**
 	 * new method of reading parquet files and managing missing values (holes)
 	 * @throws IOException
@@ -203,24 +164,14 @@ public class FlightData extends FlightDataTable {
 		}
 	}
 
-	public void buildInterpolationFunctions() {
-		
-		logger.info("---- build interpolation functions -----");
-		// create the interpolation functions
-		List<String> columnsToInterpolateList = Arrays.asList("latitude" , "longitude", "altitude",
-				"groundspeed","track", "vertical_rate", "mach", "TAS", "CAS");
-		for ( String columnName : columnsToInterpolateList) {
-			logger.info("build interpolation function for column name = " + columnName);
-			this.interpolationFunctionMap.put(columnName, generatedInterpolationFunction( columnName ));
-		}
-
-	}
+	
 
 	/**
 	 * interpolate using the basic TableSaw interpolator 
 	 * that is only filling with the nearest non null value
 	 * @param columnNameToInterpolate
 	 */
+	/**
 	public void do_not_use_interpolateDoubleColumnsFromMissingRecords ( final String columnNameToInterpolate ) {
 
 		final String interpolated_column_name = columnNameToInterpolate + "_" + "interpolated";
@@ -247,80 +198,14 @@ public class FlightData extends FlightDataTable {
 			interpolated_column.set(i++, iterFrontFill.next());
 		}
 	}
+	 */
 	/**
 	 * not used
 	 * @throws IOException
 	 * @throws CustomException 
 	 */
 
-	/*
-	public void readParquetWithNulls() throws IOException, CustomException {
-
-		throw new CustomException("do not use this one, use the read Parquet with stream");
-
-		logger.info("----------- start read parquet with nulls ------");
-
-		this.createEmptyFlightDataTable();
-		FolderDiscovery folderDiscovery = new FolderDiscovery();
-
-		String fileName = this.getFlight_id() + ".parquet";
-		try {
-
-			File parquetFile = folderDiscovery.getFlightFileFromFileName(this.getTrain_rank_value() , fileName);
-			//VariantBuilder variantBbuilder = new VariantBuilder();
-
-			try ( var reader = new CarpetReader.Builder<>(parquetFile, FlightDataRecord.class)
-					.failOnNullForPrimitives(false)
-					.buildParquetReader()) {
-
-				FlightDataRecord record;		
-				while ( ( record = reader.read() ) != null ) {
-					//System.out.println( record.altitude().getClass().getCanonicalName() );
-					System.out.println( record.timestamp());
-				}
-				reader.close();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	 */
-
-	public void readParquet() throws IOException {
-
-		this.createEmptyFlightDataTable();
-		FolderDiscovery folderDiscovery = new FolderDiscovery();
-
-		String fileName = this.getFlight_id() + ".parquet";
-		try {
-
-			File file = folderDiscovery.getFlightFileFromFileName(this.train_rank_value , fileName);
-			var reader = new CarpetReader<>(file, FlightDataRecord.class);
-			Iterator<FlightDataRecord> iterator = ((CarpetReader<FlightDataRecord>) reader).iterator();
-			int count = 0;
-
-			while (iterator.hasNext()) {
-				FlightDataSchema.FlightDataRecord r = iterator.next();
-				//System.out.println(r);
-
-				this.appendRowToFlightDataTable(r);
-				if (count > 10) {
-					//break;
-				}
-				count = count + 1;
-			}
-			//System.out.println(this.flightDataTable.print(10));
-			///logger.info("Row count = " + this.flightDataTable.rowCount());
-
-		} catch (Exception ex) {
-			ex.printStackTrace(System.out);
-		}
-		logger.info("Parquet file <<" + folderDiscovery.getFlightPathAsString(this.train_rank_value , fileName) + ">> read successfully!");
-	}
-
-	public void writeParquet( )throws IOException {
-
-	}
+	
 
 
 

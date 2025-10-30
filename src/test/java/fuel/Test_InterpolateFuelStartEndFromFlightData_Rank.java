@@ -17,7 +17,7 @@ public class Test_InterpolateFuelStartEndFromFlightData_Rank {
 		//int maxToBeComputedRow = 100;
 
 		FuelData fuelData = new FuelData(train_rank_value);
-		fuelData.CommonToTrainAndRank( maxToBeComputedRow);
+		fuelData.prepareBeforeMergeFueltoOtherData( maxToBeComputedRow);
 
 	}
 }
