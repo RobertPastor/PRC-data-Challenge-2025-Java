@@ -14,10 +14,10 @@ public class TestFlightIdIsInFlightTable_Test {
 		String flight_id = "prc806615763";
 		
 		FlightData flightData = new FlightData(train_rank.rank , flight_id);
-		flightData.readParquet();
+		flightData.readParquetWithStream();
 		
 		System.out.println( flightData.getFlightDataTable().print(10));
-		
-		System.out.println("check if flight id = " + flight_id + " is in flight table = " + flightData.flightIdIsExisting(flight_id) );
+		boolean bool = flightData.flightIdIsExisting(flight_id);
+		System.out.println("check if flight id = <<" + flight_id + ">> is in flight table = " +  bool);
 	}
 }

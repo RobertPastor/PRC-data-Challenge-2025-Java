@@ -23,7 +23,7 @@ public class TestReadAllFlightData_Test {
 			System.out.println( index + " --- " + flight_id );
 			
 			FlightData flightData = new FlightData(train_rank.rank , flight_id);
-			flightData.readParquet();
+			flightData.readParquetWithStream();
 			if ( index > 100 ) {
 				break;
 			}

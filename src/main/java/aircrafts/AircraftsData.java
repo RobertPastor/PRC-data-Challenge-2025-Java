@@ -19,13 +19,11 @@ import org.dhatim.fastexcel.reader.Sheet;
 
 import utils.Constants;
 
-
-
 public class AircraftsData extends AircraftsDataTable {
 
 	public class HeaderException extends RuntimeException {
 		/**
-		 * 
+		 * exception raised when a Header is not in the expected headers list
 		 */
 		private static final long serialVersionUID = 1L;
 		public HeaderException(String message) {

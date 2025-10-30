@@ -200,6 +200,11 @@ public class FuelDataTable extends Table {
 		logger.info( this.fuelDataTable.print(10));
 	}
 	
+	/**
+	 * use interpolation function generated beforehand
+	 * @param maxToBeComputedRow
+	 * @throws IOException
+	 */
 	public void extendFuelStartEndInstantsWithFlightData( final long maxToBeComputedRow ) throws IOException {
 		
 		// latitude degrees at fuel start

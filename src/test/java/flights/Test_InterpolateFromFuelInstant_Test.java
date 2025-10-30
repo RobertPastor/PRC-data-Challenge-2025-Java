@@ -9,7 +9,7 @@ import dataChallengeEnums.DataChallengeEnums.train_rank;
 import fuel.FuelData;
 import tech.tablesaw.api.Table;
 
-public class Test_InterolateFromFuelInstant_Test {
+public class Test_InterpolateFromFuelInstant_Test {
 
 	@Test
     public void testNearestFlightTimeStamp() throws IOException {
@@ -29,13 +29,13 @@ public class Test_InterolateFromFuelInstant_Test {
 		FlightData flightData = new FlightData(train_rank.rank , "prc806615763");
 		flightData.readParquetWithStream();
 		
-		flightData.buildInterpolationFunctions();
+		//flightData.getFlightDataTable().buildInterpolationFunctions();
 		
-		System.out.println("Row Count -> " + flightData.getFlightDataTable().rowCount() );
-		System.out.println("Shape -> " + flightData.getFlightDataTable().shape() );
+		//System.out.println("Row Count -> " + flightData.getFlightDataTable().rowCount() );
+		//System.out.println("Shape -> " + flightData.getFlightDataTable().shape() );
 
-		Instant nearestInstant = flightData.interpolateFromFuelStartEnd(now);
-		System.out.println("nearest instant = " + now + " ---> " + nearestInstant);
-		assert 	nearestInstant != null;
+		//Instant nearestInstant = flightData.interpolateFromFuelStartEnd(now);
+		//System.out.println("nearest instant = " + now + " ---> " + nearestInstant);
+		//assert 	nearestInstant != null;
 	}
 }

@@ -1,14 +1,18 @@
 package folderDiscovery;
 
-import org.codehaus.plexus.logging.Logger;
 import org.junit.jupiter.api.Test;
+
+import flights.FlightDataInterpolation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 
 public class TestFolderDiscovery {
+	
+	private static final Logger logger = Logger.getLogger(TestFolderDiscovery.class.getName());
 
 	@Test
     public void testNumberOfFiles() {
@@ -42,7 +46,7 @@ public class TestFolderDiscovery {
                 }
             }
         } else {
-            logger.err("Directory does not exist or is empty.");
+            logger.info("Directory does not exist or is empty.");
         }
 	}
 }
