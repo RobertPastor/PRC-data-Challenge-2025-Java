@@ -47,6 +47,10 @@ public class FlightDataInterpolation {
 		return interpolationFunctionMap;
 	}
 
+	/**
+	 * constructor
+	 * @param columnsAsInterpolationSource
+	 */
 	public FlightDataInterpolation(final List<String> columnsAsInterpolationSource) {
 		logger.info("---- constructor ----");
 		this.setListOfFlightColumnsToInterpolate(columnsAsInterpolationSource);
@@ -54,7 +58,7 @@ public class FlightDataInterpolation {
 		interpolationFunctionMap = new HashMap<String, PolynomialSplineFunction>();
 	}
 	/**
-	 * buil
+	 * build the interpolation function for each double/float column of the Flight Data frame
 	 * @param flightDataTable
 	 */
 	public void buildInterpolationFunctions( final Table flightDataTable) {
@@ -93,10 +97,12 @@ public class FlightDataInterpolation {
 		if ( filteredTable.rowCount() > 0) {
 			// sort table based upon time-stamp
 			filteredTable = filteredTable.sortAscendingOn("timestamp");
+			
+			System.out.println("after sorting = " + filteredTable.print());
 
 			// create a list of instants as X values in the interpolation
 			// instant after the filtering done using Summarize
-			Instant[] xInstants =  (Instant[]) filteredTable.column("timestamp").unique().asObjectArray();
+			Instant[] xInstants =  (Instant[]) filteredTable.column("timestamp").asObjectArray();
 
 			int sizeOfArray = xInstants.length;
 			// build a double array as expected by the Apache.math3 interpolation function
@@ -116,6 +122,9 @@ public class FlightDataInterpolation {
 			// convert Instant to seconds (long)
 			for ( int i = 0 ; i < xInstants.length ; i++) {
 				xMilliSeconds[i] = xInstants[i].toEpochMilli();
+				if ( i < 3 ) {
+					System.out.println(xMilliSeconds[i]);
+				}
 			}
 			// Perform interpolation
 
@@ -145,7 +154,8 @@ public class FlightDataInterpolation {
 		if ( interpolationFunctionMap.containsKey(columnName)) {
 			logger.info("Interpolation map contains an interpolation function for the column = " + columnName);
 		} else {
-			throw new InterpolationFunctionNotFoundException("Interpolation DOUBLE function for column = "+ columnName + " ---> not found in them= map");
+			return 0.0;
+			//throw new InterpolationFunctionNotFoundException("Interpolation DOUBLE function for column = "+ columnName + " ---> not found in them= map");
 		}
 
 		try {
@@ -159,7 +169,6 @@ public class FlightDataInterpolation {
 			System.out.println("Exception while interpolating -> " + e.getLocalizedMessage());
 		}
 		return 0.0;
-
 	}
 
 	/**
@@ -173,7 +182,8 @@ public class FlightDataInterpolation {
 		if ( interpolationFunctionMap.containsKey(columnName)) {
 			logger.info("Interpolation map contains an interpolation function for the column = " + columnName);
 		} else {
-			throw new InterpolationFunctionNotFoundException("Interpolation FLOAT function for column = "+ columnName + " ---> not found in them= map");
+			return (float)0.0;
+			//throw new InterpolationFunctionNotFoundException("Interpolation FLOAT function for column = "+ columnName + " ---> not found in them= map");
 		}
 
 		try {
