@@ -1,44 +1,20 @@
 package flights;
 
 import java.io.File;
-import dataChallengeEnums.DataChallengeEnums.train_rank;
-import flights.FlightDataSchema.FlightDataRecord;
-
 import java.io.IOException;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
-import org.apache.commons.math3.analysis.interpolation.LinearInterpolator;
-import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
-import org.apache.parquet.example.data.simple.SimpleGroup;
-import org.apache.parquet.hadoop.ParquetReader;
-import org.apache.parquet.hadoop.api.ReadSupport;
-import org.apache.parquet.hadoop.util.HadoopInputFile;
-import org.apache.parquet.variant.VariantBuilder;
-
 import com.jerolba.carpet.CarpetReader;
-import com.jerolba.carpet.impl.read.VariantConverter;
-import com.jerolba.carpet.impl.read.converter.VariantRead;
 
-import aircrafts.AircraftsData;
+import dataChallengeEnums.DataChallengeEnums.train_rank;
+import flights.FlightDataSchema.FlightDataRecord;
 import folderDiscovery.FolderDiscovery;
-import tech.tablesaw.aggregate.AggregateFunctions;
-import tech.tablesaw.api.DoubleColumn;
-import tech.tablesaw.api.LongColumn;
 import tech.tablesaw.api.Row;
-import tech.tablesaw.api.Table;
-import tech.tablesaw.selection.Selection;
 
 
 class CustomException extends Exception {
 	/**
-	 * 
+	 * serial generated ID
 	 */
 	private static final long serialVersionUID = -1346311432020834637L;
 
@@ -51,6 +27,7 @@ class CustomException extends Exception {
 public class FlightData extends FlightDataTable {
 
 	private static final Logger logger = Logger.getLogger(FlightData.class.getName());
+	
 	// constructor
 	public FlightData( train_rank train_rank_value , final String flight_id ) {
 		super(train_rank_value , flight_id);
@@ -71,7 +48,7 @@ public class FlightData extends FlightDataTable {
 	 */
 	public void readParquetWithStream() throws IOException {
 
-		logger.info("----------- start read parquet with stream ------");
+		//logger.info("----------- start read parquet with stream ------");
 
 		this.createEmptyFlightDataTable();
 		FolderDiscovery folderDiscovery = new FolderDiscovery();
@@ -80,7 +57,6 @@ public class FlightData extends FlightDataTable {
 		try {
 
 			File parquetFile = folderDiscovery.getFlightFileFromFileName(this.getTrain_rank_value() , fileName);
-			//VariantBuilder variantBbuilder = new VariantBuilder();
 
 			CarpetReader<FlightDataRecord> reader = new CarpetReader<FlightDataRecord>(parquetFile, FlightDataRecord.class);
 			reader.stream().forEachOrdered(record -> {
@@ -157,7 +133,7 @@ public class FlightData extends FlightDataTable {
 				}
 			});
 
-			System.out.println( this.getFlightDataTable().print(10));
+			//System.out.println( this.getFlightDataTable().print(10));
 
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -204,8 +180,6 @@ public class FlightData extends FlightDataTable {
 	 * @throws IOException
 	 * @throws CustomException 
 	 */
-
-	
 
 
 

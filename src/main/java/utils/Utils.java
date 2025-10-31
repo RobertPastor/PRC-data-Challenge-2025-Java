@@ -18,7 +18,7 @@ public class Utils {
         String formattedDateTime = now.format(formatter);
 
         // Print the result
-        System.out.println("Current Date and Time: " + formattedDateTime);
+        //System.out.println("Current Date and Time: " + formattedDateTime);
         return formattedDateTime;
 	}
 

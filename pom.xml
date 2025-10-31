@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/3.9.5" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>PRC-Data-Challenge-2025</groupId>
   <artifactId>Data-Challenge-2025</artifactId>
@@ -8,7 +10,7 @@
   
   
    <properties>
-    	<mavenVersion>3.0</mavenVersion>
+    	<mavenVersion>3.9.5</mavenVersion>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -23,13 +25,11 @@
 		    <version>0.5.0</version>
 		</dependency>
 		  
-  		
 		<dependency>
 		    <groupId>org.dhatim</groupId>
 		    <artifactId>fastexcel-reader</artifactId>
 		    <version>0.18.1</version>
 		</dependency>
-		
   
 	  <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
 		<dependency>
@@ -96,6 +96,13 @@
 		    <version>5.9.0</version>
 		    <scope>test</scope>
 		</dependency>
+		
+		<dependency>
+		     <groupId>org.junit.platform</groupId>
+		     <artifactId>junit-platform-launcher</artifactId>
+		     <version>1.8.2</version>
+		     <scope>test</scope>
+		</dependency>
         
         <!-- https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-common -->
 
@@ -155,6 +162,13 @@
 		    <artifactId>guava</artifactId>
 		    <version>33.5.0-jre</version>
 		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/tech.tablesaw/tablesaw-core -->
+		<dependency>
+		    <groupId>tech.tablesaw</groupId>
+		    <artifactId>tablesaw-core</artifactId>
+		    <version>0.44.4</version>
+		</dependency>
 
   </dependencies>
   
@@ -173,6 +187,13 @@
         	<url>https://mvnrepository.com/artifact/</url>
         	 <snapshots>
                  <enabled>true</enabled>
+             </snapshots>
+        </repository>
+        <repository> 
+        	<id>junit-launcher</id>
+        	<url>https://mvnrepository.com/artifact/org.junit.platform</url>
+        	 <snapshots>
+                  <enabled>false</enabled>
              </snapshots>
         </repository>
         <repository> 

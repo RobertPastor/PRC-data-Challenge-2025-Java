@@ -56,7 +56,6 @@ public class FlightDataTable extends Table {
 		super("Flight Data");
 		this.setFlight_id(flight_id);
 		this.setTrain_rank_value(train_rank_value);
-		
 	}
 
 	public void createEmptyFlightDataTable( ) {
@@ -93,7 +92,7 @@ public class FlightDataTable extends Table {
 		StringColumn flightIdColumn = this.getFlightDataTable().stringColumn("flight_id");
 		
 		Table filtered = this.getFlightDataTable().where(flightIdColumn.isEqualTo(flight_id));
-		System.out.println( filtered.shape() );
+		//System.out.println( filtered.shape() );
 				
 		return ( filtered.rowCount() > 0);
 	}
@@ -152,7 +151,7 @@ public class FlightDataTable extends Table {
 		DoubleColumn longitude_sine_column = DoubleColumn.create("longitude_sine");
 		this.flightDataTable.addColumns(longitude_sine_column);
 		
-		System.out.println( this.flightDataTable.structure() );
+		//System.out.println( this.flightDataTable.structure() );
 		
 		Iterator<Row> iter = this.flightDataTable.iterator();
 		while ( iter.hasNext()) {
@@ -167,8 +166,6 @@ public class FlightDataTable extends Table {
 			
 			row.setDouble("longitude_cosine" , Math.cos(Math.toRadians(origin_longitude_degrees)));
 			row.setDouble("longitude_sine" , Math.sin(Math.toRadians(origin_longitude_degrees)));
-
 		}
-
  	}
 }

@@ -18,10 +18,12 @@ public class Test_InterpolateFuelStartEndFromFlightData_Train {
 			
 			FuelData fuelData = new FuelData( train_rank_value );
 			fuelData.readParquet();
+			
 			System.out.println( fuelData.getFuelDataTable().shape());
 			System.out.println( fuelData.getFuelDataTable().structure().print());
 			
-			fuelData.prepareBeforeMergeFueltoOtherData( maxToBeComputedRow );
+			// do all the merge of data external to the final Fuel frame
+			//fuelData.prepareBeforeMergeFueltoOtherData( maxToBeComputedRow );
 			
 		}
 }

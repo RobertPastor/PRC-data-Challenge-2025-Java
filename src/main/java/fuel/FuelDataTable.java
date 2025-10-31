@@ -1,7 +1,10 @@
 package fuel;
 
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -12,6 +15,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
 import aircrafts.AircraftsData;
 import dataChallengeEnums.DataChallengeEnums.train_rank;
 import flightLists.FlightListData;
@@ -19,6 +25,7 @@ import flightLists.FlightListDataTable;
 import flights.FlightData;
 import flights.FlightDataInterpolation;
 import flights.FlightDataTable;
+import folderDiscovery.FolderDiscovery;
 import fuel.FuelDataSchema.FuelDataRecord;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.FloatColumn;
@@ -80,10 +87,27 @@ public class FuelDataTable extends Table {
 	
 	protected void generateListOfErrors() {
 		
-		// Iterate through the map
-		for (Map.Entry<Integer, ArrayList<Instant>> entry : errorsMap.entrySet()) {
-			System.out.println("Key: " + entry.getKey() + ", Value: " + entry.getValue());
-		}
+		String currentDateTimeAsStr = Utils.getCurrentDateTimeasStr();
+		String fileName  = "Errors_" + this.getTrain_rank_value() + "_" + currentDateTimeAsStr + ".parquet";
+		
+		String folderStr = FolderDiscovery.getTrainRankOutputfolderStr();
+
+		Path path = Paths.get(folderStr , fileName );
+		File file = path.toFile();
+
+		try (FileWriter writer = new FileWriter(file.getAbsoluteFile())) {
+			// write the header
+			writer.write( "Error" + ";" + "Value");
+			// Iterate through the map
+			for (Map.Entry<Integer, ArrayList<Instant>> entry : errorsMap.entrySet()) {
+				System.out.println("Key: " + entry.getKey() + ", Value: " + entry.getValue());
+				writer.write( entry.getKey() + ";" + entry.getValue());
+			}
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+		
 		
 	}
 	
@@ -102,9 +126,9 @@ public class FuelDataTable extends Table {
 	@SuppressWarnings("deprecation")
 	public void extendFuelWithFlightListData (  final Table flightListDataTable ) {
 		
-		logger.info ( flightListDataTable.structure().print() );
-		logger.info ( flightListDataTable.shape() );
-		logger.info( flightListDataTable.print(10) );
+		//logger.info ( flightListDataTable.structure().print() );
+		//logger.info ( flightListDataTable.shape() );
+		//logger.info( flightListDataTable.print(10) );
 		
 		// apply join using  flight_id
 		// use left outer join from fuel table to flight list table
@@ -114,8 +138,8 @@ public class FuelDataTable extends Table {
 		// Left Outer Join: Keeps all rows from the left table and matches from the right.
 		this.setFuelDataTable( this.fuelDataTable.joinOn("flight_id").leftOuter(flightListDataTable));
 
-		logger.info( this.getFuelDataTable().shape() );
-		logger.info( this.getFuelDataTable().structure().print() );
+		//logger.info( this.getFuelDataTable().shape() );
+		//logger.info( this.getFuelDataTable().structure().print() );
 		
 	}
 	
@@ -147,7 +171,7 @@ public class FuelDataTable extends Table {
 		LongColumn time_diff_seconds_column = LongColumn.create("time_diff_seconds");
 		this.fuelDataTable.addColumns(time_diff_seconds_column);
 		
-		System.out.println( this.fuelDataTable.structure() );
+		//System.out.println( this.fuelDataTable.structure() );
 		//int maxRowCount = this.fuelDataTable.rowCount();
 		
 		Iterator<Row> iter = this.fuelDataTable.iterator();
@@ -171,7 +195,7 @@ public class FuelDataTable extends Table {
 		FloatColumn fuel_flow_kg_sec_column = FloatColumn.create("fuel_flow_kg_sec");
 		this.fuelDataTable.addColumns(fuel_flow_kg_sec_column);
 		
-		logger.info( this.fuelDataTable.structure().print() );
+		//logger.info( this.fuelDataTable.structure().print() );
 		
 		Iterator<Row> iter = this.fuelDataTable.iterator();
 		while ( iter.hasNext()) {
@@ -337,15 +361,15 @@ public class FuelDataTable extends Table {
 			// read one flight data parquet file
 			flightData.readParquetWithStream();
 			
-			logger.info(flightData.getFlightDataTable().shape() );
-			logger.info(flightData.getFlightDataTable().structure().print() );
+			//logger.info(flightData.getFlightDataTable().shape() );
+			//logger.info(flightData.getFlightDataTable().structure().print() );
 			
 			// one set of interpolation function for each loaded flight data frame
 			this.flightDataInterpolation.buildInterpolationFunctions(flightData.getFlightDataTable());
 			
-			logger.info("--------------------------------------");
-			logger.info("----------------- row count = "+ counter + " / max = " + this.fuelDataTable.rowCount() + " ---------------------");
-			logger.info("--------------------------------------");
+			System.out.println("--------------------------------------");
+			System.out.println("----------------- row count = "+ counter + " / max = " + this.fuelDataTable.rowCount() + " ---------------------");
+			System.out.println("--------------------------------------");
 			
 			double ac_lat_fuel_start = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("latitude" , start);
 			double ac_lon_fuel_start = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("longitude" ,start);
@@ -478,7 +502,7 @@ public class FuelDataTable extends Table {
 				assert takeoff.isBefore(landed);
 			}	else {
 				this.errorsMap.put(idx, new ArrayList<>(List.of(takeoff,landed)));
-				System.out.println(row.getRowNumber());
+				//System.out.println(row.getRowNumber());
 			}
 			
 			if ( ( takeoff != null ) && takeoff.isBefore(start) ) {
@@ -507,6 +531,5 @@ public class FuelDataTable extends Table {
 			}
 		}
 	}
-	
 }
 

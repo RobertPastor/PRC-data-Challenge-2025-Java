@@ -52,7 +52,7 @@ public class FlightDataInterpolation {
 	 * @param columnsAsInterpolationSource
 	 */
 	public FlightDataInterpolation(final List<String> columnsAsInterpolationSource) {
-		logger.info("---- constructor ----");
+		//logger.info("---- constructor ----");
 		this.setListOfFlightColumnsToInterpolate(columnsAsInterpolationSource);
 		// initialise an empty map of interpolation functions
 		interpolationFunctionMap = new HashMap<String, PolynomialSplineFunction>();
@@ -63,12 +63,12 @@ public class FlightDataInterpolation {
 	 */
 	public void buildInterpolationFunctions( final Table flightDataTable) {
 
-		logger.info("---- build interpolation functions -----");
+		//logger.info("---- build interpolation functions -----");
 		// create the interpolation functions
 
 		for ( String columnName : this.listOfFlightDataColumnsToInterpolate) {
-			logger.info("build interpolation function for column name = " + columnName);
-			System.out.println( flightDataTable.shape());
+			//logger.info("build interpolation function for column name = " + columnName);
+			//System.out.println( flightDataTable.shape());
 			this.generateInterpolationFunction( columnName , flightDataTable);
 		}
 	}
@@ -82,8 +82,8 @@ public class FlightDataInterpolation {
 	public void  generateInterpolationFunction ( final String columnName , 
 			final Table flightDataTable) {
 
-		System.out.println( columnName );
-		System.out.println( flightDataTable.shape());
+		//System.out.println( columnName );
+		//System.out.println( flightDataTable.shape());
 
 		// filter the table with a selection
 		// filter missing values in the selected column
@@ -98,7 +98,7 @@ public class FlightDataInterpolation {
 			// sort table based upon time-stamp
 			filteredTable = filteredTable.sortAscendingOn("timestamp");
 			
-			System.out.println("after sorting = " + filteredTable.print());
+			//System.out.println("after sorting = " + filteredTable.print());
 
 			// create a list of instants as X values in the interpolation
 			// instant after the filtering done using Summarize
@@ -108,12 +108,12 @@ public class FlightDataInterpolation {
 			// build a double array as expected by the Apache.math3 interpolation function
 			double[] yValues = new double[sizeOfArray];
 
-			System.out.println( filteredTable.print(10));
+			//System.out.println( filteredTable.print(10));
 
 			// second column as id = 1
 			int secondColumnId = 1;
 			filteredTable.column(secondColumnId).setName( columnName );
-			System.out.println( filteredTable.structure().print());
+			//System.out.println( filteredTable.structure().print());
 
 			DoubleColumn c = (DoubleColumn) filteredTable.column(columnName);
 			yValues = c.asDoubleArray();
@@ -122,16 +122,14 @@ public class FlightDataInterpolation {
 			// convert Instant to seconds (long)
 			for ( int i = 0 ; i < xInstants.length ; i++) {
 				xMilliSeconds[i] = xInstants[i].toEpochMilli();
-				if ( i < 3 ) {
-					System.out.println(xMilliSeconds[i]);
-				}
+				//if ( i < 3 ) {
+					//System.out.println(xMilliSeconds[i]);
+				//}
 			}
 			// Perform interpolation
-
 			try {
 				LinearInterpolator interpolator = new LinearInterpolator();
 				PolynomialSplineFunction function = interpolator.interpolate(xMilliSeconds, yValues);
-
 				// put the function in the map
 				interpolationFunctionMap.put ( columnName , function);
 			} catch ( Exception e) {
@@ -152,7 +150,7 @@ public class FlightDataInterpolation {
 		// 	private Map<String, PolynomialSplineFunction> interpolationFunctionMap = null;
 
 		if ( interpolationFunctionMap.containsKey(columnName)) {
-			logger.info("Interpolation map contains an interpolation function for the column = " + columnName);
+			//logger.info("Interpolation map contains an interpolation function for the column = " + columnName);
 		} else {
 			return 0.0;
 			//throw new InterpolationFunctionNotFoundException("Interpolation DOUBLE function for column = "+ columnName + " ---> not found in them= map");
@@ -180,7 +178,7 @@ public class FlightDataInterpolation {
 	public float getFloatFlightDataAtInterpolatedStartEndFuelInstant(final String columnName , final Instant start_end) {
 
 		if ( interpolationFunctionMap.containsKey(columnName)) {
-			logger.info("Interpolation map contains an interpolation function for the column = " + columnName);
+			// logger.info("Interpolation map contains an interpolation function for the column = " + columnName);
 		} else {
 			return (float)0.0;
 			//throw new InterpolationFunctionNotFoundException("Interpolation FLOAT function for column = "+ columnName + " ---> not found in them= map");
@@ -199,7 +197,5 @@ public class FlightDataInterpolation {
 			System.out.println("Exception while interpolating -> " + e.getLocalizedMessage());
 		}
 		return (float) 0.0;
-
 	}
-
 }
