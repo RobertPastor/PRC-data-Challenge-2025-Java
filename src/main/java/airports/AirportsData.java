@@ -49,5 +49,4 @@ public class AirportsData extends AirportsDataTable {
         }
 		logger.info("Parquet file <<" + file.getName() + ">> read successfully!");
 	}
-	
 }

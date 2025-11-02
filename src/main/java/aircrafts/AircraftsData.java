@@ -45,29 +45,14 @@ public class AircraftsData extends AircraftsDataTable {
 	private static List<Integer> aircraftsFoundHeadersColumnIndexes = new ArrayList<Integer>();
 	private static List<String> aircraftsFoundHeaders = new ArrayList<String>();
 
-	public static List<String> getAircraftsFoundHeaders() {
-		return aircraftsFoundHeaders;
-	}
-
-	public static List<Integer> getAircraftHeadersColumnIndexes() {
-		return aircraftsFoundHeadersColumnIndexes;
-	}
-
-	public static List<String> getAircraftsExpectedHeaders() {
-		return aircraftsExpectedHeaders;
-	}
-
-	public static String getAircraftsFileName() {
-		return aircraftsFileName;
-	}
-
+	
 	public AircraftsData() {
 		super();
-		logger.info("file = " + getAircraftsFileName());
+		logger.info("file = " + AircraftsData.getAircraftsFileName());
 	}
 	/**
 	 * build the headers while analysing the first row from the EXCEL file
-	 * @param r
+	 * @param r the row
 	 */
 	private void buildHeadersInformations ( final Row r ) {
 		for (Cell cell : r) {
@@ -217,12 +202,6 @@ public class AircraftsData extends AircraftsDataTable {
 
 			ReadableWorkbook wb = new ReadableWorkbook(inputExcelFile);
 
-			// Access the defined names in the workbook
-			//Optional<DefinedName> definedName = workbook.getDefinedNames()
-			//                                            .stream()
-			//                                            .filter(name -> name.getName().equals("ICAO_Code"))
-			//                                            .findFirst();
-
 			Optional<Sheet> sheet = wb.findSheet(sheetName);
 			if (sheet.isPresent()) {
 				Sheet foundSheet = sheet.get();
@@ -249,4 +228,27 @@ public class AircraftsData extends AircraftsDataTable {
 			logger.info("file <<" + inputExcelFile.getAbsolutePath() + ">> not found or it is not a file");
 		}
 	}
+
+	public static List<Integer> getAircraftsFoundHeadersColumnIndexes() {
+		return aircraftsFoundHeadersColumnIndexes;
+	}
+
+
+	
+	public static List<String> getAircraftsFoundHeaders() {
+		return aircraftsFoundHeaders;
+	}
+
+	public static List<Integer> getAircraftHeadersColumnIndexes() {
+		return getAircraftsFoundHeadersColumnIndexes();
+	}
+
+	public static List<String> getAircraftsExpectedHeaders() {
+		return aircraftsExpectedHeaders;
+	}
+
+	public static String getAircraftsFileName() {
+		return aircraftsFileName;
+	}
+
 }

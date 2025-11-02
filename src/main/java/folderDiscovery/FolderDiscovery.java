@@ -21,7 +21,11 @@ public class FolderDiscovery {
 	private static String fuelTrainFolderStr = "C:/Users/rober/git/PRCdataChallenge2025/trajectory/Fuel/";
 	
 	private static String flightListTrainRankFolderStr = "C:/Users/rober/git/PRCdataChallenge2025/trajectory/FlightList";
+	
 	private static String airportsFolderStr = "C:/Users/rober/git/PRCdataChallenge2025/trajectory/Environment/AirportsDataChallenge";
+	
+	// legacy airports EXCEL file replacing apt.parquet because airport ZGOW "Jieyang Chaoshan International Airport" has missing elevation_ft value
+	private static String airportsLegacyFolderStr = "C:/Users/rober/eclipse-2025-09/eclipse-jee-2025-09-R-win32-x86_64/Data-Challenge-2025/documents/airports";
 	
 	private static String trainRankOutputfolderStr = "C:/Users/rober/eclipse-2025-09/eclipse-jee-2025-09-R-win32-x86_64/Data-Challenge-2025/documents";
 
@@ -223,6 +227,10 @@ public class FolderDiscovery {
 			return file.getAbsolutePath();
 		}
 		return null;
+	}
+
+	public static String getAirportsLegacyFolderStr() {
+		return airportsLegacyFolderStr;
 	}
 
 }

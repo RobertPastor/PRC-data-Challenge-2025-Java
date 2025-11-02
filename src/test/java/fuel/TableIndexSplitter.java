@@ -30,8 +30,8 @@ public class TableIndexSplitter {
 	public static void main(String[] args) throws IOException {
 
 		train_rank train_rank_value = train_rank.train;
-		
-		FuelData fuelData = new FuelData(train_rank_value );
+		int maxToBeAnalysedRowCount = 1000000;
+		FuelData fuelData = new FuelData(train_rank_value , maxToBeAnalysedRowCount);
 		fuelData.readParquet();
 		
 		System.out.println("fuel table -> row Count = " + fuelData.getFuelDataTable().rowCount());

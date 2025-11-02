@@ -16,7 +16,7 @@ public class Test_InterpolateFuelStartEndFromFlightData_Train {
 			long maxToBeComputedRow = 1000000;
 			//maxToBeComputedRow = 100;
 			
-			FuelData fuelData = new FuelData( train_rank_value );
+			FuelData fuelData = new FuelData( train_rank_value , maxToBeComputedRow);
 			fuelData.readParquet();
 			
 			System.out.println( fuelData.getFuelDataTable().shape());

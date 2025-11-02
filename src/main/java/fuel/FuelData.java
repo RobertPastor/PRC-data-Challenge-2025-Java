@@ -27,12 +27,17 @@ public class FuelData extends FuelDataTable {
 
 	private static final Logger logger = Logger.getLogger(FuelData.class.getName());
 
-	public FuelData( train_rank value ) {
-		super(value);
+	/**
+	 * max computed row used during debugging to reduce the number of analysed rows from the Fuel table
+	 * @param value
+	 * @param maxToBeComputedRow
+	 */
+	public FuelData( train_rank train_rank_value , final long maxToBeComputedRow ) {
+		super(train_rank_value , maxToBeComputedRow);
 		logger.info("--- constructor for <<" + this.getTrain_rank_value() + ">> ---");
 	}
 	
-	public void prepareBeforeMergeFueltoOtherData ( final long maxToBeComputedRow) throws IOException {
+	public void prepareBeforeMergeFueltoOtherData ( ) throws IOException {
 		
 		train_rank train_rank_value = this.getTrain_rank_value();
 		

@@ -74,11 +74,11 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
 		    <scope>runtime</scope>
 		</dependency>
       
-    <dependency>
-          <groupId>org.apache.maven</groupId>
-          <artifactId>maven-archiver</artifactId>
-          <version>3.6.0</version>
-      </dependency>
+    	<dependency>
+	          <groupId>org.apache.maven</groupId>
+	          <artifactId>maven-archiver</artifactId>
+	          <version>3.6.0</version>
+      	</dependency>
       
 		<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-params -->
 		<dependency>

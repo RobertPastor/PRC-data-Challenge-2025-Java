@@ -14,7 +14,8 @@ public class Test_InterpolateFromFuelInstant_Test {
 	@Test
     public void testNearestFlightTimeStamp() throws IOException {
 
-		FuelData fuelData = new FuelData(train_rank.rank );
+		long nbMaxRecordsToRead = 100;
+		FuelData fuelData = new FuelData(train_rank.rank , nbMaxRecordsToRead);
 		fuelData.readParquet();
 		
 		System.out.println("Row Count -> " + fuelData.getFuelDataTable().rowCount() );

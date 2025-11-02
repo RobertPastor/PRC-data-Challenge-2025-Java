@@ -42,19 +42,14 @@ public class FuelDataTable extends Table {
 	private static final Logger logger = Logger.getLogger(FuelDataTable.class.getName());
 
 	protected train_rank train_rank_value;
+	private  long maxToBeComputedRow = 0;
+
 	
+
 	private Map<Integer, ArrayList<Instant>> errorsMap = null;
 
 	public Map<Integer, ArrayList<Instant>> getErrorsMap() {
 		return errorsMap;
-	}
-
-	public void setTrain_rank_value(train_rank train_rank_value) {
-		this.train_rank_value = train_rank_value;
-	}
-
-	public train_rank getTrain_rank_value() {
-		return train_rank_value;
 	}
  
 	public Table fuelDataTable = null;
@@ -70,9 +65,10 @@ public class FuelDataTable extends Table {
 	private FlightDataInterpolation flightDataInterpolation;
 
 	// constructor
-	protected FuelDataTable(train_rank train_rank_value) {
+	protected FuelDataTable(train_rank train_rank_value, final long maxToBeComputedRow) {
 		super("Fuel Data");
 		this.setTrain_rank_value(train_rank_value);
+		this.setMaxToBeComputedRow(maxToBeComputedRow);
 		logger.info("constructor");
 		
 		errorsMap = new HashMap<Integer,ArrayList<Instant>>();
@@ -530,6 +526,22 @@ public class FuelDataTable extends Table {
 				System.out.println("Error fuel burnt end = " + end + " -- not before landed = " + landed);
 			}
 		}
+	}
+	
+	public void setTrain_rank_value(train_rank train_rank_value) {
+		this.train_rank_value = train_rank_value;
+	}
+
+	public train_rank getTrain_rank_value() {
+		return train_rank_value;
+	}
+	
+	public long getMaxToBeComputedRow() {
+		return maxToBeComputedRow;
+	}
+
+	public void setMaxToBeComputedRow(long maxToBeComputedRow) {
+		this.maxToBeComputedRow = maxToBeComputedRow;
 	}
 }
 

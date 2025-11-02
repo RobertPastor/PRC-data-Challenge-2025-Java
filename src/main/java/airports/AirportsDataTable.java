@@ -17,7 +17,7 @@ public class AirportsDataTable  extends Table {
 		return airportsDataTable;
 	}
 
-	AirportsDataTable() {
+	protected AirportsDataTable() {
 		super("AirportsData");
 	}
 
