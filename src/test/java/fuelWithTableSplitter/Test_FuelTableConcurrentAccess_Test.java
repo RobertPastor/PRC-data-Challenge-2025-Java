@@ -1,6 +1,10 @@
 package fuelWithTableSplitter;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.*;
+import java.time.temporal.ChronoUnit;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -23,10 +27,10 @@ public class Test_FuelTableConcurrentAccess_Test {
 	@Test
 	public void processParallelyWithExecutorService() throws InterruptedException, IOException {
 		
-		train_rank train_rank_value = train_rank.rank;
+		train_rank train_rank_value = train_rank.train;
 
-		//long maxToBeComputedRow = 1000000;
-		long maxToBeComputedRow = 100;
+		long maxToBeComputedRow = 1000000;
+		//long maxToBeComputedRow = 100;
 
 		FuelData fuelData = new FuelData(train_rank_value , maxToBeComputedRow);
 		fuelData.readParquet();
@@ -72,29 +76,30 @@ public class Test_FuelTableConcurrentAccess_Test {
 		fuelData.createExtendedEngineeringFeatures();
 		
 		//============================================
-		// exploiting multi threading for 16 cores
+		// exploiting multi threading for 32 cores some waiting for IO operations on parquet files
 		//============================================
 		
 		int cores = Runtime.getRuntime().availableProcessors();
 		System.out.println("Number of available processors: " + cores);
 		// create a pool of thread to execute concurrently
-		ExecutorService executor = Executors.newFixedThreadPool(cores);
+		ExecutorService executor = Executors.newFixedThreadPool(2*cores);
 
 		ConcurrentLinkedDeque<Integer> fuelTableIndexes = new ConcurrentLinkedDeque<Integer>();
-		fuelData.getFuelDataTable().stream()
-		.forEach(row -> {
+		fuelData.getFuelDataTable().stream().forEach(row -> {
 			// build a list of fuel indexes to share between thread
 			logger.info("add index to the linked queue = " + String.valueOf(row.getRowNumber()));
 			fuelTableIndexes.add(row.getRowNumber());
 		});
-		
+		// start time
+		LocalDateTime startTime = LocalDateTime.now();
+		// start loop
 		while (!fuelTableIndexes.isEmpty()) {
 			int rowIndex = fuelTableIndexes.removeFirst();
 			Row row = fuelData.getFuelDataTable().row(rowIndex);
 			executor.execute( () -> {
 				
 				logger.info("start executor -> " + row.getRowNumber());
-				fuelData.extendOneFuelRowStartEndInstantWithFlightData(row);
+				fuelData.extendOneFuelRowStartEndInstantWithFlightData(startTime , row);
 				
 			});
 		}
@@ -110,7 +115,7 @@ public class Test_FuelTableConcurrentAccess_Test {
 		
 		// last step generate the parquet file
 		fuelData.generateParquetFileFor();
-		
+		// generate a text file
 		fuelData.generateListOfErrors();
 	}
 	

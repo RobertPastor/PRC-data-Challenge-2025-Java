@@ -155,7 +155,6 @@ public class FlightDataInterpolation {
 			return 0.0;
 			//throw new InterpolationFunctionNotFoundException("Interpolation DOUBLE function for column = "+ columnName + " ---> not found in them= map");
 		}
-
 		try {
 			PolynomialSplineFunction interpolateFunction = (PolynomialSplineFunction)interpolationFunctionMap.get(columnName);
 			double queryMilliSeconds = start_end.toEpochMilli();
