@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 import com.jerolba.carpet.CarpetReader;
 
 import airports.AirportsDataSchema.AirportDataRecord;
-import flightLists.FlightListData;
 import folderDiscovery.FolderDiscovery;
 
 public class AirportsData extends AirportsDataTable {

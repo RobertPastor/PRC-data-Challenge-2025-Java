@@ -276,7 +276,6 @@ public class FlightListDataTable extends Table {
 	public void extendWithAirportsSinusCosinusOfLatitudeLongitude() {
 		
 		// origin
-		
 		DoubleColumn origin_latitude_cosine_column = DoubleColumn.create("origin_latitude_cosine");
 		this.flightListDataTable.addColumns(origin_latitude_cosine_column);
 		
@@ -290,7 +289,6 @@ public class FlightListDataTable extends Table {
 		this.flightListDataTable.addColumns(origin_longitude_sine_column);
 		
 		// destination
-		
 		DoubleColumn destination_latitude_cosine_column = DoubleColumn.create("destination_latitude_cosine");
 		this.flightListDataTable.addColumns(destination_latitude_cosine_column);
 		
@@ -309,11 +307,11 @@ public class FlightListDataTable extends Table {
 		while ( iter.hasNext()) {
 			Row row = iter.next();
 			
-			double origin_latitude_degrees = row.getDouble("origin_latitude");
-			double origin_longitude_degrees = row.getDouble("origin_longitude");
+			double origin_latitude_degrees = row.getDouble("origin_latitude_deg");
+			double origin_longitude_degrees = row.getDouble("origin_longitude_deg");
 			
-			double destination_latitude_degrees = row.getDouble("destination_latitude");
-			double destination_longitude_degrees = row.getDouble("destination_longitude");
+			double destination_latitude_degrees = row.getDouble("destination_latitude_deg");
+			double destination_longitude_degrees = row.getDouble("destination_longitude_deg");
 					
 			row.setDouble("origin_latitude_cosine" , Math.cos(Math.toRadians(origin_latitude_degrees)));
 			row.setDouble("origin_latitude_sine" , Math.sin(Math.toRadians(origin_latitude_degrees)));
@@ -328,7 +326,6 @@ public class FlightListDataTable extends Table {
 			row.setDouble("destination_longitude_sine" , Math.sin(Math.toRadians(destination_longitude_degrees)));
 			
 		}
-
-		System.out.println( this.flightListDataTable.print(10));
+		logger.info( this.flightListDataTable.print(10));
 	}
 }

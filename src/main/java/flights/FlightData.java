@@ -132,7 +132,6 @@ public class FlightData extends FlightDataTable {
 					row.setDouble("CAS", record.CAS());
 				}
 			});
-
 			//System.out.println( this.getFlightDataTable().print(10));
 
 		}catch (Exception e) {
@@ -141,7 +140,6 @@ public class FlightData extends FlightDataTable {
 	}
 
 	
-
 	/**
 	 * interpolate using the basic TableSaw interpolator 
 	 * that is only filling with the nearest non null value

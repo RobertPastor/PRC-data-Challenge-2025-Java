@@ -21,7 +21,6 @@ import aircrafts.AircraftsData;
 
 public class AirportsLegacyExcelData extends AirportsLegacyExcelDataTable {
 
-	
 	private static final Logger logger = Logger.getLogger(AirportsLegacyExcelData.class.getName());
 
 	private static String airportsFileName = "airports.xlsx";

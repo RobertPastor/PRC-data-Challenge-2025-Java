@@ -90,4 +90,10 @@ public class AirportsLegacyExcelDataTable extends Table implements Runnable {
 		row.setDouble("airport longitude radians" , Math.toRadians ( airport_longitude_degrees ) );
 
 	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
+	}
 }

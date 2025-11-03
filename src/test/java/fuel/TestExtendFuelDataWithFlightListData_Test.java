@@ -14,6 +14,8 @@ public class TestExtendFuelDataWithFlightListData_Test {
 	@Test
     public void testReadRankFuelFile() throws IOException {
 		
+		int nbMaxRows = 100;
+		
 		AirportsData airportsData = new AirportsData();
 		airportsData.readParquet();
 
@@ -28,7 +30,7 @@ public class TestExtendFuelDataWithFlightListData_Test {
 		flightListData.extendWithAirportData( airportsData );
 		flightListData.extendWithAirportsSinusCosinusOfLatitudeLongitude();
 
-		FuelData fuelData = new FuelData(train_rank_value );
+		FuelData fuelData = new FuelData(train_rank_value , nbMaxRows );
 		fuelData.readParquet();
 		
 		fuelData.extendFuelWithEndStartDifference();
@@ -48,6 +50,7 @@ public class TestExtendFuelDataWithFlightListData_Test {
 	@Test
     public void testReadTrainFuelFile() throws IOException {
 		
+		int nbMaxRows = 100;
 		AirportsData airportsData = new AirportsData();
 		airportsData.readParquet();
 		
@@ -63,7 +66,7 @@ public class TestExtendFuelDataWithFlightListData_Test {
 		flightListData.extendWithAirportData( airportsData );
 		flightListData.extendWithAirportsSinusCosinusOfLatitudeLongitude();
 
-		FuelData fuelData = new FuelData(train_rank_value );
+		FuelData fuelData = new FuelData(train_rank_value , nbMaxRows );
 		fuelData.readParquet();
 		
 		fuelData.extendFuelWithEndStartDifference();

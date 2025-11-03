@@ -10,7 +10,6 @@ import com.jerolba.carpet.CarpetReader;
 import dataChallengeEnums.DataChallengeEnums.train_rank;
 import flightLists.FlightListDataSchema.FlightListDataRecord;
 import folderDiscovery.FolderDiscovery;
-import fuel.FuelData;
 
 public class FlightListData extends FlightListDataTable {
 

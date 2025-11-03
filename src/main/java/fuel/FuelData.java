@@ -67,6 +67,7 @@ public class FuelData extends FuelDataTable {
 
 		// extend fuel with end minus start differences
 		this.extendFuelWithEndStartDifference();
+		
 		logger.info(this.getFuelDataTable().shape());
 		logger.info(this.getFuelDataTable().structure().print());
 		
@@ -88,12 +89,12 @@ public class FuelData extends FuelDataTable {
 		logger.info(this.getFuelDataTable().structure().print());
 
 		// extend fuel with flight data - there is a "merge" between fuel and flight data
-		this.extendFuelStartEndInstantsWithFlightData( maxToBeComputedRow);
+		this.extendFuelStartEndInstantsWithFlightData( );
 		
 		// generate final parquet file with extended fuel dataframe
-		this.generateParquetFileFor();
+		//this.generateParquetFileFor();
 		
-		this.generateListOfErrors();
+		//this.generateListOfErrors();
 			
 	}
 	

@@ -34,10 +34,10 @@ public class TableIndexSplitter {
 		int maxToBeAnalysedRowCount = 1000000;
 		
 		FuelDataSplitter fuelDataSplitter = new FuelDataSplitter(train_rank_value , maxToBeAnalysedRowCount);
-		fuelData.readParquet();
+		fuelDataSplitter.readParquet();
 		
-		System.out.println("fuel table -> row Count = " + fuelData.getFuelDataTable().rowCount());
-		int totalRows = fuelData.getFuelDataTable().rowCount(); // Total number of rows in the table
+		System.out.println("fuel table -> row Count = " + fuelDataSplitter.getFuelDataTable().rowCount());
+		int totalRows = fuelDataSplitter.getFuelDataTable().rowCount(); // Total number of rows in the table
 		
 		int cores = Runtime.getRuntime().availableProcessors();
 		System.out.println("Number of available processors: " + cores);

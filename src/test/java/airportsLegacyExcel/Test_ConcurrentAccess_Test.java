@@ -1,14 +1,9 @@
 package airportsLegacyExcel;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Test;
@@ -35,7 +30,7 @@ public class Test_ConcurrentAccess_Test {
 
 		int cores = Runtime.getRuntime().availableProcessors();
 		System.out.println("Number of available processors: " + cores);
-
+		// create a pool of thread to execute concurrently
 		ExecutorService executor = Executors.newFixedThreadPool(cores);
 
 		ConcurrentLinkedDeque<Integer> airportsTableIndexes = new ConcurrentLinkedDeque<Integer>();
