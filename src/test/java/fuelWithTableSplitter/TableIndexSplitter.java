@@ -1,10 +1,11 @@
-package fuel;
+package fuelWithTableSplitter;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import dataChallengeEnums.DataChallengeEnums.train_rank;
+import fuel.FuelData;
 
 //Task to process a specific range of rows
 class TableProcessor implements Runnable {
@@ -31,14 +32,18 @@ public class TableIndexSplitter {
 
 		train_rank train_rank_value = train_rank.train;
 		int maxToBeAnalysedRowCount = 1000000;
-		FuelData fuelData = new FuelData(train_rank_value , maxToBeAnalysedRowCount);
+		
+		FuelDataSplitter fuelDataSplitter = new FuelDataSplitter(train_rank_value , maxToBeAnalysedRowCount);
 		fuelData.readParquet();
 		
 		System.out.println("fuel table -> row Count = " + fuelData.getFuelDataTable().rowCount());
 		int totalRows = fuelData.getFuelDataTable().rowCount(); // Total number of rows in the table
+		
+		int cores = Runtime.getRuntime().availableProcessors();
+		System.out.println("Number of available processors: " + cores);
 
 		// Calculate the range size for each thread
-		int threadCount = 16;  // Number of threads to use
+		int threadCount = cores;  // Number of threads to use
 		int rangeSize = totalRows / threadCount;
 		System.out.println("range size = " + rangeSize);
 

@@ -11,7 +11,8 @@ public class TestReadFuelData_Test {
 	@Test
     public void testReadFuelRank() throws IOException {
 		
-		FuelData fuelData = new FuelData(train_rank.rank );
+		int nbMaxRows = 100;
+		FuelData fuelData = new FuelData(train_rank.rank , nbMaxRows );
 		fuelData.readParquet();
 		
 		fuelData.extendFuelWithEndStartDifference();
@@ -26,7 +27,8 @@ public class TestReadFuelData_Test {
 	@Test
     public void testReadFuelTrain() throws IOException {
 		
-		FuelData fuelData = new FuelData(train_rank.train );
+		int nbMaxRows = 100;
+		FuelData fuelData = new FuelData(train_rank.train , nbMaxRows);
 		fuelData.readParquet();
 		
 		fuelData.extendFuelWithEndStartDifference();

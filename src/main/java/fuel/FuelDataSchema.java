@@ -134,11 +134,11 @@ public class FuelDataSchema {
 			return aircraft_TAS_at_fuel_end;
 		}
 
-		    public double aircraft_CAS_at_fuel_start() {
+		public double aircraft_CAS_at_fuel_start() {
 			return aircraft_CAS_at_fuel_start;
 		}
 
-		    public double aircraft_CAS_at_fuel_end() {
+		public double aircraft_CAS_at_fuel_end() {
 			return aircraft_CAS_at_fuel_end;
 		}
 

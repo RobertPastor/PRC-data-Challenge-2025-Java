@@ -53,16 +53,16 @@ public class AirportsLegacyExcelData extends AirportsLegacyExcelDataTable {
 					String headerNameFound =  cell.getRawValue();
 					logger.info("header name found = " + headerNameFound );
 					if ( AirportsLegacyExcelData.getAirportsExpectedHeaders().contains(headerNameFound)) {
-						
+						// store header names and column indexes for each header
 						AirportsLegacyExcelData.getAirportsFoundHeaders().add(headerNameFound);
 						AirportsLegacyExcelData.getAirportsFoundHeadersColumnIndexes().add(cell.getColumnIndex());
 					}
 				}
 			}
 		}
-		logger.info(AirportsLegacyExcelData.getAirportsExpectedHeaders().toString());
-		logger.info(AirportsLegacyExcelData.getAirportsFoundHeaders().toString());
-		logger.info(AirportsLegacyExcelData.getAirportsFoundHeadersColumnIndexes().toString());
+		logger.info("expected headers = " + AirportsLegacyExcelData.getAirportsExpectedHeaders().toString());
+		logger.info("found headers = " +AirportsLegacyExcelData.getAirportsFoundHeaders().toString());
+		logger.info("headers column indexes = " +AirportsLegacyExcelData.getAirportsFoundHeadersColumnIndexes().toString());
 	}
 	
 	/**
@@ -97,12 +97,12 @@ public class AirportsLegacyExcelData extends AirportsLegacyExcelDataTable {
 				Iterator<Row> iter = listOfRows.iterator();
 				while (iter.hasNext()) {
 					Row row = iter.next();
-
+					logger.info( "row numer = " + String.valueOf( row.getRowNum() ) );
 					// assumption - row with row number 1 contains the header
 					if ( row.getRowNum() == 1) {
 						this.buildHeadersInformations(row);
 					} else {
-						logger.info( String.valueOf( row.getRowNum() ) );
+						logger.info("row number = " + String.valueOf( row.getRowNum() ) );
 						this.fillTableRow(row);
 					}
 				}
@@ -118,80 +118,99 @@ public class AirportsLegacyExcelData extends AirportsLegacyExcelDataTable {
 	private void fillTableRow(final Row row) {
 		
 		tech.tablesaw.api.Row tableRow = this.airportsDataTable.appendRow();
-		logger.info ("row count ---> " + this.airportsDataTable.rowCount());
+		logger.info ("Fill Table row - row count ---> " + this.airportsDataTable.rowCount());
 
 		//"Id","Name","Airport short name","Country","IATA","ICAO","latitude degrees","longitude degrees","elevation meters");
 
 		// Id
 		int columnIndex = AirportsLegacyExcelData.getAirportsFoundHeadersColumnIndexes().get(0);
 		Cell cell = row.getCell(columnIndex);
-		if ( cell.getType().equals(CellType.NUMBER) ) {
-			java.math.BigDecimal bigDecimal = (java.math.BigDecimal)cell.getValue();
-			long longValue = bigDecimal.longValueExact();
-			int intValue = Math.toIntExact(longValue);
-			tableRow.setInt("Id", intValue);
+		if (cell != null) {
+			if ( cell.getType().equals(CellType.NUMBER) ) {
+				java.math.BigDecimal bigDecimal = (java.math.BigDecimal)cell.getValue();
+				long longValue = bigDecimal.longValueExact();
+				int intValue = Math.toIntExact(longValue);
+				logger.info("---> airport id = " + String.valueOf(intValue) );
+				tableRow.setInt("Id", intValue);
+			}
 		}
 
 		//Name
-		columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(1);
+		columnIndex = AirportsLegacyExcelData.getAirportsFoundHeadersColumnIndexes().get(1);
 		cell = row.getCell(columnIndex);
-		if ( cell.getType().equals(CellType.STRING) ) {
-			tableRow.setString("Name", cell.getRawValue() );
+		if (cell != null) {
+			if ( cell.getType().equals(CellType.STRING) ) {
+				logger.info("---> airport name = " + cell.getRawValue() );
+				tableRow.setString("Name", cell.getRawValue() );
+			}
 		}
 		
 		//Airport short name
-		columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(2);
+		columnIndex = AirportsLegacyExcelData.getAirportsFoundHeadersColumnIndexes().get(2);
 		cell = row.getCell(columnIndex);
-		if ( cell.getType().equals(CellType.STRING) ) {
-			tableRow.setString("Airport_short_name", cell.getRawValue() );
+		if (cell != null) {
+			if ( cell.getType().equals(CellType.STRING) ) {
+				tableRow.setString("Airport short name", cell.getRawValue() );
+			}
 		}
 
 		//Country
-		columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(2);
+		columnIndex = AirportsLegacyExcelData.getAirportsFoundHeadersColumnIndexes().get(3);
 		cell = row.getCell(columnIndex);
-		if ( cell.getType().equals(CellType.STRING) ) {
-			tableRow.setString("Country", cell.getRawValue() );
+		if (cell != null) {
+			if ( cell.getType().equals(CellType.STRING) ) {
+				tableRow.setString("Country", cell.getRawValue() );
+			}
 		}
 		
 		//IATA
-		columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(3);
+		columnIndex = AirportsLegacyExcelData.getAirportsFoundHeadersColumnIndexes().get(4);
 		cell = row.getCell(columnIndex);
-		if ( cell.getType().equals(CellType.STRING) ) {
-			tableRow.setString("IATA", cell.getRawValue() );
+		if (cell != null) {
+			if ( cell.getType().equals(CellType.STRING) ) {
+				tableRow.setString("IATA", cell.getRawValue() );
+			}
 		}
 		
 		//ICAO
-		columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(4);
+		columnIndex = AirportsLegacyExcelData.getAirportsFoundHeadersColumnIndexes().get(5);
 		cell = row.getCell(columnIndex);
-		if ( cell.getType().equals(CellType.STRING) ) {
-			tableRow.setString("ICAO", cell.getRawValue() );
+		if (cell != null) {
+			if ( cell.getType().equals(CellType.STRING) ) {
+				tableRow.setString("ICAO", cell.getRawValue() );
+			}
 		}
 		
 		//latitude degrees
-		columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(5);
+		columnIndex = AirportsLegacyExcelData.getAirportsFoundHeadersColumnIndexes().get(6);
 		cell = row.getCell(columnIndex);
-		if ( cell.getType().equals(CellType.NUMBER) ) {
-			tableRow.setFloat("latitude_degrees", 
-					(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
+		if (cell != null) {
+			if ( cell.getType().equals(CellType.NUMBER) ) {
+				tableRow.setDouble("airport latitude degrees", 
+						(double) utils.Utils.getDoubleFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
+			}
 		}
 
 		//longitude degrees
-		columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(6);
+		columnIndex = AirportsLegacyExcelData.getAirportsFoundHeadersColumnIndexes().get(7);
 		cell = row.getCell(columnIndex);
-		if ( cell.getType().equals(CellType.NUMBER) ) {
-			tableRow.setFloat("longitude_degrees", 
-					(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
+		if (cell != null) {
+			if ( cell.getType().equals(CellType.NUMBER) ) {
+				tableRow.setDouble("airport longitude degrees", 
+						(double) utils.Utils.getDoubleFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
+			}
 		}
 
 		//elevation meters
-		columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(7);
+		columnIndex = AirportsLegacyExcelData.getAirportsFoundHeadersColumnIndexes().get(8);
 		cell = row.getCell(columnIndex);
-		if ( cell.getType().equals(CellType.NUMBER) ) {
-			tableRow.setFloat("elevation_meters", 
-					(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
+		if (cell != null) {
+			if ( cell.getType().equals(CellType.NUMBER) ) {
+				tableRow.setFloat("airport elevation meters", 
+						(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
+			}
 		}
 	}
-	
 
 	public static List<String> getAirportsExpectedHeaders() {
 		return airportsExpectedHeaders;
@@ -207,6 +226,11 @@ public class AirportsLegacyExcelData extends AirportsLegacyExcelDataTable {
 
 	public static String getAirportsFileName() {
 		return airportsFileName;
+	}
+
+	public void extendwithName() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

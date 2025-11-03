@@ -16,13 +16,13 @@ public class Test_InterpolateFuelStartEndFromFlightData_Rank {
 		long maxToBeComputedRow = 1000000;
 		//int maxToBeComputedRow = 100;
 
-		FuelData fuelData = new FuelData(train_rank_value);
+		FuelData fuelData = new FuelData(train_rank_value , maxToBeComputedRow);
 		fuelData.readParquet();
 		
 		System.out.println( fuelData.getFuelDataTable().shape());
 		System.out.println( fuelData.getFuelDataTable().structure().print());
 
-		fuelData.prepareBeforeMergeFueltoOtherData( maxToBeComputedRow);
+		fuelData.prepareBeforeMergeFueltoOtherData(maxToBeComputedRow);
 
 	}
 }

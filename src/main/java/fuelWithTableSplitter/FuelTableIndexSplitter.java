@@ -1,4 +1,4 @@
-package fuel;
+package fuelWithTableSplitter;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -27,7 +27,7 @@ public class FuelTableIndexSplitter {
             int end = (i == threadCount - 1) ? totalRows : start + rangeSize;
 
             // Submit a task for each range
-            executor.submit(new TableProcessor(start, end));
+            //executor.submit(new TableProcessor(start, end));
         }
 
         // Shutdown the executor

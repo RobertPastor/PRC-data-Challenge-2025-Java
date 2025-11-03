@@ -1,4 +1,4 @@
-package fuel;
+package fuelWithTableSplitter;
 
 
 import java.io.File;
@@ -31,10 +31,13 @@ import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
 import utils.Utils;
 
-public class FuelDataTable extends Table {
+public class FuelDataTableSplitter  extends Table implements Runnable {
 	
-	private static final Logger logger = Logger.getLogger(FuelDataTable.class.getName());
-
+	private static final Logger logger = Logger.getLogger(FuelDataTableSplitter.class.getName());
+	
+	private int startIndex = 0;
+	private int endIndex = 0;
+	
 	protected train_rank train_rank_value;
 	private  long maxToBeComputedRow = 0;
 
@@ -57,7 +60,7 @@ public class FuelDataTable extends Table {
 	private FlightDataInterpolation flightDataInterpolation;
 
 	// constructor
-	protected FuelDataTable(train_rank train_rank_value, final long maxToBeComputedRow) {
+	protected FuelDataTableSplitter(train_rank train_rank_value, final long maxToBeComputedRow) {
 		super("Fuel Data");
 		this.setTrain_rank_value(train_rank_value);
 		this.setMaxToBeComputedRow(maxToBeComputedRow);
@@ -95,10 +98,11 @@ public class FuelDataTable extends Table {
         } catch (IOException e) {
             e.printStackTrace();
         }
-		
-		
 	}
 	
+	/**
+	 * used once at table creation
+	 */
 	public void createEmptyFuelDataTable( ) {
 		this.fuelDataTable = Table.create("Fuel Data",
 
@@ -211,7 +215,9 @@ public class FuelDataTable extends Table {
 		}
 		logger.info( this.fuelDataTable.print(10));
 	}
-	
+	/**
+	 * should be called only once
+	 */
 	public void createExtendedEngineeringFeatures() {
 		
 		// latitude degrees at fuel start
@@ -331,19 +337,18 @@ public class FuelDataTable extends Table {
 	 * @param maxToBeComputedRow
 	 * @throws IOException
 	 */
-	public void extendFuelStartEndInstantsWithFlightData( final long maxToBeComputedRow ) throws IOException {
+	@Override
+	public void run()  {
+		System.out.println("Processing rows from " + this.startIndex + " to " + this.endIndex);		
 		
-		
-
+		maxToBeComputedRow = this.getMaxToBeComputedRow();
 		// find the nearest instant from a fuel table of a flight id
 		// given a fuel start or stop instant
 		train_rank train_rank_value = this.getTrain_rank_value();
 		
-		Iterator<Row> iter = this.fuelDataTable.iterator();
 		long counter = 0;
-		while ( iter.hasNext() && ( counter < maxToBeComputedRow )) {
-			counter++;
-			Row row = iter.next();
+		for ( int index = this.startIndex ; index < this.endIndex ; index++ ) {
+			Row row = this.fuelDataTable.row(index);
 			
 			Instant start = row.getInstant("start");
 			Instant end = row.getInstant("end");
@@ -352,7 +357,11 @@ public class FuelDataTable extends Table {
 			FlightData flightData = new FlightData( train_rank_value , flight_id );
 			// 27th October 2025 - use new stream reader capable of filling empty values
 			// read one flight data parquet file
-			flightData.readParquetWithStream();
+			try {
+				flightData.readParquetWithStream();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			
 			//logger.info(flightData.getFlightDataTable().shape() );
 			//logger.info(flightData.getFlightDataTable().structure().print() );

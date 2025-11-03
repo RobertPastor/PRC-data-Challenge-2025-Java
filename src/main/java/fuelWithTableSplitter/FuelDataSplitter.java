@@ -1,4 +1,4 @@
-package fuel;
+package fuelWithTableSplitter;
 
 
 import java.io.File;
@@ -23,20 +23,25 @@ import fuel.FuelDataSchema.FuelDataRecord;
 import fuel.FuelDataSchema.FuelExtendedDataRecord;
 import utils.Utils;
 
-public class FuelData extends FuelDataTable {
+public class FuelDataSplitter extends FuelDataTableSplitter {
 
-	private static final Logger logger = Logger.getLogger(FuelData.class.getName());
+	private static final Logger logger = Logger.getLogger(FuelDataSplitter.class.getName());
 
 	/**
 	 * max computed row used during debugging to reduce the number of analysed rows from the Fuel table
 	 * @param value
 	 * @param maxToBeComputedRow
 	 */
-	public FuelData( train_rank train_rank_value , final long maxToBeComputedRow ) {
+	public FuelDataSplitter( train_rank train_rank_value , final long maxToBeComputedRow ) {
 		super(train_rank_value , maxToBeComputedRow);
 		logger.info("--- constructor for <<" + this.getTrain_rank_value() + ">> ---");
 	}
 	
+	/**
+	 * called i=once before the big work interpolation starts
+	 * @param maxToBeComputedRow
+	 * @throws IOException
+	 */
 	public void prepareBeforeMergeFueltoOtherData (final long maxToBeComputedRow  ) throws IOException {
 		
 		train_rank train_rank_value = this.getTrain_rank_value();
@@ -88,12 +93,12 @@ public class FuelData extends FuelDataTable {
 		logger.info(this.getFuelDataTable().structure().print());
 
 		// extend fuel with flight data - there is a "merge" between fuel and flight data
-		this.extendFuelStartEndInstantsWithFlightData( maxToBeComputedRow);
+		//this.extendFuelStartEndInstantsWithFlightData();
 		
 		// generate final parquet file with extended fuel dataframe
-		this.generateParquetFileFor();
-		
-		this.generateListOfErrors();
+		//this.generateParquetFileFor();
+		// generate the raised errors
+		//this.generateListOfErrors();
 			
 	}
 	

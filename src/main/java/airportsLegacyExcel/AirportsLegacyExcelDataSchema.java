@@ -1,10 +1,6 @@
 package airportsLegacyExcel;
 
-import java.util.logging.Logger;
-
 public class AirportsLegacyExcelDataSchema {
-
-	private static final Logger logger = Logger.getLogger(AirportsLegacyExcelDataSchema.class.getName());
 
 	public static record AirportDataRecord(
 

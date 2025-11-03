@@ -209,8 +209,8 @@ public class FlightListDataTable extends Table {
 			row.setDouble("origin_longitude_deg" , origin_longitude_degrees);
 			
 			// -------------- destination airport latitude longitude radians (27/10/2025)
-			row.setDouble("origin_longitude_rad" , ( origin_latitude_degrees * Math.PI ) / 180.0);
-			row.setDouble("origin_latitude_rad" , ( origin_longitude_degrees * Math.PI ) / 180.0);
+			row.setDouble("origin_longitude_rad" , Math.toRadians ( origin_latitude_degrees ) );
+			row.setDouble("origin_latitude_rad" , Math.toRadians ( origin_longitude_degrees ) );
 
 			// elevation origin airport
 			float origin_elevation_feet = airportsDataTable.getAirportFloatValues(origin_airport_icao_code, "elevation");
