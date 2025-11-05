@@ -78,7 +78,6 @@ public class FlightListDataTable extends Table {
 				StringColumn.create("destination_name"),
 
 				StringColumn.create("aircraft_type")
-				
 				);
 	}
 	
@@ -146,6 +145,10 @@ public class FlightListDataTable extends Table {
 	 *  flight_distance_Nm |   flight_duration_sec
 	 */
 	
+	/**
+	 * to be used by the flight list... that is extended with airport data
+	 * @param airportsDataTable
+	 */
 	public void extendWithAirportData( final AirportsDataTable airportsDataTable) {
 		
 		// latitude longitude in degrees - origin airport
@@ -181,10 +184,11 @@ public class FlightListDataTable extends Table {
 		this.flightListDataTable.addColumns(destination_longitude_rad_column);
 		
 		//------------------
-
+		// destination airports
 		FloatColumn destination_elevation_feet_column = FloatColumn.create("destination_elevation_feet");
 		this.flightListDataTable.addColumns(destination_elevation_feet_column);
 		
+		// flight level data
 		DoubleColumn flight_distance_Nm_column = DoubleColumn.create("flight_distance_Nm");
 		this.flightListDataTable.addColumns(flight_distance_Nm_column);
 		

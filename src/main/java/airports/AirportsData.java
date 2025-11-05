@@ -14,6 +14,10 @@ public class AirportsData extends AirportsDataTable {
 	
 	private static final Logger logger = Logger.getLogger(AirportsData.class.getName());
 
+	/**
+	 * ensure that the reading process manages correctly missing values
+	 * @throws IOException
+	 */
 	public void readParquet() throws IOException {
 		this.createEmptyAirportsDataTable();
 		File file = null;

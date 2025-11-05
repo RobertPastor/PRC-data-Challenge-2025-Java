@@ -10,7 +10,7 @@ import tech.tablesaw.api.Row;
 import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
 
-public class AirportsLegacyExcelDataTable extends Table implements Runnable {
+public class AirportsLegacyExcelDataTable extends Table  {
 
 	private static final Logger logger = Logger.getLogger(AirportsLegacyExcelDataTable.class.getName());
 
@@ -78,9 +78,9 @@ public class AirportsLegacyExcelDataTable extends Table implements Runnable {
 	
 	public void extendOneRowWithLatitudeLongitudeRadians (Row row) {
 		
-		String airportICAOcode = row.getString("ICAO");
-		int airportId = row.getInt("Id");
-		System.out.println( className + " - extending row with Id = " + String.valueOf(airportId) + " for airport ICAO code = "+ airportICAOcode);
+		//String airportICAOcode = row.getString("ICAO");
+		//int airportId = row.getInt("Id");
+		//System.out.println( className + " - extending row with Id = " + String.valueOf(airportId) + " for airport ICAO code = "+ airportICAOcode);
 			
 		// -------------- destination airport latitude longitude in radians (27/10/2025)
 		double airport_latitude_degrees = row.getDouble("airport latitude degrees");
@@ -89,11 +89,5 @@ public class AirportsLegacyExcelDataTable extends Table implements Runnable {
 		row.setDouble("airport latitude radians" , Math.toRadians ( airport_latitude_degrees ) );
 		row.setDouble("airport longitude radians" , Math.toRadians ( airport_longitude_degrees ) );
 
-	}
-
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		
 	}
 }

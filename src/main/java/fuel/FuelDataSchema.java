@@ -8,14 +8,18 @@ import tech.tablesaw.api.LongColumn;
 public class FuelDataSchema {
 
 	public static record FuelExtendedDataRecord(
+			
 			int idx,
 			String flight_id, 
+			
 			Instant start, 
 			Instant end,
 
 			long time_diff_seconds,
 			float fuel_flow_kg_sec,
 
+			//=========================================
+			// aircraft positions in latitude and longitudes
 			// latitude and longitude DEGREES at fuel start
 			double aircraft_latitude_deg_at_fuel_start,
 			double aircraft_longitude_deg_at_fuel_start,
@@ -32,16 +36,28 @@ public class FuelDataSchema {
 			double aircraft_latitude_rad_at_fuel_end,
 			double aircraft_longitude_rad_at_fuel_end,
 
-			// distance flown between fuel start and fuel end
-			double aircraft_distance_flown_Nm,
-
+			//==========================================
+			// distances
+			// flown between fuel start and fuel end
+			double aircraft_distance_flown_start_end_Nm,
+			double aircraft_distance_flown_origin_start_Nm,
+			double aircraft_distance_flown_origin_end_Nm,
+			double aircraft_distance_to_be_flown_start_destination_Nm,
+			double aircraft_distance_to_be_flown_end_destination_Nm,
+			
+			//===================altitudes
 			// altitude at fuel start and fuel stop
 			double aircraft_altitude_ft_at_fuel_start,
 			double aircraft_altitude_ft_at_fuel_end,
 
-			// computed vertical rate feet per minutes
-			double aircraft_computed_vertical_rate_ft_min,
+			//==================================
+			// delta altitudes
+			double aircraft_delta_altitude_ft_origin_fuel_start,
+			double aircraft_delta_altitude_ft_origin_end_start,
+			double aircraft_delta_altitude_ft_start_destination,
+			double aircraft_delta_altitude_ft_end_destination,
 			
+			//=================================
 			// ground speed
 			double aircraft_groundspeed_kt_at_fuel_start,
 			double aircraft_groundspeed_kt_at_fuel_end,
@@ -54,18 +70,27 @@ public class FuelDataSchema {
 			double aircraft_groundspeed_kt_X_at_fuel_end,
 			double aircraft_groundspeed_kt_Y_at_fuel_end,
 			
+			//=================================
 			// track angle DEGREES
 			double aircraft_track_angle_deg_at_fuel_start,
 			double aircraft_track_angle_deg_at_fuel_end,
 			
 			// added 27th October 2025 -RADIANS
+			// track angle radians
 			double aircraft_track_angle_rad_at_fuel_start,
 			double aircraft_track_angle_rad_at_fuel_end,
 			
+			//==================================
+			// vertical rate
+			// computed vertical rate feet per minutes between start and end
+			double aircraft_computed_vertical_rate_ft_min,
+			
+			//=================================
 			// vertical rate
 			double aircraft_vertical_rate_ft_min_at_fuel_start,
 			double aircraft_vertical_rate_ft_min_at_fuel_end,
 			
+			//=================speeds==========
 			// mach
 			double aircraft_mach_at_fuel_start,
 			double aircraft_mach_at_fuel_end,
@@ -77,24 +102,26 @@ public class FuelDataSchema {
 			double aircraft_CAS_at_fuel_start,
 			double aircraft_CAS_at_fuel_end,
 			
+			//============ airport elevations ===========
 			// origin an destination airport elevation
 			float origin_elevation_feet,
 			float destination_elevation_feet,
 			
-			// flight distance
+			// flight and flight duration
 			double flight_distance_Nm,			
 			long flight_duration_sec,
 
 			// using flight take-off and flight landed , compute relate duration in second
 			long fuel_burnt_start_relative_to_takeoff_sec,
 			long fuel_burnt_end_relative_to_takeoff_sec,
+			long fuel_burnt_start_relative_to_landed_sec,
 			long fuel_burnt_end_relative_to_landed_sec,
 
 			int Num_Engines,
 
 			float Approach_Speed_knot,
-			float Wingspan_ft_without_winglets_sharklets,
 			float Length_ft,
+			float Wingspan_ft_without_winglets_sharklets,
 			float Tail_Height_at_OEW_ft,
 			float Wheelbase_ft,
 			float Cockpit_to_Main_Gear_ft,
@@ -160,10 +187,6 @@ public class FuelDataSchema {
 
 		public float Approach_Speed_knot() {
 			return Approach_Speed_knot;
-		}
-
-		public float Wingspan_ft_without_winglets_sharklets() {
-			return Wingspan_ft_without_winglets_sharklets;
 		}
 
 		public float Length_ft() {
@@ -349,9 +372,7 @@ public class FuelDataSchema {
 			return aircraft_computed_vertical_rate_ft_min;
 		}
 
-		public double aircraft_distance_flown_Nm() {
-			return aircraft_distance_flown_Nm;
-		}
+		
 	}
 
 	public static record FuelDataRecord(

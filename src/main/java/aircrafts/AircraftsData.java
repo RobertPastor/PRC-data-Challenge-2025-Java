@@ -71,7 +71,6 @@ public class AircraftsData extends AircraftsDataTable {
 		logger.info(AircraftsData.getAircraftsExpectedHeaders().toString());
 		logger.info(AircraftsData.getAircraftsFoundHeaders().toString());
 		logger.info(AircraftsData.getAircraftHeadersColumnIndexes().toString());
-
 	}
 	
 	private void fillTableRow(final Row r) {
@@ -106,17 +105,25 @@ public class AircraftsData extends AircraftsDataTable {
 		//Wingspan_ft_without_winglets_sharklets
 		columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(3);
 		cell = r.getCell(columnIndex);
-		if ( cell.getType().equals(CellType.NUMBER) ) {
-			tableRow.setFloat("Wingspan_ft_without_winglets_sharklets", 
-					(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
+		if ( cell != null) {
+			if ( cell.getType().equals(CellType.NUMBER) ) {
+				tableRow.setFloat("Wingspan_ft_without_winglets_sharklets", 
+						(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
+			}
+		} else {
+			tableRow.setFloat("Wingspan_ft_without_winglets_sharklets", (0.0f));
 		}
 
 		//Length_ft
 		columnIndex = AircraftsData.getAircraftHeadersColumnIndexes().get(4);
 		cell = r.getCell(columnIndex);
-		if ( cell.getType().equals(CellType.NUMBER) ) {
-			tableRow.setFloat("Length_ft", 
-					(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
+		if (cell != null) {
+			if ( cell.getType().equals(CellType.NUMBER) ) {
+				tableRow.setFloat("Length_ft", 
+						(float) utils.Utils.getFloatFromBigDecimal ( (java.math.BigDecimal) cell.getValue() ) );
+			}
+		} else {
+			tableRow.setFloat("Length_ft", (0.0f));
 		}
 
 		//Tail_Height_at_OEW_ft

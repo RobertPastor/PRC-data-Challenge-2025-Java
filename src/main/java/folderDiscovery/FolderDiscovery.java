@@ -6,7 +6,6 @@ import java.nio.file.Paths;
 import java.util.logging.Logger;
 
 import dataChallengeEnums.DataChallengeEnums.train_rank;
-import fuel.FuelDataTable;
 
 public class FolderDiscovery {
 	
@@ -21,14 +20,14 @@ public class FolderDiscovery {
 	private static String fuelTrainFolderStr = "C:/Users/rober/git/PRCdataChallenge2025/trajectory/Fuel/";
 	
 	private static String flightListTrainRankFolderStr = "C:/Users/rober/git/PRCdataChallenge2025/trajectory/FlightList";
-	
+	// 4th November 2025 - airports provided by the PRC team with missing elevation on one airport used in the rank flight list
 	private static String airportsFolderStr = "C:/Users/rober/git/PRCdataChallenge2025/trajectory/Environment/AirportsDataChallenge";
-	
+	private static String legacyAirportsFolderStr = "C:/Users/rober/eclipse-2025-09/eclipse-jee-2025-09-R-win32-x86_64/Data-Challenge-2025/documents/airports";
+
 	// legacy airports EXCEL file replacing apt.parquet because airport ZGOW "Jieyang Chaoshan International Airport" has missing elevation_ft value
 	private static String airportsLegacyFolderStr = "C:/Users/rober/eclipse-2025-09/eclipse-jee-2025-09-R-win32-x86_64/Data-Challenge-2025/documents/airports";
 	
 	private static String trainRankOutputfolderStr = "C:/Users/rober/eclipse-2025-09/eclipse-jee-2025-09-R-win32-x86_64/Data-Challenge-2025/documents";
-
 
 	public static String getFuelRankFolderStr() {
 		return fuelRankFolderStr;
@@ -231,6 +230,10 @@ public class FolderDiscovery {
 
 	public static String getAirportsLegacyFolderStr() {
 		return airportsLegacyFolderStr;
+	}
+
+	public static String getLegacyAirportsFolderStr() {
+		return legacyAirportsFolderStr;
 	}
 
 }

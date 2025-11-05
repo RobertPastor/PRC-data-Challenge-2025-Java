@@ -127,6 +127,7 @@ public class FuelDataSplitter extends FuelDataTableSplitter {
 	        				row.getInstant("start"),
 	        				row.getInstant("end") ,
 	        				
+	        				// time diff seconds 
 	        				row.getLong("time_diff_seconds") , 
 	        				row.getFloat("fuel_flow_kg_sec") ,
 	        				
@@ -145,17 +146,29 @@ public class FuelDataSplitter extends FuelDataTableSplitter {
 	        				// latitude and longitude RADIANS at fuel end
 	        				row.getDouble("aircraft_latitude_rad_at_fuel_end"),
 	        				row.getDouble("aircraft_longitude_rad_at_fuel_end"),
-
-	        				// computed distance flown
-	        				row.getDouble("aircraft_distance_flown_Nm"),
 	        				
+	        				//==========================================
+	        				// distances
+	        				// flown between fuel start and fuel end
+	        				row.getDouble("aircraft_distance_flown_start_end_Nm"),
+	        				row.getDouble("aircraft_distance_flown_origin_start_Nm"),
+	        				row.getDouble("aircraft_distance_flown_origin_end_Nm"),
+	        				row.getDouble("aircraft_distance_to_be_flown_start_destination_Nm"),
+	        				row.getDouble("aircraft_distance_to_be_flown_end_destination_Nm"),
+	        				
+	        				//=================================
 	        				// altitude at fuel start and stop
 	        				row.getDouble("aircraft_altitude_ft_at_fuel_start"),
 	        				row.getDouble("aircraft_altitude_ft_at_fuel_end"),
-	        				// ---
-	        				// computed vertical rate between fuel start and fuel stop
-	        				row.getDouble("aircraft_computed_vertical_rate_ft_min"),
 	        				
+	        				//==================================
+	        				// delta altitudes
+	        				row.getDouble("aircraft_delta_altitude_ft_origin_fuel_start"),
+	        				row.getDouble("aircraft_delta_altitude_ft_origin_end_start"),
+	        				row.getDouble("aircraft_delta_altitude_ft_start_destination"),
+	        				row.getDouble("aircraft_delta_altitude_ft_end_destination"),
+	        				
+	        				//=================================
 	        				// ground speed
 	        				row.getDouble("aircraft_groundspeed_kt_at_fuel_start"),
 	        				row.getDouble("aircraft_groundspeed_kt_at_fuel_end"),
@@ -167,6 +180,7 @@ public class FuelDataSplitter extends FuelDataTableSplitter {
 	        				row.getDouble("aircraft_groundspeed_kt_X_at_fuel_end"),
 	        				row.getDouble("aircraft_groundspeed_kt_Y_at_fuel_end"),
 	        				
+	        				//===================================================
 	        				// track angle degrees
 	        				row.getDouble("aircraft_track_angle_deg_at_fuel_start"),
 	        				row.getDouble("aircraft_track_angle_deg_at_fuel_end"),
@@ -175,10 +189,17 @@ public class FuelDataSplitter extends FuelDataTableSplitter {
 	        				row.getDouble("aircraft_track_angle_rad_at_fuel_start"),
 	        				row.getDouble("aircraft_track_angle_rad_at_fuel_end"),
 	        				
+	        				//=================================
+	        				// vertical rate
+	        				// computed vertical rate between fuel start and fuel stop
+	        				row.getDouble("aircraft_computed_vertical_rate_ft_min"),
+	        				
+	        				//===================================================
 	        				// vertical rate
 	        				row.getDouble("aircraft_vertical_rate_ft_min_at_fuel_start"),
 	        				row.getDouble("aircraft_vertical_rate_ft_min_at_fuel_end"),
 	        				
+	        				//===============speeds==============================
 	        				// mach 
 	        				row.getDouble("aircraft_mach_at_fuel_start"),
 	        				row.getDouble("aircraft_mach_at_fuel_end"),
@@ -189,25 +210,31 @@ public class FuelDataSplitter extends FuelDataTableSplitter {
 	        				row.getDouble("aircraft_CAS_at_fuel_start"),
 	        				row.getDouble("aircraft_CAS_at_fuel_end"),
 	        				
+	        				//===================================================
+	        				// airports elevations
 	        				// airports departure and arrival elevation feet
 	        				row.getFloat("origin_elevation_feet"),
 	        				row.getFloat("destination_elevation_feet"),
 	        				
+	        				// ================= flight distance ================
 	        				// flight distance and flight duration
 	        				row.getDouble("flight_distance_Nm"),
 	        				row.getLong("flight_duration_sec"),
 	        				
+	        				//===================================================
+	        				// relative distances
 	        				// difference relative to takeoff
 	        				row.getLong("fuel_burnt_start_relative_to_takeoff_sec"),
 	        				row.getLong("fuel_burnt_end_relative_to_takeoff_sec"),
+	        				row.getLong("fuel_burnt_start_relative_to_landed_sec"),
 	        				row.getLong("fuel_burnt_end_relative_to_landed_sec"),
 	        				
 	        				// aircraft data
 	        				row.getInt("Num_Engines"),
 	        				
 	        				row.getFloat("Approach_Speed_knot"),
-	        				row.getFloat("Wingspan_ft_without_winglets_sharklets"),
 	        				row.getFloat("Length_ft"),
+	        				row.getFloat("Wingspan_ft_without_winglets_sharklets"),
 	        				row.getFloat("Tail_Height_at_OEW_ft"),
 	        				row.getFloat("Wheelbase_ft"),
 	        				row.getFloat("Cockpit_to_Main_Gear_ft"),
@@ -216,7 +243,6 @@ public class FuelDataSplitter extends FuelDataTableSplitter {
 	        				// these data types are consistent with those use in the aircrafts data reader
 	        				row.getDouble("MTOW_kg"),
 	        				row.getDouble("MALW_kg"),
-	        				
 	        				row.getFloat("Parking_Area_ft2"),
 	        				
 	        				// 26th October 2025

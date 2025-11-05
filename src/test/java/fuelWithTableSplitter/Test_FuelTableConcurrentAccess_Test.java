@@ -2,9 +2,6 @@ package fuelWithTableSplitter;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.temporal.*;
-import java.time.temporal.ChronoUnit;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -23,11 +20,14 @@ import tech.tablesaw.api.Row;
 public class Test_FuelTableConcurrentAccess_Test {
 	
 	private static final Logger logger = Logger.getLogger(Test_FuelTableConcurrentAccess_Test.class.getName());
+	
+	static int count = 0;
 
 	@Test
 	public void processParallelyWithExecutorService() throws InterruptedException, IOException {
 		
-		train_rank train_rank_value = train_rank.train;
+		//train_rank train_rank_value = train_rank.train;
+		train_rank train_rank_value = train_rank.rank;
 
 		long maxToBeComputedRow = 1000000;
 		//long maxToBeComputedRow = 100;
@@ -86,9 +86,12 @@ public class Test_FuelTableConcurrentAccess_Test {
 
 		ConcurrentLinkedDeque<Integer> fuelTableIndexes = new ConcurrentLinkedDeque<Integer>();
 		fuelData.getFuelDataTable().stream().forEach(row -> {
-			// build a list of fuel indexes to share between thread
-			logger.info("add index to the linked queue = " + String.valueOf(row.getRowNumber()));
-			fuelTableIndexes.add(row.getRowNumber());
+			if ( count < maxToBeComputedRow ) {
+				// build a list of fuel indexes to share between thread
+				logger.info("add index to the linked queue = " + String.valueOf(row.getRowNumber()));
+				fuelTableIndexes.add(row.getRowNumber());
+			}
+			count = count + 1;
 		});
 		// start time
 		LocalDateTime startTime = LocalDateTime.now();
