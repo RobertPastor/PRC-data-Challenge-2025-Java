@@ -102,6 +102,10 @@ public class FuelDataSplitter extends FuelDataTableSplitter {
 			
 	}
 	
+	/**
+	 * list of columns must be in the same order ... otherwise risk to load erroneous data
+	 * @throws IOException
+	 */
 	public void generateParquetFileFor( ) throws IOException {
 		
 		logger.info("--- generate Parquet file <<" + this.getTrain_rank_value() + ">> ---");
@@ -121,7 +125,9 @@ public class FuelDataSplitter extends FuelDataTableSplitter {
 	        	List<FuelExtendedDataRecord> fuelRecords = new ArrayList<FuelExtendedDataRecord>();
 	        	this.getFuelDataTable().stream().forEach(row -> {
 	        		FuelExtendedDataRecord record = new FuelExtendedDataRecord(
+	        				
 	        				row.getInt("idx"),
+	        				
 	        				row.getString("flight_id") , 
 	        				
 	        				row.getInstant("start"),
@@ -230,11 +236,14 @@ public class FuelDataSplitter extends FuelDataTableSplitter {
 	        				row.getLong("fuel_burnt_end_relative_to_landed_sec"),
 	        				
 	        				// aircraft data
+	        				row.getString("aircraftICAO_Code") , 
+
 	        				row.getInt("Num_Engines"),
 	        				
 	        				row.getFloat("Approach_Speed_knot"),
 	        				row.getFloat("Length_ft"),
 	        				row.getFloat("Wingspan_ft_without_winglets_sharklets"),
+	        				row.getFloat("Wingspan_ft_with_winglets_sharklets"),
 	        				row.getFloat("Tail_Height_at_OEW_ft"),
 	        				row.getFloat("Wheelbase_ft"),
 	        				row.getFloat("Cockpit_to_Main_Gear_ft"),

@@ -31,6 +31,7 @@ import tech.tablesaw.api.LongColumn;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
+import tech.tablesaw.columns.Column;
 import utils.Utils;
 
 
@@ -228,7 +229,7 @@ public class FuelDataTable extends Table implements Runnable {
 	/**
 	 * one shot , before start the big loop on each of the 131530 fuel train rows
 	 */
-	public void createExtendedEngineeringFeatures() {
+	public void createExtendedEngineeringFeaturesColumns() {
 
 		// latitude degrees at fuel start
 		DoubleColumn aircraft_latitude_deg_at_fuel_start_column = DoubleColumn.create("aircraft_latitude_deg_at_fuel_start");
@@ -313,7 +314,6 @@ public class FuelDataTable extends Table implements Runnable {
 		DoubleColumn delta_altitude_end_destination_column = DoubleColumn.create("aircraft_delta_altitude_ft_end_destination");
 		this.fuelDataTable.addColumns(delta_altitude_end_destination_column);
 
-		
 		//============================================
 		// computed vertical rate feet per minutes
 		DoubleColumn aircraft_computed_vertical_rate = DoubleColumn.create("aircraft_computed_vertical_rate_ft_min");
@@ -397,9 +397,27 @@ public class FuelDataTable extends Table implements Runnable {
 		LongColumn fuel_burnt_end_relative_to_landed_sec_column = LongColumn.create("fuel_burnt_end_relative_to_landed_sec");
 		this.fuelDataTable.addColumns(fuel_burnt_end_relative_to_landed_sec_column );
 	}
+	
+	/**
+	 * row level function
+	 * @return
+	 */
+	public Double leaveItMissingIfApplicable( Row row , final String columnName ) {
+		
+		int columnIndex = this.getFuelDataTable().columnIndex(columnName);
+		Column<?> column = (Column<?>) this.getFuelDataTable().column(columnIndex);
+		int rowNumber = row.getRowNumber();
+		if ( column.isMissing(rowNumber)) {
+			return (Double)null;
+		} else {
+			DoubleColumn columnDouble = this.getFuelDataTable().doubleColumn(columnIndex);
+			return  columnDouble.get(rowNumber);
+		}
+	}
 
 	/**
-	 * this method is launch inside an Executor execute from java concurrency
+	 * this method is launched inside an Executor execute from java concurrency
+	 * row -> current row in Fuel Table
 	 * @param row
 	 */
 	public void extendOneFuelRowStartEndInstantWithFlightData (final LocalDateTime startTime, Row row ) {
@@ -417,6 +435,7 @@ public class FuelDataTable extends Table implements Runnable {
 		// 27th October 2025 - use new stream reader capable of filling empty values
 		// read one flight data parquet file
 		try {
+			// reading with stream allows to keep missing values as holes
 			flightData.readParquetWithStream();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -498,7 +517,6 @@ public class FuelDataTable extends Table implements Runnable {
 			double aircraft_altitude_ft_fuel_end = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("altitude" ,  end);
 			row.setDouble("aircraft_altitude_ft_at_fuel_end" , aircraft_altitude_ft_fuel_end);
 			
-			
 			// ==============================================
 			// delta altitude
 			float airport_origin_elevation_ft = row.getFloat("origin_elevation_feet");
@@ -539,6 +557,7 @@ public class FuelDataTable extends Table implements Runnable {
 			double track_angle_deg_end = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("track" ,  end);
 			row.setDouble("aircraft_track_angle_deg_at_fuel_end" ,  track_angle_deg_end);
 
+			//=======================================
 			// ground speed X and Y projected components
 			row.setDouble("aircraft_groundspeed_kt_X_at_fuel_start" , groundSpeed_end * Math.cos(Math.toRadians(track_angle_deg_end)));
 			row.setDouble("aircraft_groundspeed_kt_Y_at_fuel_start" , groundSpeed_end * Math.sin(Math.toRadians(track_angle_deg_end)));
@@ -551,6 +570,7 @@ public class FuelDataTable extends Table implements Runnable {
 			row.setDouble("aircraft_track_angle_rad_at_fuel_start" , Math.toRadians(track_angle_deg_start) );
 			row.setDouble("aircraft_track_angle_rad_at_fuel_end" ,  Math.toRadians(track_angle_deg_end));
 
+			//=======================================
 			// vertical rate
 			double vertical_rate_ft_min_start = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("vertical_rate" ,  start);
 			row.setDouble("aircraft_vertical_rate_ft_min_at_fuel_start" , vertical_rate_ft_min_start);
@@ -558,6 +578,7 @@ public class FuelDataTable extends Table implements Runnable {
 			double vertical_rate_ft_min_end = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("vertical_rate" ,  end);
 			row.setDouble("aircraft_vertical_rate_ft_min_at_fuel_end" , vertical_rate_ft_min_end);
 
+			//=======================================
 			// mach
 			double mach_start = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("mach" ,  start);
 			row.setDouble("aircraft_mach_at_fuel_start" , mach_start);
@@ -565,19 +586,41 @@ public class FuelDataTable extends Table implements Runnable {
 			double mach_end = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("mach" ,  end);
 			row.setDouble("aircraft_mach_at_fuel_end" , mach_end);
 
-			// TAS
-			double TAS_start = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("TAS" ,  start);
-			row.setDouble("aircraft_TAS_at_fuel_start" , TAS_start);
+			//=======================================
+			// TAS - or use mach if mach not missing
+			//double TAS_start = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("TAS" ,  start);
+			Double TAS_start = this.leaveItMissingIfApplicable( row , "aircraft_TAS_at_fuel_start");
+			if ((Double)TAS_start == null) {
+				row.setMissing("aircraft_TAS_at_fuel_start");
+			} else {
+				row.setDouble("aircraft_TAS_at_fuel_start" , TAS_start);
+			}
+			
+			//double TAS_end = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("TAS" ,  end);
+			Double TAS_end = this.leaveItMissingIfApplicable( row , "aircraft_TAS_at_fuel_end");
+			if ((Double)TAS_end == null) {
+				row.setMissing("aircraft_TAS_at_fuel_end");
+			} else {
+				row.setDouble("aircraft_TAS_at_fuel_end" , TAS_end);
+			}
 
-			double TAS_end = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("TAS" ,  end);
-			row.setDouble("aircraft_TAS_at_fuel_end" , TAS_end);
+			//=======================================
+			// CAS - leave it missing if it is missing
+			//double CAS_start = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("CAS" ,  start);
+			Double CAS_start = this.leaveItMissingIfApplicable( row , "aircraft_CAS_at_fuel_start");
+			if ((Double)CAS_start == null) {
+				row.setMissing("aircraft_CAS_at_fuel_start");
+			} else {
+				row.setDouble("aircraft_CAS_at_fuel_start" , CAS_start);
+			}
 
-			// CAS
-			double CAS_start = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("CAS" ,  start);
-			row.setDouble("aircraft_CAS_at_fuel_start" , CAS_start);
-
-			double CAS_end = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("CAS" ,  end);
-			row.setDouble("aircraft_CAS_at_fuel_end" , CAS_end);
+			//double CAS_end = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("CAS" ,  end);
+			Double CAS_end = this.leaveItMissingIfApplicable( row , "aircraft_CAS_at_fuel_end");
+			if ((Double)CAS_end == null) {
+				row.setMissing("aircraft_CAS_at_fuel_end");
+			} else {
+				row.setDouble("aircraft_CAS_at_fuel_end" , CAS_end);
+			}
 
 			//================================
 			// duration between flight takeoff and fuel burnt start end

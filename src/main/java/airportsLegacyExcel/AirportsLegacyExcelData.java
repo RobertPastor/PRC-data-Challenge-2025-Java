@@ -17,7 +17,6 @@ import org.dhatim.fastexcel.reader.ReadableWorkbook;
 import org.dhatim.fastexcel.reader.Row;
 import org.dhatim.fastexcel.reader.Sheet;
 
-import aircrafts.AircraftsData;
 import folderDiscovery.FolderDiscovery;
 
 public class AirportsLegacyExcelData extends AirportsLegacyExcelDataTable {

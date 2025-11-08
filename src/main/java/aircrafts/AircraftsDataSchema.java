@@ -6,10 +6,13 @@ public class AircraftsDataSchema {
 	public static record AircraftsDataRecord(
 			
 			String ICAO_Code ,
+			String aircraft_ICAO_code,
+			
 			int Num_Engines,
 			
 			float Approach_Speed_knot,
 			float Wingspan_ft_without_winglets_sharklets,
+			float Wingspan_ft_with_winglets_sharklets,
 			
 			float Length_ft,
 			float Tail_Height_at_OEW_ft,
@@ -28,18 +31,17 @@ public class AircraftsDataSchema {
 			float Parking_Area_ft2
 			) {
 		
+		public String aircraft_ICAO_code() {
+			return aircraft_ICAO_code;
+		}
+
 		public String ICAO_Code() {
 			return ICAO_Code;
 		}
-		
 
 		public int Num_Engines() {
 			return Num_Engines;
 		}
-
-
-		
-
 
 		public float Approach_Speed_knot() {
 			return Approach_Speed_knot;
@@ -47,6 +49,10 @@ public class AircraftsDataSchema {
 
 		public float Wingspan_ft_without_winglets_sharklets() {
 			return Wingspan_ft_without_winglets_sharklets;
+		}
+		
+		public float Wingspan_ft_with_winglets_sharklets() {
+			return Wingspan_ft_with_winglets_sharklets;
 		}
 
 		public float Length_ft() {

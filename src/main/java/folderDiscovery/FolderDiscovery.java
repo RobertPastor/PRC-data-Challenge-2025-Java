@@ -20,6 +20,7 @@ public class FolderDiscovery {
 	private static String fuelTrainFolderStr = "C:/Users/rober/git/PRCdataChallenge2025/trajectory/Fuel/";
 	
 	private static String flightListTrainRankFolderStr = "C:/Users/rober/git/PRCdataChallenge2025/trajectory/FlightList";
+	
 	// 4th November 2025 - airports provided by the PRC team with missing elevation on one airport used in the rank flight list
 	private static String airportsFolderStr = "C:/Users/rober/git/PRCdataChallenge2025/trajectory/Environment/AirportsDataChallenge";
 	private static String legacyAirportsFolderStr = "C:/Users/rober/eclipse-2025-09/eclipse-jee-2025-09-R-win32-x86_64/Data-Challenge-2025/documents/airports";
@@ -28,6 +29,17 @@ public class FolderDiscovery {
 	private static String airportsLegacyFolderStr = "C:/Users/rober/eclipse-2025-09/eclipse-jee-2025-09-R-win32-x86_64/Data-Challenge-2025/documents/airports";
 	
 	private static String trainRankOutputfolderStr = "C:/Users/rober/eclipse-2025-09/eclipse-jee-2025-09-R-win32-x86_64/Data-Challenge-2025/documents";
+
+	private static String aircraftsFolderPath = "C:/Users/rober/eclipse-2025-09/eclipse-jee-2025-09-R-win32-x86_64/Data-Challenge-2025/documents/aircrafts";
+
+	
+	public static String getAircraftsFolderPath() {
+		return aircraftsFolderPath;
+	}
+
+	public static String getFuelTrainFolderStr() {
+		return fuelTrainFolderStr;
+	}
 
 	public static String getFuelRankFolderStr() {
 		return fuelRankFolderStr;

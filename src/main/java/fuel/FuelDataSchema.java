@@ -2,15 +2,12 @@ package fuel;
 
 import java.time.Instant;
 
-import tech.tablesaw.api.DoubleColumn;
-import tech.tablesaw.api.LongColumn;
-
 public class FuelDataSchema {
 
 	public static record FuelExtendedDataRecord(
 			
 			int idx,
-			String flight_id, 
+			String flight_id,
 			
 			Instant start, 
 			Instant end,
@@ -117,11 +114,15 @@ public class FuelDataSchema {
 			long fuel_burnt_start_relative_to_landed_sec,
 			long fuel_burnt_end_relative_to_landed_sec,
 
+			// aircraft informations
+			String aircraft_ICAO_Code,
+
 			int Num_Engines,
 
 			float Approach_Speed_knot,
 			float Length_ft,
 			float Wingspan_ft_without_winglets_sharklets,
+			float Wingspan_ft_with_winglets_sharklets,
 			float Tail_Height_at_OEW_ft,
 			float Wheelbase_ft,
 			float Cockpit_to_Main_Gear_ft,
@@ -131,11 +132,80 @@ public class FuelDataSchema {
 			double MALW_kg,
 			float Parking_Area_ft2,
 
+			// flight date data
 			int flight_date_year,
 			int flight_date_month,
 			int flight_date_day_of_the_year
 
 			) {
+		
+		public int idx() {
+			return idx;
+		}
+
+		public String flight_id() {
+			return flight_id;
+		}
+
+		public Instant start() {
+			return start;
+		}
+
+		public Instant end() {
+			return end;
+		}
+
+		public String aircraft_ICAO_Code() {
+			return aircraft_ICAO_Code;
+		}
+
+		public double aircraft_distance_flown_start_end_Nm() {
+			return aircraft_distance_flown_start_end_Nm;
+		}
+
+		    public double aircraft_distance_flown_origin_start_Nm() {
+			return aircraft_distance_flown_origin_start_Nm;
+		}
+
+		    public double aircraft_distance_flown_origin_end_Nm() {
+			return aircraft_distance_flown_origin_end_Nm;
+		}
+
+		    public double aircraft_distance_to_be_flown_start_destination_Nm() {
+			return aircraft_distance_to_be_flown_start_destination_Nm;
+		}
+
+		    public double aircraft_distance_to_be_flown_end_destination_Nm() {
+			return aircraft_distance_to_be_flown_end_destination_Nm;
+		}
+
+		    public double aircraft_delta_altitude_ft_origin_fuel_start() {
+			return aircraft_delta_altitude_ft_origin_fuel_start;
+		}
+
+		    public double aircraft_delta_altitude_ft_origin_end_start() {
+			return aircraft_delta_altitude_ft_origin_end_start;
+		}
+
+		    public double aircraft_delta_altitude_ft_start_destination() {
+			return aircraft_delta_altitude_ft_start_destination;
+		}
+
+		    public double aircraft_delta_altitude_ft_end_destination() {
+			return aircraft_delta_altitude_ft_end_destination;
+		}
+
+		    public long fuel_burnt_start_relative_to_landed_sec() {
+			return fuel_burnt_start_relative_to_landed_sec;
+		}
+
+		    public float Wingspan_ft_without_winglets_sharklets() {
+			return Wingspan_ft_without_winglets_sharklets;
+		}
+
+		    public float Wingspan_ft_with_winglets_sharklets() {
+			return Wingspan_ft_with_winglets_sharklets;
+		}
 
 		public double aircraft_track_angle_radians_at_fuel_start() {
 			return aircraft_track_angle_rad_at_fuel_start;
@@ -249,43 +319,25 @@ public class FuelDataSchema {
 			return destination_elevation_feet;
 		}
 		
-
-		
 		public double aircraft_groundspeed_kt_Y_at_fuel_start() {
 			return aircraft_groundspeed_kt_Y_at_fuel_start;
 		}
-
 
 		public double aircraft_groundspeed_kt_X_at_fuel_end() {
 			return aircraft_groundspeed_kt_X_at_fuel_end;
 		}
 
 
-		    public double aircraft_groundspeed_kt_Y_at_fuel_end() {
+		public double aircraft_groundspeed_kt_Y_at_fuel_end() {
 			return aircraft_groundspeed_kt_Y_at_fuel_end;
 		}
 
-
-		    public double aircraft_groundspeed_kt_X_at_fuel_start() {
+		public double aircraft_groundspeed_kt_X_at_fuel_start() {
 			return aircraft_groundspeed_kt_X_at_fuel_start;
 		}
 
 
-		public int idx() {
-			return idx;
-		}
-
-		public String flight_id() {
-			return flight_id;
-		}
-
-		public Instant start() {
-			return start;
-		}
-
-		public Instant end() {
-			return end;
-		}
+		
 
 		public long time_diff_seconds() {
 			return time_diff_seconds;

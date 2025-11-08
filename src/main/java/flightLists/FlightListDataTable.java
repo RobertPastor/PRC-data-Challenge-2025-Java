@@ -274,7 +274,7 @@ public class FlightListDataTable extends Table {
 		
 		logger.info( this.flightListDataTable.structure().print());
 		logger.info( this.flightListDataTable.print(10));
-
+		logger.info("problem to be spotted here");
 	}
 	
 	public void extendWithAirportsSinusCosinusOfLatitudeLongitude() {

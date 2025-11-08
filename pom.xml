@@ -11,9 +11,11 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
   
    <properties>
     	<mavenVersion>3.9.5</mavenVersion>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        
+    	<junit-jupiter.version>6.0.1</junit-jupiter.version>
     </properties>
   
   <dependencies>
@@ -74,46 +76,12 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
 		    <scope>runtime</scope>
 		</dependency>
       
-    	<dependency>
+    		<dependency>
 	          <groupId>org.apache.maven</groupId>
 	          <artifactId>maven-archiver</artifactId>
 	          <version>3.6.0</version>
       	</dependency>
       	
-      	<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
-		<dependency>
-		    <groupId>org.junit.jupiter</groupId>
-		    <artifactId>junit-jupiter-api</artifactId>
-		    <version>6.0.1</version>
-		    <scope>test</scope>
-		</dependency>
-		
-		<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine -->
-		<dependency>
-		    <groupId>org.junit.jupiter</groupId>
-		    <artifactId>junit-jupiter-engine</artifactId>
-		    <version>6.0.1</version>
-		    <scope>test</scope>
-		</dependency>
-		      
-      	
-		<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-params -->
-		<dependency>
-		    <groupId>org.junit.jupiter</groupId>
-		    <artifactId>junit-jupiter-params</artifactId>
-		    <version>6.0.1</version>
-		    <scope>test</scope>
-		</dependency>
-		
-		<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter -->
-		<dependency>
-		    <groupId>org.junit.jupiter</groupId>
-		    <artifactId>junit-jupiter</artifactId>
-		    <version>6.0.1</version>
-		    <scope>test</scope>
-		</dependency>
-      
-        
         <!-- https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-common -->
 
         <dependency>
@@ -129,9 +97,9 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
 		</dependency>
 		
 		<dependency>
-    		<groupId>org.apache.parquet</groupId>
-   			<artifactId>parquet-column</artifactId>
-    		<version>1.16.0</version>
+	    		<groupId>org.apache.parquet</groupId>
+	   			<artifactId>parquet-column</artifactId>
+	    		<version>1.16.0</version>
 		</dependency>
 		
         <dependency>
@@ -173,11 +141,45 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
 		    <version>33.5.0-jre</version>
 		</dependency>
 		
+		
+		
 		<!-- https://mvnrepository.com/artifact/tech.tablesaw/tablesaw-core -->
 		<dependency>
 		    <groupId>tech.tablesaw</groupId>
 		    <artifactId>tablesaw-core</artifactId>
 		    <version>0.44.4</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter -->
+		<dependency>
+		    <groupId>org.junit.jupiter</groupId>
+		    <artifactId>junit-jupiter</artifactId>
+		    <version>${junit-jupiter.version}</version>
+		    <scope>test</scope>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.junit.platform/junit-platform-launcher -->
+		<dependency>
+		    <groupId>org.junit.platform</groupId>
+		    <artifactId>junit-platform-launcher</artifactId>
+		    <version>${junit-jupiter.version}</version>
+		    <scope>test</scope>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.junit.platform/junit-platform-engine -->
+		<dependency>
+		    <groupId>org.junit.platform</groupId>
+		    <artifactId>junit-platform-engine</artifactId>
+		    <version>${junit-jupiter.version}</version>
+		    <scope>test</scope>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.junit.platform/junit-platform-commons -->
+		<dependency>
+		    <groupId>org.junit.platform</groupId>
+		    <artifactId>junit-platform-commons</artifactId>
+		    <version>${junit-jupiter.version}</version>
+		    <scope>test</scope>
 		</dependency>
 
   </dependencies>

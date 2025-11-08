@@ -30,10 +30,13 @@ public class AircraftsDataTable extends Table {
 		this.aircraftsDataTable = Table.create("Aircrafts Data",
 				
 				StringColumn.create("ICAO_Code") ,
+				StringColumn.create("aircraft_ICAO_Code") ,
+				
 				IntColumn.create("Num_Engines"),
 				
 				FloatColumn.create("Approach_Speed_knot"),
 				FloatColumn.create("Wingspan_ft_without_winglets_sharklets"),
+				FloatColumn.create("Wingspan_ft_with_winglets_sharklets"),
 				
 				FloatColumn.create("Length_ft"),
 				FloatColumn.create("Tail_Height_at_OEW_ft"),
@@ -59,9 +62,15 @@ public class AircraftsDataTable extends Table {
 		Row row = this.aircraftsDataTable.appendRow();
 
 		row.setString("ICAO_Code", record.ICAO_Code());
+		row.setString("aircraft_ICAO_Code", record.aircraft_ICAO_code());
+		
 		row.setInt("Num_Engines", record.Num_Engines());
 		
 		row.setFloat("Approach_Speed_knot", record.Approach_Speed_knot());
+		
+		row.setFloat("Wingspan_ft_without_winglets_sharklets", record.Wingspan_ft_without_winglets_sharklets());
+		
+		// 7th November 2025 added to discriminate aircraft with or without winglets or sharklets
 		row.setFloat("Wingspan_ft_without_winglets_sharklets", record.Wingspan_ft_without_winglets_sharklets());
 		
 		row.setFloat("Length_ft", record.Length_ft());
