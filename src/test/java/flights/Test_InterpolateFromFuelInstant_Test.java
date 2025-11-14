@@ -5,7 +5,7 @@ import java.time.Instant;
 
 import org.junit.jupiter.api.Test;
 
-import dataChallengeEnums.DataChallengeEnums.train_rank;
+import dataChallengeEnums.DataChallengeEnums.train_rank_final;
 import fuel.FuelData;
 import tech.tablesaw.api.Table;
 
@@ -15,7 +15,7 @@ public class Test_InterpolateFromFuelInstant_Test {
     public void testNearestFlightTimeStamp() throws IOException {
 
 		long nbMaxRecordsToRead = 100;
-		FuelData fuelData = new FuelData(train_rank.rank , nbMaxRecordsToRead);
+		FuelData fuelData = new FuelData(train_rank_final.rank , nbMaxRecordsToRead);
 		fuelData.readParquet();
 		
 		System.out.println("Row Count -> " + fuelData.getFuelDataTable().rowCount() );
@@ -27,7 +27,7 @@ public class Test_InterpolateFromFuelInstant_Test {
 		Instant now = Instant.now();
         System.out.println("Current Instant: " + now);
 
-		FlightData flightData = new FlightData(train_rank.rank , "prc806615763");
+		FlightData flightData = new FlightData(train_rank_final.rank , "prc806615763");
 		flightData.readParquetWithStream();
 		
 		//flightData.getFlightDataTable().buildInterpolationFunctions();

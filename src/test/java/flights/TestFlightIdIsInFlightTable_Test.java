@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import dataChallengeEnums.DataChallengeEnums.train_rank;
+import dataChallengeEnums.DataChallengeEnums.train_rank_final;
 
 public class TestFlightIdIsInFlightTable_Test {
 
@@ -13,7 +13,7 @@ public class TestFlightIdIsInFlightTable_Test {
 		
 		String flight_id = "prc806615763";
 		
-		FlightData flightData = new FlightData(train_rank.rank , flight_id);
+		FlightData flightData = new FlightData(train_rank_final.rank , flight_id);
 		flightData.readParquetWithStream();
 		
 		System.out.println( flightData.getFlightDataTable().print(10));

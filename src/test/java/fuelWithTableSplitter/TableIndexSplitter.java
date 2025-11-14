@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import dataChallengeEnums.DataChallengeEnums.train_rank;
+import dataChallengeEnums.DataChallengeEnums.train_rank_final;
 import fuel.FuelData;
 
 //Task to process a specific range of rows
@@ -30,7 +30,7 @@ public class TableIndexSplitter {
 
 	public static void main(String[] args) throws IOException {
 
-		train_rank train_rank_value = train_rank.train;
+		train_rank_final train_rank_value = train_rank_final.train;
 		int maxToBeAnalysedRowCount = 1000000;
 		
 		FuelDataSplitter fuelDataSplitter = new FuelDataSplitter(train_rank_value , maxToBeAnalysedRowCount);

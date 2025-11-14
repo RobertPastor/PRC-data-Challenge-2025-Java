@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import dataChallengeEnums.DataChallengeEnums.train_rank;
+import dataChallengeEnums.DataChallengeEnums.train_rank_final;
 import flightLists.FlightListData;
 import flights.FlightData;
 
@@ -15,7 +15,7 @@ public class TestColumnInterpolation {
 	@Test
     public void testReadExtendFuelTrain() throws IOException {
 		
-		train_rank train_rank_value = train_rank.train;
+		train_rank_final train_rank_value = train_rank_final.train;
 		String flight_id = "prc770822360";
 		
 		FlightListData flightListData = new FlightListData(train_rank_value);

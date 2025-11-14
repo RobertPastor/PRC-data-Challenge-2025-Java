@@ -106,7 +106,6 @@ public class AirportsLegacyExcelData extends AirportsLegacyExcelDataTable {
 					}
 				}
 				// add the latitude and longitude in degrees
-				
 				logger.info( this.airportsDataTable.structure().print() );
 				logger.info( this.airportsDataTable.print(10) );
 			} 

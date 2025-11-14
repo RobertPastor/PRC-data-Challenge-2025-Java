@@ -16,7 +16,7 @@ import com.jerolba.carpet.io.FileSystemOutputFile;
 
 import aircrafts.AircraftsData;
 import airports.AirportsData;
-import dataChallengeEnums.DataChallengeEnums.train_rank;
+import dataChallengeEnums.DataChallengeEnums.train_rank_final;
 import flightLists.FlightListData;
 import folderDiscovery.FolderDiscovery;
 import fuel.FuelDataSchema.FuelDataRecord;
@@ -32,7 +32,7 @@ public class FuelDataSplitter extends FuelDataTableSplitter {
 	 * @param value
 	 * @param maxToBeComputedRow
 	 */
-	public FuelDataSplitter( train_rank train_rank_value , final long maxToBeComputedRow ) {
+	public FuelDataSplitter( train_rank_final train_rank_value , final long maxToBeComputedRow ) {
 		super(train_rank_value , maxToBeComputedRow);
 		logger.info("--- constructor for <<" + this.getTrain_rank_value() + ">> ---");
 	}
@@ -44,7 +44,7 @@ public class FuelDataSplitter extends FuelDataTableSplitter {
 	 */
 	public void prepareBeforeMergeFueltoOtherData (final long maxToBeComputedRow  ) throws IOException {
 		
-		train_rank train_rank_value = this.getTrain_rank_value();
+		train_rank_final train_rank_value = this.getTrain_rank_value();
 		
 		AirportsData airportsData = new AirportsData();
 		airportsData.readParquet();

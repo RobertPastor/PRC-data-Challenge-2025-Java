@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 import org.junit.jupiter.api.Test;
 
 import aircrafts.AircraftsData;
-import dataChallengeEnums.DataChallengeEnums.train_rank;
+import dataChallengeEnums.DataChallengeEnums.train_rank_final;
 import fuelWithTableSplitter.Test_FuelTableFillwithExecutors_Test;
 
 public class TestExtendWithAircraftsData_Test {
@@ -23,7 +23,7 @@ public class TestExtendWithAircraftsData_Test {
 		System.out.println(aircraftsData.getAircraftDataTable().print(10));
 
 		// rank
-		FlightListData flightListData = new FlightListData(train_rank.rank );
+		FlightListData flightListData = new FlightListData(train_rank_final.rank );
 		flightListData.readParquet();
 		
 		flightListData.extendWithAircraftsData(aircraftsData);

@@ -13,22 +13,22 @@ import java.util.logging.Logger;
 
 import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
 
-import dataChallengeEnums.DataChallengeEnums.train_rank;
+import dataChallengeEnums.DataChallengeEnums.train_rank_final;
 import flights.FlightDataSchema.FlightDataRecord;
 
 public class FlightDataTable extends Table {
 	
 	private static final Logger logger = Logger.getLogger(FlightDataTable.class.getName());
 	
-	protected train_rank train_rank_value;
+	protected train_rank_final train_rank_value;
 	
-	public train_rank getTrain_rank_value() {
+	public train_rank_final getTrain_rank_value() {
 		return train_rank_value;
 	}
 	
 	protected String flight_id = "";
 	
-	public void setTrain_rank_value(train_rank train_rank_value) {
+	public void setTrain_rank_value(train_rank_final train_rank_value) {
 		this.train_rank_value = train_rank_value;
 	}
 
@@ -52,7 +52,7 @@ public class FlightDataTable extends Table {
 
 	
 	// constructor
-	protected FlightDataTable(final train_rank train_rank_value , final String flight_id) {
+	protected FlightDataTable(final train_rank_final train_rank_value , final String flight_id) {
 		super("Flight Data");
 		this.setFlight_id(flight_id);
 		this.setTrain_rank_value(train_rank_value);

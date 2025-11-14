@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 import com.jerolba.carpet.CarpetReader;
 
-import dataChallengeEnums.DataChallengeEnums.train_rank;
+import dataChallengeEnums.DataChallengeEnums.train_rank_final;
 import flightLists.FlightListDataSchema.FlightListDataRecord;
 import folderDiscovery.FolderDiscovery;
 
@@ -15,7 +15,7 @@ public class FlightListData extends FlightListDataTable {
 
 	private static final Logger logger = Logger.getLogger(FlightListData.class.getName());
 
-	public FlightListData( train_rank value ) {
+	public FlightListData( train_rank_final value ) {
 		this.train_rank_value = value;
 	}
 

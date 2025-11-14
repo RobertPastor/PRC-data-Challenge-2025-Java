@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 
 import com.jerolba.carpet.CarpetReader;
 
-import dataChallengeEnums.DataChallengeEnums.train_rank;
+import dataChallengeEnums.DataChallengeEnums.train_rank_final;
 import flights.FlightDataSchema.FlightDataRecord;
 import folderDiscovery.FolderDiscovery;
 import tech.tablesaw.api.Row;
@@ -29,7 +29,7 @@ public class FlightData extends FlightDataTable {
 	private static final Logger logger = Logger.getLogger(FlightData.class.getName());
 	
 	// constructor
-	public FlightData( train_rank train_rank_value , final String flight_id ) {
+	public FlightData( train_rank_final train_rank_value , final String flight_id ) {
 		super(train_rank_value , flight_id);
 
 	}
@@ -48,12 +48,13 @@ public class FlightData extends FlightDataTable {
 	 */
 	public void readParquetWithStream() throws IOException {
 
-		//logger.info("----------- start read parquet with stream ------");
+		logger.info("----------- start read parquet with stream ------");
 
 		this.createEmptyFlightDataTable();
 		FolderDiscovery folderDiscovery = new FolderDiscovery();
 
 		String fileName = this.getFlight_id() + ".parquet";
+		logger.info(fileName);
 		try {
 
 			File parquetFile = folderDiscovery.getFlightFileFromFileName(this.getTrain_rank_value() , fileName);

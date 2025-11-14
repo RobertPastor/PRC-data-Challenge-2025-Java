@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import dataChallengeEnums.DataChallengeEnums.train_rank;
+import dataChallengeEnums.DataChallengeEnums.train_rank_final;
 
 public class TestReadFuelData_Test {
 
@@ -12,7 +12,7 @@ public class TestReadFuelData_Test {
     public void testReadFuelRank() throws IOException {
 		
 		int nbMaxRows = 100;
-		FuelData fuelData = new FuelData(train_rank.rank , nbMaxRows );
+		FuelData fuelData = new FuelData(train_rank_final.rank , nbMaxRows );
 		fuelData.readParquet();
 		
 		fuelData.extendFuelWithEndStartDifference();
@@ -28,7 +28,7 @@ public class TestReadFuelData_Test {
     public void testReadFuelTrain() throws IOException {
 		
 		int nbMaxRows = 100;
-		FuelData fuelData = new FuelData(train_rank.train , nbMaxRows);
+		FuelData fuelData = new FuelData(train_rank_final.train , nbMaxRows);
 		fuelData.readParquet();
 		
 		fuelData.extendFuelWithEndStartDifference();

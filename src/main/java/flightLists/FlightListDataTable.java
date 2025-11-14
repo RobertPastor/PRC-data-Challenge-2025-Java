@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 
 import aircrafts.AircraftsData;
 import airports.AirportsDataTable;
-import dataChallengeEnums.DataChallengeEnums.train_rank;
+import dataChallengeEnums.DataChallengeEnums.train_rank_final;
 import flightLists.FlightListDataSchema.FlightListDataRecord;
 import fuel.FuelDataTable;
 import tech.tablesaw.api.DateColumn;
@@ -30,9 +30,9 @@ public class FlightListDataTable extends Table {
 	
 	private static final Logger logger = Logger.getLogger(FlightListDataTable.class.getName());
 
-	protected train_rank train_rank_value;
+	protected train_rank_final train_rank_value;
 	
-	public train_rank getTrain_rank_value() {
+	public train_rank_final getTrain_rank_value() {
 		return train_rank_value;
 	}
 	

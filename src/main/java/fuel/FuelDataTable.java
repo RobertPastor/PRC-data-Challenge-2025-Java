@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import dataChallengeEnums.DataChallengeEnums.train_rank;
+import dataChallengeEnums.DataChallengeEnums.train_rank_final;
 import flights.FlightData;
 import flights.FlightDataInterpolation;
 import folderDiscovery.FolderDiscovery;
@@ -51,7 +51,7 @@ public class FuelDataTable extends Table implements Runnable {
 
 	private static final Logger logger = Logger.getLogger(FuelDataTable.class.getName());
 
-	protected train_rank train_rank_value;
+	protected train_rank_final train_rank_value;
 	private  long maxToBeComputedRow = 0;
 
 	private Map<Integer, ArrayList<String>> errorsMap = null;
@@ -73,7 +73,7 @@ public class FuelDataTable extends Table implements Runnable {
 	private FlightDataInterpolation flightDataInterpolation;
 
 	// constructor
-	protected FuelDataTable(train_rank train_rank_value, final long maxToBeComputedRow) {
+	protected FuelDataTable(train_rank_final train_rank_value, final long maxToBeComputedRow) {
 		super("Fuel Data");
 		this.setTrain_rank_value(train_rank_value);
 		this.setMaxToBeComputedRow(maxToBeComputedRow);
@@ -431,6 +431,7 @@ public class FuelDataTable extends Table implements Runnable {
 		Instant end = row.getInstant("end");
 
 		String flight_id = row.getString ("flight_id");
+		logger.info(flight_id);
 		FlightData flightData = new FlightData( train_rank_value , flight_id );
 		// 27th October 2025 - use new stream reader capable of filling empty values
 		// read one flight data parquet file
@@ -683,7 +684,7 @@ public class FuelDataTable extends Table implements Runnable {
 
 		// find the nearest instant from a fuel table of a flight id
 		// given a fuel start or stop instant
-		train_rank train_rank_value = this.getTrain_rank_value();
+		train_rank_final train_rank_value = this.getTrain_rank_value();
 		long maxToBeComputedRow = this.getMaxToBeComputedRow();
 
 		Iterator<Row> iter = this.fuelDataTable.iterator();
@@ -921,11 +922,11 @@ public class FuelDataTable extends Table implements Runnable {
 		}
 	}
 
-	public void setTrain_rank_value(train_rank train_rank_value) {
+	public void setTrain_rank_value(train_rank_final train_rank_value) {
 		this.train_rank_value = train_rank_value;
 	}
 
-	public train_rank getTrain_rank_value() {
+	public train_rank_final getTrain_rank_value() {
 		return train_rank_value;
 	}
 

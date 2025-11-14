@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import airports.AirportsData;
-import dataChallengeEnums.DataChallengeEnums.train_rank;
+import dataChallengeEnums.DataChallengeEnums.train_rank_final;
 
 import tech.tablesaw.api.*;
 
@@ -18,7 +18,7 @@ public class Test_IsAirportInRankFlightList_Test {
 		AirportsData airportsData = new AirportsData();
 		airportsData.readParquet();
 		
-		FlightListData flightListData = new FlightListData(train_rank.rank );
+		FlightListData flightListData = new FlightListData(train_rank_final.rank );
 		flightListData.readParquet();
 		
 		flightListData.extendWithAirportData(airportsData);

@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import dataChallengeEnums.DataChallengeEnums.train_rank;
+import dataChallengeEnums.DataChallengeEnums.train_rank_final;
 import flights.FlightData;
 import flights.FlightDataInterpolation;
 import folderDiscovery.FolderDiscovery;
@@ -38,7 +38,7 @@ public class FuelDataTableSplitter  extends Table implements Runnable {
 	private int startIndex = 0;
 	private int endIndex = 0;
 	
-	protected train_rank train_rank_value;
+	protected train_rank_final train_rank_value;
 	private  long maxToBeComputedRow = 0;
 
 	private Map<Integer, ArrayList<Instant>> errorsMap = null;
@@ -60,7 +60,7 @@ public class FuelDataTableSplitter  extends Table implements Runnable {
 	private FlightDataInterpolation flightDataInterpolation;
 
 	// constructor
-	protected FuelDataTableSplitter(train_rank train_rank_value, final long maxToBeComputedRow) {
+	protected FuelDataTableSplitter(train_rank_final train_rank_value, final long maxToBeComputedRow) {
 		super("Fuel Data");
 		this.setTrain_rank_value(train_rank_value);
 		this.setMaxToBeComputedRow(maxToBeComputedRow);
@@ -344,7 +344,7 @@ public class FuelDataTableSplitter  extends Table implements Runnable {
 		maxToBeComputedRow = this.getMaxToBeComputedRow();
 		// find the nearest instant from a fuel table of a flight id
 		// given a fuel start or stop instant
-		train_rank train_rank_value = this.getTrain_rank_value();
+		train_rank_final train_rank_value = this.getTrain_rank_value();
 		
 		long counter = 0;
 		for ( int index = this.startIndex ; index < this.endIndex ; index++ ) {
@@ -546,11 +546,11 @@ public class FuelDataTableSplitter  extends Table implements Runnable {
 		}
 	}
 	
-	public void setTrain_rank_value(train_rank train_rank_value) {
+	public void setTrain_rank_value(train_rank_final train_rank_value) {
 		this.train_rank_value = train_rank_value;
 	}
 
-	public train_rank getTrain_rank_value() {
+	public train_rank_final getTrain_rank_value() {
 		return train_rank_value;
 	}
 	

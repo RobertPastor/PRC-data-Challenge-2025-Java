@@ -4,14 +4,14 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import dataChallengeEnums.DataChallengeEnums.train_rank;
+import dataChallengeEnums.DataChallengeEnums.train_rank_final;
 
 public class Test_InterpolateFuelStartEndFromFlightData_Rank {
 
 	@Test
 	public void testReadExtendFuelRank() throws IOException {
 
-		train_rank train_rank_value = train_rank.rank;
+		train_rank_final train_rank_value = train_rank_final.rank;
 
 		long maxToBeComputedRow = 1000000;
 		//int maxToBeComputedRow = 100;

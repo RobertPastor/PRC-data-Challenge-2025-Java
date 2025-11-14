@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import aircrafts.AircraftsData;
 import airports.AirportsData;
-import dataChallengeEnums.DataChallengeEnums.train_rank;
+import dataChallengeEnums.DataChallengeEnums.train_rank_final;
 import flightLists.FlightListData;
 
 public class TestExtendFuelDataWithFlightListData_Test {
@@ -22,7 +22,7 @@ public class TestExtendFuelDataWithFlightListData_Test {
 		AircraftsData aircraftsData = new AircraftsData();
 		aircraftsData.readExcelFile();
 		
-		train_rank train_rank_value = train_rank.rank;
+		train_rank_final train_rank_value = train_rank_final.rank;
 		FlightListData flightListData = new FlightListData(train_rank_value);
 		flightListData.readParquet();
 		
@@ -57,7 +57,7 @@ public class TestExtendFuelDataWithFlightListData_Test {
 		AircraftsData aircraftsData = new AircraftsData();
 		aircraftsData.readExcelFile();
 
-		train_rank train_rank_value = train_rank.train;
+		train_rank_final train_rank_value = train_rank_final.train;
 		
 		FlightListData flightListData = new FlightListData(train_rank_value);
 		flightListData.readParquet();

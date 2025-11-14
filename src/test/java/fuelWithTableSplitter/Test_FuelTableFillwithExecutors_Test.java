@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import aircrafts.AircraftsData;
 import airports.AirportsData;
-import dataChallengeEnums.DataChallengeEnums.train_rank;
+import dataChallengeEnums.DataChallengeEnums.train_rank_final;
 import flightLists.FlightListData;
 import fuel.FuelData;
 import tech.tablesaw.api.Row;
@@ -27,11 +27,11 @@ public class Test_FuelTableFillwithExecutors_Test {
 	public void processParallelyWithExecutorService() throws InterruptedException, IOException {
 		
 		//train_rank train_rank_value = train_rank.train;
-		train_rank train_rank_value = train_rank.train ;
-		train_rank_value = train_rank.rank;
+		train_rank_final train_rank_value = train_rank_final.train ;
+		//train_rank_value = train_rank.rank;
 
 		long maxToBeComputedRow = 1000000;
-		//long maxToBeComputedRow = 1000;
+		//long maxToBeComputedRow = 100;
 
 		FuelData fuelData = new FuelData(train_rank_value , maxToBeComputedRow);
 		fuelData.readParquet();
@@ -86,6 +86,7 @@ public class Test_FuelTableFillwithExecutors_Test {
 		// create a pool of thread to execute concurrently
 		// 1 set of cores for the CPU operations and 1/2 for the IO asynchronous parquet reader
 		int numberOfExecutors = (int)(cores+(cores/2));
+		//numberOfExecutors = (int)(2*cores);
 		System.out.println("Number of executors: " + numberOfExecutors);
 		ExecutorService executor = Executors.newFixedThreadPool(numberOfExecutors);
 

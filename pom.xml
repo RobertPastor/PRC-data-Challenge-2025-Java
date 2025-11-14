@@ -141,8 +141,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
 		    <version>33.5.0-jre</version>
 		</dependency>
 		
-		
-		
 		<!-- https://mvnrepository.com/artifact/tech.tablesaw/tablesaw-core -->
 		<dependency>
 		    <groupId>tech.tablesaw</groupId>
@@ -181,6 +179,16 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
 		    <version>${junit-jupiter.version}</version>
 		    <scope>test</scope>
 		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/com.synerset/unitility -->
+		<!--
+		<dependency>
+		    <groupId>com.synerset</groupId>
+		    <artifactId>unitility</artifactId>
+		    <version>3.0.0</version>
+		    <type>pom</type>
+		</dependency>
+		-->
 
   </dependencies>
   
@@ -235,6 +243,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
         	 <snapshots>
              	<enabled>false</enabled>
              </snapshots>
+        </repository>
+        <repository> 
+        	<id>synerset</id>
+        	<url>https://mvnrepository.com/artifact/com.synerset/</url>
+			<snapshots>
+             	<enabled>false</enabled>
+            </snapshots>
         </repository>
         
     </repositories>
