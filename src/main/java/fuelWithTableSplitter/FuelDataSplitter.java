@@ -62,7 +62,7 @@ public class FuelDataSplitter extends FuelDataTableSplitter {
 		//flightListData.extendWithAirportsSinusCosinusOfLatitudeLongitude();
 		
 		logger.info(flightListData.getFlightListDataTable().shape());
-		logger.info(flightListData.getFlightListDataTable().structure().print());
+		//logger.info(flightListData.getFlightListDataTable().structure().print());
 		
 		flightListData.extendWithAircraftsData( aircraftsData );
 		//flightListData.extendWithAirportsSinusCosinusOfLatitudeLongitude();
@@ -73,24 +73,24 @@ public class FuelDataSplitter extends FuelDataTableSplitter {
 		// extend fuel with end minus start differences
 		this.extendFuelWithEndStartDifference();
 		logger.info(this.getFuelDataTable().shape());
-		logger.info(this.getFuelDataTable().structure().print());
+		//logger.info(this.getFuelDataTable().structure().print());
 		
 		// extend fuel with fuel flow in Kilograms per seconds
 		this.extendFuelFlowKgSeconds();
 		logger.info(this.getFuelDataTable().shape());
-		logger.info(this.getFuelDataTable().structure().print());
+		//logger.info(this.getFuelDataTable().structure().print());
 
 		// merge fuel with flight list
 		this.extendFuelWithFlightListData( flightListData.getFlightListDataTable() ) ;
 		logger.info(this.getFuelDataTable().shape());
-		logger.info(this.getFuelDataTable().structure().print());
+		//logger.info(this.getFuelDataTable().structure().print());
 		
 		// as flight take-off and landed are now available from flight list 
 		// use them to compute relative delta from burnt start and stop
 		// extend fuel with start end differences from takeoff
 		this.extendRelativeStartEndFromFlightTakeoff();
 		logger.info(this.getFuelDataTable().shape());
-		logger.info(this.getFuelDataTable().structure().print());
+		//logger.info(this.getFuelDataTable().structure().print());
 
 		// extend fuel with flight data - there is a "merge" between fuel and flight data
 		//this.extendFuelStartEndInstantsWithFlightData();

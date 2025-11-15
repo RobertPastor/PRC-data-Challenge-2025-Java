@@ -70,7 +70,7 @@ public class AirportsLegacyExcelData extends AirportsLegacyExcelDataTable {
 	public void readExcelFile() throws IOException {
 
 		this.createEmptyAirportsDataTable();
-		logger.info(this.airportsDataTable.structure().print());
+		//logger.info(this.airportsDataTable.structure().print());
 		
 		logger.info(AirportsLegacyExcelData.getAirportsFileName());
 		
@@ -106,8 +106,8 @@ public class AirportsLegacyExcelData extends AirportsLegacyExcelDataTable {
 					}
 				}
 				// add the latitude and longitude in degrees
-				logger.info( this.airportsDataTable.structure().print() );
-				logger.info( this.airportsDataTable.print(10) );
+				//logger.info( this.airportsDataTable.structure().print() );
+				//logger.info( this.airportsDataTable.print(10) );
 			} 
 			wb.close();
 		} else {

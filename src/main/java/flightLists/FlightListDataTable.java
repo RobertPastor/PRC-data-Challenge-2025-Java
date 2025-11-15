@@ -197,7 +197,7 @@ public class FlightListDataTable extends Table {
 		
 		// flight_distance_Nm |   flight_duration_sec
 		
-		logger.info( this.flightListDataTable.structure().print());
+		//logger.info( this.flightListDataTable.structure().print());
 				
 		Iterator<Row> iter = this.flightListDataTable.iterator();
 		while ( iter.hasNext()) {
@@ -250,8 +250,8 @@ public class FlightListDataTable extends Table {
 			row.setLong ("flight_duration_sec" , flight_duration_seconds);
 			
 		}
-		logger.info( this.flightListDataTable.structure().print());
-		logger.info( this.flightListDataTable.print());
+		//logger.info( this.flightListDataTable.structure().print());
+		//logger.info( this.flightListDataTable.print());
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -260,20 +260,20 @@ public class FlightListDataTable extends Table {
 		// use left join
 		// aircraft_type -> join column in FlightList table
 		// ICAO_Code -> join column in aircrafts table
-		logger.info(aircraftsData.getAircraftDataTable().shape());
-		logger.info(aircraftsData.getAircraftDataTable().structure().print());
+		//logger.info(aircraftsData.getAircraftDataTable().shape());
+		//logger.info(aircraftsData.getAircraftDataTable().structure().print());
 
 		// Rename the column
 		aircraftsData.getAircraftDataTable().column("ICAO_Code").setName("aircraft_type");
-		logger.info(aircraftsData.getAircraftDataTable().structure().print());
+		//logger.info(aircraftsData.getAircraftDataTable().structure().print());
 		
 		// Perform an left outer join on the "id" column
 		// Left Outer Join: Keeps all rows from the left table and matches from the right.
 		Table aircraftsDataTable = aircraftsData.getAircraftDataTable();
         this.setFlightListDataTable( this.flightListDataTable.joinOn("aircraft_type").leftOuter(aircraftsDataTable));
 		
-		logger.info( this.flightListDataTable.structure().print());
-		logger.info( this.flightListDataTable.print(10));
+		//logger.info( this.flightListDataTable.structure().print());
+		//logger.info( this.flightListDataTable.print(10));
 		logger.info("problem to be spotted here");
 	}
 	

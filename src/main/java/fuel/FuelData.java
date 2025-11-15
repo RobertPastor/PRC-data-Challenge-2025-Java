@@ -61,8 +61,8 @@ public class FuelData extends FuelDataTable {
 		flightListData.extendWithAirportData( airportsData );
 		//flightListData.extendWithAirportsSinusCosinusOfLatitudeLongitude();
 		
-		logger.info(flightListData.getFlightListDataTable().shape());
-		logger.info(flightListData.getFlightListDataTable().structure().print());
+		//logger.info(flightListData.getFlightListDataTable().shape());
+		//logger.info(flightListData.getFlightListDataTable().structure().print());
 		
 		flightListData.extendWithAircraftsData( aircraftsData );
 		//flightListData.extendWithAirportsSinusCosinusOfLatitudeLongitude();

@@ -30,8 +30,8 @@ public class Test_FuelTableFillwithExecutors_Test {
 		train_rank_final train_rank_value = train_rank_final.train ;
 		//train_rank_value = train_rank.rank;
 
-		//long maxToBeComputedRow = 1000000;
-		long maxToBeComputedRow = 100;
+		long maxToBeComputedRow = 1000000;
+		//long maxToBeComputedRow = 1000;
 
 		FuelData fuelData = new FuelData(train_rank_value , maxToBeComputedRow);
 		fuelData.readParquet();
