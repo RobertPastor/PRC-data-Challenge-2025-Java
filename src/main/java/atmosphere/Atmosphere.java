@@ -138,8 +138,8 @@ public final class Atmosphere {
 
 	public Atmosphere() {
 		
-		logger.info(String.valueOf( AltitudeMeters.length) );
-		logger.info("table length = " + String.valueOf( TabularAtmosphere.length ) );
+		//logger.info(String.valueOf( AltitudeMeters.length) );
+		//logger.info("table length = " + String.valueOf( TabularAtmosphere.length ) );
 		assert AltitudeMeters.length == AltitudeMeters.length;
 		
 		for ( int rowIndex = 0 ; rowIndex < TabularAtmosphere.length ; rowIndex ++) {
