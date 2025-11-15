@@ -208,9 +208,9 @@ public class AircraftsData extends AircraftsDataTable {
 	public void readExcelFile() throws IOException {
 
 		this.createEmptyAircraftsDataTable();
-		logger.info(this.aircraftsDataTable.structure().print());
+		//logger.info(this.aircraftsDataTable.structure().print());
 
-		logger.info(AircraftsData.getAircraftsFileName());
+		//logger.info(AircraftsData.getAircraftsFileName());
 		// name of the sheet in the EXCEL file
 		String sheetName = "ACD_Data";
 
@@ -241,8 +241,10 @@ public class AircraftsData extends AircraftsDataTable {
 						this.fillTableRow(row);
 					}
 				}
-				logger.info( this.aircraftsDataTable.structure().print() );
-				logger.info( this.aircraftsDataTable.print(10) );
+				//logger.info( this.aircraftsDataTable.structure().print() );
+				//logger.info( this.aircraftsDataTable.print(10) );
+				logger.info("file <<" + inputExcelFile.getAbsolutePath() + ">> read correctly");
+
 			} 
 			wb.close();
 		} else {

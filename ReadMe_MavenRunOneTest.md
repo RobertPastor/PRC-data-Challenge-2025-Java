@@ -14,3 +14,5 @@ mvn test -Dtest="Test_FuelTableFillwithExecutors_Test"
 mvn test -Dtest="Test_Atmosphere_Tests"
 
 mvn test -Dtest="Test_AirspeedConversion_Test"
+
+mvn test -Dtest="Test_InterpolateFuelStartEndFromFlightData_Rank"

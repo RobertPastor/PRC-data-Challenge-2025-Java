@@ -109,6 +109,7 @@ public class FuelDataSchema {
 			long flight_duration_sec,
 
 			// using flight take-off and flight landed , compute relate duration in second
+			
 			long fuel_burnt_start_relative_to_takeoff_sec,
 			long fuel_burnt_end_relative_to_takeoff_sec,
 			long fuel_burnt_start_relative_to_landed_sec,

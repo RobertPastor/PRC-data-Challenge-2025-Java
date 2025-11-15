@@ -48,8 +48,8 @@ public class FlightListData extends FlightListDataTable {
 				this.appendRowToFlightListDataTable(record);
 
 			}
-			logger.info( this.flightListDataTable.shape() );
-			logger.info( this.flightListDataTable.structure().print() );
+			//logger.info( this.flightListDataTable.shape() );
+			//logger.info( this.flightListDataTable.structure().print() );
 		} catch (Exception ex) {
 			ex.printStackTrace(System.out);
 		}

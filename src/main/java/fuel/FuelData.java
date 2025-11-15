@@ -73,13 +73,13 @@ public class FuelData extends FuelDataTable {
 		// extend fuel with end minus start differences
 		this.extendFuelWithEndStartDifference();
 		
-		logger.info(this.getFuelDataTable().shape());
-		logger.info(this.getFuelDataTable().structure().print());
+		//logger.info(this.getFuelDataTable().shape());
+		//logger.info(this.getFuelDataTable().structure().print());
 		
 		// extend fuel with fuel flow in Kilograms per seconds
 		this.extendFuelFlowKgSeconds();
-		logger.info(this.getFuelDataTable().shape());
-		logger.info(this.getFuelDataTable().structure().print());
+		//logger.info(this.getFuelDataTable().shape());
+		//logger.info(this.getFuelDataTable().structure().print());
 
 		// merge fuel with flight list
 		this.extendFuelWithFlightListData( flightListData.getFlightListDataTable() ) ;
@@ -90,8 +90,9 @@ public class FuelData extends FuelDataTable {
 		// use them to compute relative delta from burnt start and stop
 		// extend fuel with start end differences from takeoff
 		this.extendRelativeStartEndFromFlightTakeoff();
-		logger.info(this.getFuelDataTable().shape());
-		logger.info(this.getFuelDataTable().structure().print());
+		
+		//logger.info(this.getFuelDataTable().shape());
+		//logger.info(this.getFuelDataTable().structure().print());
 
 		// extend fuel with flight data - there is a "merge" between fuel and flight data
 		this.extendFuelStartEndInstantsWithFlightData( );

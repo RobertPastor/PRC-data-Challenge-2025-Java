@@ -1,6 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/3.9.5" 
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="https://maven.apache.org/POM/3.9.5" 
+xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>PRC-Data-Challenge-2025</groupId>
   <artifactId>Data-Challenge-2025</artifactId>
@@ -140,13 +140,50 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
 		    <version>33.5.0-jre</version>
 		</dependency>
 		
-		<!-- https://mvnrepository.com/artifact/tech.tablesaw/tablesaw-core -->
 		<dependency>
+            <groupId>it.unimi.dsi</groupId>
+            <artifactId>fastutil</artifactId>
+            <version>8.5.13</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>io.github.classgraph</groupId>
+            <artifactId>classgraph</artifactId>
+            <version>4.8.168</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.github.haifengl</groupId>
+            <artifactId>smile-data</artifactId>
+            <version>2.6.0</version>
+            <optional>true</optional>
+            <scope>provided</scope> <!-- because the shade plugin doesn't exclude optional dependencies -->
+        </dependency>
+        
+        <dependency>
+            <groupId>org.roaringbitmap</groupId>
+            <artifactId>RoaringBitmap</artifactId>
+            <version>1.0.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.univocity</groupId>
+            <artifactId>univocity-parsers</artifactId>
+            <version>2.9.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ibm.icu</groupId>
+            <artifactId>icu4j</artifactId>
+            <version>74.2</version>
+        </dependency>
+        
+		
+		<!-- https://mvnrepository.com/artifact/tech.tablesaw/tablesaw-core -->
+		<!--<dependency>
 		    <groupId>tech.tablesaw</groupId>
 		    <artifactId>tablesaw-core</artifactId>
 		    <version>0.44.4</version>
 		</dependency>
-		
+		-->
 		<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter -->
 		<dependency>
 		    <groupId>org.junit.jupiter</groupId>
@@ -177,6 +214,20 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
 		    <artifactId>junit-platform-commons</artifactId>
 		    <version>${junit-jupiter.version}</version>
 		    <scope>test</scope>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api -->
+		<dependency>
+		    <groupId>javax.annotation</groupId>
+		    <artifactId>javax.annotation-api</artifactId>
+		    <version>1.3.2</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>com.google.code.findbugs</groupId>
+		    <artifactId>jsr305</artifactId>
+		    <version>3.0.2</version>
+		    <scope>provided</scope> <!-- or compile if you want it in runtime -->
 		</dependency>
 
   </dependencies>
@@ -266,6 +317,27 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
 	<build>
 	    <finalName>maven-unit-test</finalName>
         <plugins>
+        
+	        <plugin>
+		        <groupId>org.codehaus.mojo</groupId>
+		        <artifactId>build-helper-maven-plugin</artifactId>
+		        <version>3.6.1</version>
+		        <executions>
+		          <execution>
+		            <id>add-test-source</id>
+		            <phase>generate-test-sources</phase>
+		            <goals>
+		              <goal>add-test-source</goal>
+		            </goals>
+		            <configuration>
+		              <sources>
+		                <source>/tablesaw-master/core/src/main/java</source>
+		              </sources>
+		            </configuration>
+		          </execution>
+		        </executions>
+	      </plugin>
+      
             <!-- org.apache.maven.plugins:maven-site-plugin:jar:3.12.1 -->
         	<plugin>
                 <groupId>org.apache.maven.plugins</groupId>

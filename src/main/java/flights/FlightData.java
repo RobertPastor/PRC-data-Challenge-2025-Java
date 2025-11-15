@@ -48,13 +48,13 @@ public class FlightData extends FlightDataTable {
 	 */
 	public void readParquetWithStream() throws IOException {
 
-		logger.info("----------- start read parquet with stream ------");
+		//logger.info("----------- start read parquet with stream ------");
 
 		this.createEmptyFlightDataTable();
 		FolderDiscovery folderDiscovery = new FolderDiscovery();
 
 		String fileName = this.getFlight_id() + ".parquet";
-		logger.info(fileName);
+		//logger.info(fileName);
 		try {
 
 			File parquetFile = folderDiscovery.getFlightFileFromFileName(this.getTrain_rank_value() , fileName);

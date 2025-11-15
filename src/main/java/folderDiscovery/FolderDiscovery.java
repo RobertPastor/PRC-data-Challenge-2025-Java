@@ -178,7 +178,7 @@ public class FolderDiscovery {
 	
 	public File getFlightFileFromFileName ( train_rank_final train_rank_value , String fileName ) {
 		
-		logger.info(this.className + " --- " + fileName );
+		//logger.info(this.className + " --- " + fileName );
 		if (!fileName.endsWith("parquet")) {
 			fileName = fileName + ".parquet";
 		}
@@ -193,7 +193,7 @@ public class FolderDiscovery {
 					path = Paths.get(FolderDiscovery.flightFinalFolderStr , fileName);
 				}
 			}
-			logger.info(path.toString());
+			//logger.info(path.toString());
 			File file = path.toFile();
 			if (!file.exists() || !file.isFile()) {
 				return null;
@@ -223,7 +223,7 @@ public class FolderDiscovery {
 			if (!file.exists() || !file.isFile()) {
 				return null;
 			} else {
-				logger.info(file.getAbsolutePath());
+				//logger.info(file.getAbsolutePath());
 				return file;
 			}
 		} catch (Exception ex) {
@@ -302,7 +302,7 @@ public class FolderDiscovery {
 		Path path = Paths.get(FolderDiscovery.flightListTrainRankFolderStr , fileName);
 		File file = path.toFile();
 		if ( file.exists() && file.isFile()) {
-			logger.info(file.getAbsolutePath());
+			//logger.info(file.getAbsolutePath());
 			return file;
 		}
 		return null;
@@ -313,7 +313,7 @@ public class FolderDiscovery {
 		Path path = Paths.get(FolderDiscovery.getAirportsFolderStr() , fileName);
 		File file = path.toFile();
 		if ( file.exists() && file.isFile()) {
-			logger.info(file.getAbsolutePath());
+			//logger.info(file.getAbsolutePath());
 			return file;
 		}
 		return null;
@@ -333,7 +333,7 @@ public class FolderDiscovery {
 		Path path = Paths.get(folder , fileName);
 		File file = path.toFile();
 		if ( file.exists() && file.isFile()) {
-			logger.info(file.getAbsolutePath());
+			//logger.info(file.getAbsolutePath());
 			return file.getAbsolutePath();
 		}
 		return null;

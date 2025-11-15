@@ -22,7 +22,7 @@ public class Test_InterpolateFuelStartEndFromFlightData_Rank {
 		System.out.println( fuelData.getFuelDataTable().shape());
 		System.out.println( fuelData.getFuelDataTable().structure().print());
 
-		fuelData.prepareBeforeMergeFueltoOtherData(maxToBeComputedRow);
+		//fuelData.prepareBeforeMergeFueltoOtherData(maxToBeComputedRow);
 
 	}
 }

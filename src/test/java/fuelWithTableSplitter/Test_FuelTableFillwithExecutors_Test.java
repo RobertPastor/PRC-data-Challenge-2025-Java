@@ -36,8 +36,8 @@ public class Test_FuelTableFillwithExecutors_Test {
 		FuelData fuelData = new FuelData(train_rank_value , maxToBeComputedRow);
 		fuelData.readParquet();
 		
-		logger.info( fuelData.getFuelDataTable().shape());
-		logger.info( fuelData.getFuelDataTable().structure().print());
+		//logger.info( fuelData.getFuelDataTable().shape());
+		//logger.info( fuelData.getFuelDataTable().structure().print());
 		
 		AirportsData airportsData = new AirportsData();
 		airportsData.readParquet();
@@ -56,7 +56,7 @@ public class Test_FuelTableFillwithExecutors_Test {
 		flightListData.extendWithAirportsSinusCosinusOfLatitudeLongitude();
 		
 		logger.info(flightListData.getFlightListDataTable().shape());
-		logger.info(flightListData.getFlightListDataTable().structure().print());
+		//logger.info(flightListData.getFlightListDataTable().structure().print());
 		
 		flightListData.extendWithAircraftsData( aircraftsData );
 		
