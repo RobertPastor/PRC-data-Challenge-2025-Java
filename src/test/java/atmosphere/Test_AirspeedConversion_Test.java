@@ -24,7 +24,7 @@ public class Test_AirspeedConversion_Test {
 	@Test
     public void test_AirspeedConvertion_two () throws Exception {
 		
-		System.out.println("================ mach 2 cas ========================");
+		System.out.println("================ mach 2 tas ========================");
 
 		AirSpeedConverter airspeedConverter = new AirSpeedConverter();
 		

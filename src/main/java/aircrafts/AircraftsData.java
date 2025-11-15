@@ -56,10 +56,10 @@ public class AircraftsData extends AircraftsDataTable {
 	private void buildHeadersInformations ( final Row r ) {
 		for (Cell cell : r) {
 			if (cell != null) {
-				logger.info("column index = " + cell.getColumnIndex() + " cell type = " + cell.getType());
+				//logger.info("column index = " + cell.getColumnIndex() + " cell type = " + cell.getType());
 				if ( cell.getType().equals(CellType.STRING)) {
 					String headerNameFound =  cell.getRawValue();
-					logger.info("header name found = " + headerNameFound );
+					//logger.info("header name found = " + headerNameFound );
 					if ( AircraftsData.getAircraftsExpectedHeaders().contains(headerNameFound)) {
 						// header column is in the list of expected headers
 						AircraftsData.getAircraftsFoundHeaders().add(headerNameFound);
@@ -68,15 +68,15 @@ public class AircraftsData extends AircraftsDataTable {
 				}
 			}
 		}
-		logger.info(AircraftsData.getAircraftsExpectedHeaders().toString());
-		logger.info(AircraftsData.getAircraftsFoundHeaders().toString());
-		logger.info(AircraftsData.getAircraftHeadersColumnIndexes().toString());
+		//logger.info(AircraftsData.getAircraftsExpectedHeaders().toString());
+		//logger.info(AircraftsData.getAircraftsFoundHeaders().toString());
+		//logger.info(AircraftsData.getAircraftHeadersColumnIndexes().toString());
 	}
 
 	private void fillTableRow(final Row row) {
 
 		tech.tablesaw.api.Row tableRow = this.aircraftsDataTable.appendRow();
-		logger.info ("row count ---> " + this.aircraftsDataTable.rowCount());
+		//logger.info ("row count ---> " + this.aircraftsDataTable.rowCount());
 		
 		int columnIndex = 0;
 

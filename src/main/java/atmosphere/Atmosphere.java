@@ -185,7 +185,7 @@ public final class Atmosphere {
 
 			if (  interpolateFunction.isValidPoint(altitudeMeters)) {
 				double airDensityKgPerCubicMeters = interpolateFunction.value(altitudeMeters);
-				logger.info("interpolation for altitude meters = " + String.valueOf(altitudeMeters) + " - air density = " + String.valueOf(airDensityKgPerCubicMeters) + " kg / m3");
+				//logger.info("interpolation for altitude meters = " + String.valueOf(altitudeMeters) + " - air density = " + String.valueOf(airDensityKgPerCubicMeters) + " kg / m3");
 				return airDensityKgPerCubicMeters;
 			} else {
 				// return Not a Number
@@ -207,7 +207,7 @@ public final class Atmosphere {
 				double temperatureKelvins = interpolateFunction.value(altitudeMeters);
 	            // The temperature T in degrees Celsius (�C) is equal to the temperature T in Kelvin (K) minus 273.15:   
 	            // temperatureDegrees = temperatureKelvins - 273.15
-				logger.info("interpolation for altitude meters = " + String.valueOf(altitudeMeters) + " - temperature = " + String.valueOf(temperatureKelvins) + " Kelvins");
+				//logger.info("interpolation for altitude meters = " + String.valueOf(altitudeMeters) + " - temperature = " + String.valueOf(temperatureKelvins) + " Kelvins");
 				return temperatureKelvins;
 			} else {
 				// return Not a Number
@@ -235,7 +235,7 @@ public final class Atmosphere {
 				if (  interpolateFunction.isValidPoint(altitudeMeters)) {
 					double speedOfSound = interpolateFunction.value(altitudeMeters);
 		            
-					logger.info("interpolation for altitude meters = " + String.valueOf(altitudeMeters) + " - speed of sound = " + String.valueOf(speedOfSound) );
+					//logger.info("interpolation for altitude meters = " + String.valueOf(altitudeMeters) + " - speed of sound = " + String.valueOf(speedOfSound) );
 					return speedOfSound;
 				} else {
 					// return Not a Number
@@ -257,7 +257,7 @@ public final class Atmosphere {
 				if (  interpolateFunction.isValidPoint(altitudeMeters)) {
 					double pressurePascals = interpolateFunction.value(altitudeMeters);
 		            
-					logger.info("interpolation for altitude meters = " + String.valueOf(altitudeMeters) + " - pressure = " + String.valueOf(pressurePascals) + " Pascals");
+					//logger.info("interpolation for altitude meters = " + String.valueOf(altitudeMeters) + " - pressure = " + String.valueOf(pressurePascals) + " Pascals");
 					return pressurePascals;
 				} else {
 					// return Not a Number

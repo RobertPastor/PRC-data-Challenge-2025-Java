@@ -138,15 +138,13 @@ public class FlightDataInterpolation {
 		}
 	}
 	
-	
-
 	/**
 	 * get double value from an start end input given by the fuel data frame
 	 * @param columnName
 	 * @param start_end
 	 * @return
 	 */
-	public double getDoubleFlightDataAtInterpolatedStartEndFuelInstant(final String columnName , final Instant start_end) {
+	public Double getDoubleFlightDataAtInterpolatedStartEndFuelInstant(final String columnName , final Instant start_end) {
 
 		// use interpolation function when start end instant inside the range of the function
 		// 	private Map<String, PolynomialSplineFunction> interpolationFunctionMap = null;
@@ -154,7 +152,7 @@ public class FlightDataInterpolation {
 		if ( interpolationFunctionMap.containsKey(columnName)) {
 			//logger.info("Interpolation map contains an interpolation function for the column = " + columnName);
 		} else {
-			return 0.0;
+			return (Double)null;
 			//throw new InterpolationFunctionNotFoundException("Interpolation DOUBLE function for column = "+ columnName + " ---> not found in them= map");
 		}
 		try {
@@ -163,11 +161,13 @@ public class FlightDataInterpolation {
 
 			if (  interpolateFunction.isValidPoint(queryMilliSeconds)) {
 				return interpolateFunction.value(queryMilliSeconds);
+			} else {
+				return (Double)null;
 			}
 		} catch (Exception e) {
 			System.out.println("Exception while interpolating -> " + e.getLocalizedMessage());
 		}
-		return 0.0;
+		return (Double)null;
 	}
 
 	/**

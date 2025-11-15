@@ -30,8 +30,8 @@ public class Test_FuelTableFillwithExecutors_Test {
 		train_rank_final train_rank_value = train_rank_final.train ;
 		//train_rank_value = train_rank.rank;
 
-		long maxToBeComputedRow = 1000000;
-		//long maxToBeComputedRow = 100;
+		//long maxToBeComputedRow = 1000000;
+		long maxToBeComputedRow = 100;
 
 		FuelData fuelData = new FuelData(train_rank_value , maxToBeComputedRow);
 		fuelData.readParquet();
@@ -107,10 +107,8 @@ public class Test_FuelTableFillwithExecutors_Test {
 			int rowIndex = fuelTableIndexes.removeFirst();
 			Row row = fuelData.getFuelDataTable().row(rowIndex);
 			executor.execute( () -> {
-				
 				logger.info("start executor -> " + row.getRowNumber());
 				fuelData.extendOneFuelRowStartEndInstantWithFlightData(startTime , row);
-				
 			});
 		}
 		
@@ -122,10 +120,9 @@ public class Test_FuelTableFillwithExecutors_Test {
 		System.out.println( fuelData.getFuelDataTable().structure().print());
 		System.out.println( fuelData.getFuelDataTable().print(10));
 
-		
 		// last step generate the parquet file
 		fuelData.generateParquetFileFor();
-		// generate a text file
+		// generate a text file with errors
 		fuelData.generateListOfErrors();
 	}
 	
