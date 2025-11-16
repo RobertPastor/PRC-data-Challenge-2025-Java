@@ -1,9 +1,6 @@
 package flightLists;
 
 import java.io.IOException;
-import utils.CustomException;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -15,6 +12,7 @@ import dataChallengeEnums.DataChallengeEnums.train_rank_final;
 import flights.FlightData;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.selection.Selection;
+import utils.CustomException;
 
 public class TestReadAllFlightData_Test {
 
@@ -46,6 +44,9 @@ public class TestReadAllFlightData_Test {
 	@Test
     public void testReadAllFlightDataFiles_Two() throws IOException, CustomException {
 		
+		int maxMissingRows = 0;
+		String flightIdWithMaxMissing = "";
+		
 		System.out.println("================ test two ==========================");
 		train_rank_final train_rank_final_value = train_rank_final.train;
 		
@@ -76,22 +77,27 @@ public class TestReadAllFlightData_Test {
 				//System.out.println(columnName);
 			//}
 			
-			boolean shouldBreak = false;
 			for ( String columnName : columnNamesList) {
 				assert ( flightDataTable.columnNames().contains(columnName) );
 				
 				Selection selectionIsMissing = flightDataTable.doubleColumn(columnName).isMissing();
 				Table filteredTable = flightDataTable.where(selectionIsMissing);
-				System.out.println("for col = " + columnName + " - Missing = " + String.valueOf(filteredTable.rowCount()) + " / "  + String.valueOf(flightDataTable.rowCount()));
+				//System.out.println("for col = " + columnName + " - Missing = " + String.valueOf(filteredTable.rowCount()) + " / "  + String.valueOf(flightDataTable.rowCount()));
 				if ( filteredTable.rowCount() > 0 ) {
 					int missingRowCount = filteredTable.rowCount();
-					shouldBreak = true;
+					if ( missingRowCount > maxMissingRows) {
+						maxMissingRows = missingRowCount;
+						flightIdWithMaxMissing = flight_id;
+					}
 				}
 			}
 			
 			rowCount =  rowCount + flightDataTable.rowCount();
 			System.out.println ("---> cumulated row count = " + String.valueOf(rowCount));
-			if ( shouldBreak == true ) {
+			if ( index > 1000 ) {
+				System.out.println(flightIdWithMaxMissing  );
+				System.out.println(String.valueOf(maxMissingRows)  );
+				
 				break;
 			}
 			index++;
