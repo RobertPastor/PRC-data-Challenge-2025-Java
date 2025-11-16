@@ -84,6 +84,7 @@ public class TestReadAllFlightData_Test {
 				Table filteredTable = flightDataTable.where(selectionIsMissing);
 				System.out.println("for col = " + columnName + " - Missing = " + String.valueOf(filteredTable.rowCount()) + " / "  + String.valueOf(flightDataTable.rowCount()));
 				if ( filteredTable.rowCount() > 0 ) {
+					int missingRowCount = filteredTable.rowCount();
 					shouldBreak = true;
 				}
 			}
