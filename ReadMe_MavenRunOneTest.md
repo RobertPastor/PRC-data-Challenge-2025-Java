@@ -1,3 +1,4 @@
+cd "C:\Users\rober\eclipse-2025-09\eclipse-jee-2025-09-R-win32-x86_64\Data-Challenge-2025"
 
 mvn test -Dtest="Test_AirportsLegacyExcelReader_Test"
 
@@ -16,3 +17,13 @@ mvn test -Dtest="Test_Atmosphere_Tests"
 mvn test -Dtest="Test_AirspeedConversion_Test"
 
 mvn test -Dtest="Test_InterpolateFuelStartEndFromFlightData_Rank"
+
+mvn test -Dtest="Test_UniqueAircraftTypeCodes_Tests"
+
+mvn test -Dtest="Test_UniqueAircraftIcaoCode_InFlightData_Tests"
+
+mvn test -Dtest="TestReadAllFlightData_Test"
+
+mvn test -Dtest="Test_UniqueAircraftTypeCodes_Tests"
+
+mvn test -Dtest="TestReadAllFlightData_Test"

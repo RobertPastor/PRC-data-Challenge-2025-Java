@@ -1,13 +1,20 @@
 package flightLists;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.logging.Logger;
 
 import aircrafts.AircraftsData;
 import airports.AirportsDataTable;
 import dataChallengeEnums.DataChallengeEnums.train_rank_final;
 import flightLists.FlightListDataSchema.FlightListDataRecord;
-import fuel.FuelDataTable;
 import tech.tablesaw.api.DateColumn;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.FloatColumn;
@@ -20,31 +27,13 @@ import tech.tablesaw.api.Table;
 import tech.tablesaw.selection.Selection;
 import utils.Utils;
 
-import java.time.Duration;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-
 public class FlightListDataTable extends Table {
 	
 	private static final Logger logger = Logger.getLogger(FlightListDataTable.class.getName());
 
 	protected train_rank_final train_rank_value;
 	
-	public train_rank_final getTrain_rank_value() {
-		return train_rank_value;
-	}
-	
 	public Table flightListDataTable = null;
-
-	public void setFlightListDataTable(Table flightListDataTable) {
-		this.flightListDataTable = flightListDataTable;
-	}
-
-	public Table getFlightListDataTable() {
-		return this.flightListDataTable;
-	}
 
 	FlightListDataTable() {
 		super("Flight List Data");
@@ -57,7 +46,6 @@ public class FlightListDataTable extends Table {
 		
 		Instant takeoff = filteredTable.instantColumn("takeoff").get(0);
 		return takeoff;
-
 	}
 	
 	public void createEmptyFlightListDataTable( ) {
@@ -277,6 +265,39 @@ public class FlightListDataTable extends Table {
 		logger.info("problem to be spotted here");
 	}
 	
+	/**
+	 * retrieves a list of distinct (unique) aircraft ICAO codes from a train, rank or final flight list
+	 * @return
+	 */
+	public SortedSet<String> getListOfUniqueAircraftICAOTypes() {
+		
+		SortedSet<String> listAircrafICAOcodes = new TreeSet<String>();
+		Iterator<Row> iter = this.flightListDataTable.iterator();
+		while ( iter.hasNext()) {
+			Row row = iter.next();
+			String aircraftICAOcode = row.getString("aircraft_type");
+			listAircrafICAOcodes.add(aircraftICAOcode);
+		}
+		return listAircrafICAOcodes;
+	}
+	
+	/**
+	 * return a sorted list of unique flight ids
+	 * @return
+	 */
+	public SortedSet<String> getListOfUniqueFlightIds() {
+		
+		SortedSet<String> listOfUniqueFlightIds = new TreeSet<String>();
+		
+		Iterator<Row> iter = this.flightListDataTable.iterator();
+		while ( iter.hasNext()) {
+			Row row = iter.next();
+			String flight_id = row.getString("flight_id");
+			listOfUniqueFlightIds.add(flight_id);
+		}
+		return listOfUniqueFlightIds;
+	}
+	 
 	public void extendWithAirportsSinusCosinusOfLatitudeLongitude() {
 		
 		// origin
@@ -331,5 +352,17 @@ public class FlightListDataTable extends Table {
 			
 		}
 		logger.info( this.flightListDataTable.print(10));
+	}
+	
+	public train_rank_final getTrain_rank_value() {
+		return train_rank_value;
+	}
+	
+	public void setFlightListDataTable(Table flightListDataTable) {
+		this.flightListDataTable = flightListDataTable;
+	}
+
+	public Table getFlightListDataTable() {
+		return this.flightListDataTable;
 	}
 }

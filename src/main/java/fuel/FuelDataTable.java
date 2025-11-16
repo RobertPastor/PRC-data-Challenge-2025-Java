@@ -391,7 +391,7 @@ public class FuelDataTable extends Table implements Runnable {
 	 * row level function
 	 * @return
 	 */
-	private Double leaveItMissingIfApplicable( Row row , final String columnName ) {
+	public Double leaveItMissingIfApplicable( Row row , final String columnName ) {
 
 		int columnIndex = this.getFuelDataTable().columnIndex(columnName);
 		Column<?> column = (Column<?>) this.getFuelDataTable().column(columnIndex);
@@ -404,7 +404,7 @@ public class FuelDataTable extends Table implements Runnable {
 		}
 	}
 
-	private void setDouble( Row row , final String columnName , final Double doubleValueWithPotentialNull) {
+	public void setDouble( Row row , final String columnName , final Double doubleValueWithPotentialNull) {
 
 		if ( (Double)doubleValueWithPotentialNull == null ) {
 			row.doubleColumnMap.get(columnName).setMissing(row.getIndex(row.getRowNumber()));
@@ -627,8 +627,10 @@ public class FuelDataTable extends Table implements Runnable {
 	 * this method is launched inside an Executor execute from java concurrency
 	 * row -> current row in Fuel Table
 	 * @param row
+	 * @throws IOException 
+	 * @throws utils.CustomException 
 	 */
-	public void extendOneFuelRowStartEndInstantWithFlightData (final LocalDateTime startTime, Row row ) {
+	public void extendOneFuelRowStartEndInstantWithFlightData (final LocalDateTime startTime, Row row ) throws IOException, utils.CustomException {
 
 		LocalDateTime nowDateTime = LocalDateTime.now();
 		long hours = ChronoUnit.HOURS.between(startTime, nowDateTime);
@@ -646,10 +648,13 @@ public class FuelDataTable extends Table implements Runnable {
 		try {
 			// reading with stream allows to keep missing values as holes
 			flightData.readParquetWithStream();
-
 		} catch (IOException e) {
 			e.printStackTrace();
-			return ;
+			throw e;
+			
+		} catch (utils.CustomException e) {
+			e.printStackTrace();
+			throw e;
 		}
 		if ( flightData.getFlightDataTable().isEmpty() ) {
 			logger.info("flight data for flight id = <<" + flight_id + ">> is empty");
@@ -834,8 +839,9 @@ public class FuelDataTable extends Table implements Runnable {
 	 * use interpolation function generated beforehand
 	 * @param maxToBeComputedRow
 	 * @throws IOException
+	 * @throws utils.CustomException 
 	 */
-	protected void extendFuelStartEndInstantsWithFlightData( ) throws IOException {
+	protected void extendFuelStartEndInstantsWithFlightData( ) throws IOException, utils.CustomException {
 
 		// find the nearest instant from a fuel table of a flight id
 		// given a fuel start or stop instant

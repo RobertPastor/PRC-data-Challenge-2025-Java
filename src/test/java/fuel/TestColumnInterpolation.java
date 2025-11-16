@@ -9,11 +9,12 @@ import org.junit.jupiter.api.Test;
 import dataChallengeEnums.DataChallengeEnums.train_rank_final;
 import flightLists.FlightListData;
 import flights.FlightData;
+import utils.CustomException;
 
 public class TestColumnInterpolation {
 
 	@Test
-    public void testReadExtendFuelTrain() throws IOException {
+    public void testReadExtendFuelTrain() throws IOException, CustomException {
 		
 		train_rank_final train_rank_value = train_rank_final.train;
 		String flight_id = "prc770822360";

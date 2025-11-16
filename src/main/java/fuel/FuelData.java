@@ -41,8 +41,9 @@ public class FuelData extends FuelDataTable {
 	 * main preparation method before looping through fuel rows and interpolating the flight aircraft position
 	 * @param maxToBeComputedRow
 	 * @throws IOException
+	 * @throws utils.CustomException 
 	 */
-	public void prepareBeforeMergeFueltoOtherData (final long maxToBeComputedRow  ) throws IOException {
+	public void prepareBeforeMergeFueltoOtherData (final long maxToBeComputedRow  ) throws IOException, utils.CustomException {
 		
 		train_rank_final train_rank_value = this.getTrain_rank_value();
 		

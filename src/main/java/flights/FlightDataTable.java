@@ -9,6 +9,8 @@ import java.util.Iterator;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.logging.Logger;
 
 import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
@@ -22,33 +24,10 @@ public class FlightDataTable extends Table {
 	
 	protected train_rank_final train_rank_value;
 	
-	public train_rank_final getTrain_rank_value() {
-		return train_rank_value;
-	}
-	
 	protected String flight_id = "";
-	
-	public void setTrain_rank_value(train_rank_final train_rank_value) {
-		this.train_rank_value = train_rank_value;
-	}
-
-	public void setFlight_id(String flight_id) {
-		this.flight_id = flight_id;
-	}
-
-	public void setFlightDataTable(Table flightDataTable) {
-		this.flightDataTable = flightDataTable;
-	}
-
-	public String getFlight_id() {
-		return flight_id;
-	}
-	
 	public Table flightDataTable = null;
 
-	public Table getFlightDataTable() {
-		return this.flightDataTable;
-	}
+	
 
 	
 	// constructor
@@ -168,4 +147,44 @@ public class FlightDataTable extends Table {
 			row.setDouble("longitude_sine" , Math.sin(Math.toRadians(origin_longitude_degrees)));
 		}
  	}
+	
+	/**
+	 * retrieves a list of distinct (unique) aircraft ICAO codes from a train, rank or final flight list
+	 * @return
+	 */
+	public SortedSet<String> getListOfUniqueAircraftICAOTypes() {
+		
+		SortedSet<String> listAircrafICAOcodes = new TreeSet<String>();
+		Iterator<Row> iter = this.flightDataTable.iterator();
+		while ( iter.hasNext()) {
+			Row row = iter.next();
+			String aircraftICAOcode = row.getString("typecode");
+			listAircrafICAOcodes.add(aircraftICAOcode);
+		}
+		return listAircrafICAOcodes;
+	}
+	
+	public train_rank_final getTrain_rank_value() {
+		return train_rank_value;
+	}
+	
+	public void setTrain_rank_value(train_rank_final train_rank_value) {
+		this.train_rank_value = train_rank_value;
+	}
+
+	public void setFlight_id(String flight_id) {
+		this.flight_id = flight_id;
+	}
+
+	public void setFlightDataTable(Table flightDataTable) {
+		this.flightDataTable = flightDataTable;
+	}
+
+	public String getFlight_id() {
+		return flight_id;
+	}
+	
+	public Table getFlightDataTable() {
+		return this.flightDataTable;
+	}
 }

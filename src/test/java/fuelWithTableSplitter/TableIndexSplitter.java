@@ -5,7 +5,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import dataChallengeEnums.DataChallengeEnums.train_rank_final;
-import fuel.FuelData;
 
 //Task to process a specific range of rows
 class TableProcessor implements Runnable {

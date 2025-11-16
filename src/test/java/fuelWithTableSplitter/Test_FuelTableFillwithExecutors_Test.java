@@ -16,6 +16,7 @@ import dataChallengeEnums.DataChallengeEnums.train_rank_final;
 import flightLists.FlightListData;
 import fuel.FuelData;
 import tech.tablesaw.api.Row;
+import utils.CustomException;
 
 public class Test_FuelTableFillwithExecutors_Test {
 	
@@ -24,7 +25,7 @@ public class Test_FuelTableFillwithExecutors_Test {
 	static int count = 0;
 
 	@Test
-	public void processParallelyWithExecutorService() throws InterruptedException, IOException {
+	public void processParallelyWithExecutorService() throws InterruptedException, IOException , utils.CustomException {
 		
 		//train_rank train_rank_value = train_rank.train;
 		train_rank_final train_rank_value = train_rank_final.train ;
@@ -108,7 +109,11 @@ public class Test_FuelTableFillwithExecutors_Test {
 			Row row = fuelData.getFuelDataTable().row(rowIndex);
 			executor.execute( () -> {
 				logger.info("start executor -> " + row.getRowNumber());
-				fuelData.extendOneFuelRowStartEndInstantWithFlightData(startTime , row);
+				try {
+					fuelData.extendOneFuelRowStartEndInstantWithFlightData(startTime , row);
+				} catch (IOException | CustomException e) {
+					e.printStackTrace();
+				}
 			});
 		}
 		

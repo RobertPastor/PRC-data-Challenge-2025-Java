@@ -7,12 +7,12 @@ import org.junit.jupiter.api.Test;
 
 import dataChallengeEnums.DataChallengeEnums.train_rank_final;
 import fuel.FuelData;
-import tech.tablesaw.api.Table;
+import utils.CustomException;
 
 public class Test_InterpolateFromFuelInstant_Test {
 
 	@Test
-    public void testNearestFlightTimeStamp() throws IOException {
+    public void testNearestFlightTimeStamp() throws IOException, CustomException {
 
 		long nbMaxRecordsToRead = 100;
 		FuelData fuelData = new FuelData(train_rank_final.rank , nbMaxRecordsToRead);

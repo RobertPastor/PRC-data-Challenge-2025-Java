@@ -5,11 +5,12 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import dataChallengeEnums.DataChallengeEnums.train_rank_final;
+import utils.CustomException;
 
 public class TestFlightDataRead_Test {
 	
 	@Test
-    public void testReadFlight() throws IOException {
+    public void testReadFlight() throws IOException, CustomException {
 
 		FlightData flightData = new FlightData(train_rank_final.rank , "prc806615763");
 		flightData.readParquetWithStream();

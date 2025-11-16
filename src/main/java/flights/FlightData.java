@@ -10,28 +10,16 @@ import dataChallengeEnums.DataChallengeEnums.train_rank_final;
 import flights.FlightDataSchema.FlightDataRecord;
 import folderDiscovery.FolderDiscovery;
 import tech.tablesaw.api.Row;
-
-
-class CustomException extends Exception {
-	/**
-	 * serial generated ID
-	 */
-	private static final long serialVersionUID = -1346311432020834637L;
-
-	public CustomException(String message) {
-		super(message);
-	}
-}
+import utils.CustomException;
 
 
 public class FlightData extends FlightDataTable {
 
 	private static final Logger logger = Logger.getLogger(FlightData.class.getName());
-	
+
 	// constructor
 	public FlightData( train_rank_final train_rank_value , final String flight_id ) {
 		super(train_rank_value , flight_id);
-
 	}
 
 	/**
@@ -41,106 +29,113 @@ public class FlightData extends FlightDataTable {
 		 +---
 	 */
 
-	
+
 	/**
 	 * new method of reading parquet files and managing missing values (holes)
 	 * @throws IOException
+	 * @throws CustomException 
 	 */
-	public void readParquetWithStream() throws IOException {
+	public void readParquetWithStream() throws IOException, CustomException {
 
-		//logger.info("----------- start read parquet with stream ------");
+		logger.info("----------- start read <<" + this.getTrain_rank_value() + ">> parquet file <<" +  this.getFlight_id() + ">> using a stream ------");
 
 		this.createEmptyFlightDataTable();
 		FolderDiscovery folderDiscovery = new FolderDiscovery();
 
 		String fileName = this.getFlight_id() + ".parquet";
 		//logger.info(fileName);
-		try {
 
-			File parquetFile = folderDiscovery.getFlightFileFromFileName(this.getTrain_rank_value() , fileName);
+		File parquetFile = folderDiscovery.getFlightFileFromFileName(this.getTrain_rank_value() , fileName);
+		if (( parquetFile != null ) &&  parquetFile.isFile() ) {
 
-			CarpetReader<FlightDataRecord> reader = new CarpetReader<FlightDataRecord>(parquetFile, FlightDataRecord.class);
-			reader.stream().forEachOrdered(record -> {
+			try {
 
-				Row row = this.flightDataTable.appendRow();
+				CarpetReader<FlightDataRecord> reader = new CarpetReader<FlightDataRecord>(parquetFile, FlightDataRecord.class);
+				reader.stream().forEachOrdered(record -> {
 
-				row.setString("flight_id", record.flight_id());
-				row.setInstant("timestamp", record.timestamp());
+					Row row = this.flightDataTable.appendRow();
 
-				// assumption no holes in latitude nor in longitude
-				if (record.latitude() == null) {
-					//System.out.println("row = " + record.timestamp() + " -> longitude --> null found");
-					//System.out.println("--- do nothing - do not fill empty cell ---");
-				} else {
-					row.setDouble("latitude" , record.latitude());
-				}
+					row.setString("flight_id", record.flight_id());
+					row.setInstant("timestamp", record.timestamp());
 
-				if (record.longitude() == null) {
-					//System.out.println("row = " + record.timestamp() + " -> longitude --> null found");
-					//System.out.println("--- do nothing - do not fill empty cell ---");
-				} else {
-					row.setDouble("longitude", record.longitude());
-				}
-				/**
-				 * managing holes in the floating values of altitude
-				 */
-				if ( record.altitude() == null) {
-					//System.out.println("row = " + record.timestamp() + " -> altitude --> null found");
-					//System.out.println("--- do nothing - do not fill empty cell ---");
-				} else {
-					row.setDouble("altitude", record.altitude());
-				}
+					// assumption no holes in latitude nor in longitude
+					if (record.latitude() == null) {
+						//System.out.println("row = " + record.timestamp() + " -> longitude --> null found");
+						//System.out.println("--- do nothing - do not fill empty cell ---");
+					} else {
+						row.setDouble("latitude" , record.latitude());
+					}
 
-				if ( record.groundspeed() == null) {
-					//System.out.println("row = " + record.timestamp() + " -> groundspeed --> null found");
-					//System.out.println("--- do nothing - do not fill empty cell ---");
-				} else {
-					row.setDouble("groundspeed", record.groundspeed());
-				}
+					if (record.longitude() == null) {
+						//System.out.println("row = " + record.timestamp() + " -> longitude --> null found");
+						//System.out.println("--- do nothing - do not fill empty cell ---");
+					} else {
+						row.setDouble("longitude", record.longitude());
+					}
+					/**
+					 * managing holes in the floating values of altitude
+					 */
+					if ( record.altitude() == null) {
+						//System.out.println("row = " + record.timestamp() + " -> altitude --> null found");
+						//System.out.println("--- do nothing - do not fill empty cell ---");
+					} else {
+						row.setDouble("altitude", record.altitude());
+					}
 
-				if ( record.track() == null) {
-					//System.out.println("row = " + record.timestamp() + " -> track --> null found");
-					//System.out.println("--- do nothing - do not fill empty cell ---");
-				} else {
-					row.setDouble("track", record.track());
-				}
+					if ( record.groundspeed() == null) {
+						//System.out.println("row = " + record.timestamp() + " -> groundspeed --> null found");
+						//System.out.println("--- do nothing - do not fill empty cell ---");
+					} else {
+						row.setDouble("groundspeed", record.groundspeed());
+					}
 
-				if ( record.vertical_rate() == null) {
-					//System.out.println("row = " + record.timestamp() + " -> vertical_rate --> null found");
-					//System.out.println("--- do nothing - do not fill empty cell ---");
-				} else {
-					row.setDouble("vertical_rate", record.vertical_rate());
-				}
+					if ( record.track() == null) {
+						//System.out.println("row = " + record.timestamp() + " -> track --> null found");
+						//System.out.println("--- do nothing - do not fill empty cell ---");
+					} else {
+						row.setDouble("track", record.track());
+					}
 
-				if ( record.mach() == null) {
-					//System.out.println("row = " + record.timestamp() + " -> mach --> null found");
-					//System.out.println("--- do nothing - do not fill empty cell ---");
-				} else {
-					row.setDouble("mach", record.mach());
-				}
+					if ( record.vertical_rate() == null) {
+						//System.out.println("row = " + record.timestamp() + " -> vertical_rate --> null found");
+						//System.out.println("--- do nothing - do not fill empty cell ---");
+					} else {
+						row.setDouble("vertical_rate", record.vertical_rate());
+					}
 
-				if ( record.TAS() == null) {
-					//System.out.println("row = " + record.timestamp() + " -> TAS --> null found");
-					//System.out.println("--- do nothing - do not fill empty cell ---");
-				} else {
-					row.setDouble("TAS", record.TAS());
-				}
+					if ( record.mach() == null) {
+						//System.out.println("row = " + record.timestamp() + " -> mach --> null found");
+						//System.out.println("--- do nothing - do not fill empty cell ---");
+					} else {
+						row.setDouble("mach", record.mach());
+					}
 
-				if ( record.CAS() == null) {
-					//System.out.println("row = " + record.timestamp() + " -> CAS --> null found");
-					//System.out.println("--- do nothing - do not ill empty cell ---");
-				} else {
-					row.setDouble("CAS", record.CAS());
-				}
-			});
-			//System.out.println( this.getFlightDataTable().print(10));
+					if ( record.TAS() == null) {
+						//System.out.println("row = " + record.timestamp() + " -> TAS --> null found");
+						//System.out.println("--- do nothing - do not fill empty cell ---");
+					} else {
+						row.setDouble("TAS", record.TAS());
+					}
 
-		}catch (Exception e) {
-			e.printStackTrace();
+					if ( record.CAS() == null) {
+						//System.out.println("row = " + record.timestamp() + " -> CAS --> null found");
+						//System.out.println("--- do nothing - do not ill empty cell ---");
+					} else {
+						row.setDouble("CAS", record.CAS());
+					}
+				});
+				//System.out.println( this.getFlightDataTable().print(10));
+
+			}catch (Exception e) {
+				e.printStackTrace();
+				throw e;
+			}
+		} else {
+			throw new CustomException("file with name <<" + fileName + ">> ->> not found in -> <<" + this.train_rank_value + ">> database of flight files");
 		}
 	}
 
-	
+
 	/**
 	 * interpolate using the basic TableSaw interpolator 
 	 * that is only filling with the nearest non null value
