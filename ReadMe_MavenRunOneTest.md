@@ -26,4 +26,8 @@ mvn test -Dtest="TestReadAllFlightData_Test"
 
 mvn test -Dtest="Test_UniqueAircraftTypeCodes_Tests"
 
-mvn test -Dtest="TestReadAllFlightData_Test"
+mvn test -Dtest="Test_SearchForMissingFeaturesRank_Test"
+
+mvn test -Dtest="Test_SearchForMissingFeatiresFinal_Test"
+
+mvn test -Dtest="Test_InterpolateOneFile_Test"

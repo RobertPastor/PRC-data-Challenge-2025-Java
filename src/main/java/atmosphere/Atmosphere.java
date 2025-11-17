@@ -6,8 +6,6 @@ import org.apache.commons.math3.analysis.interpolation.LinearInterpolator;
 import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
 
 
-
-
 public final class Atmosphere {
 	
 	protected class OutOfBoundException extends RuntimeException {
