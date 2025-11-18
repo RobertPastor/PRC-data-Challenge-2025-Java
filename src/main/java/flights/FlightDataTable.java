@@ -28,13 +28,12 @@ public class FlightDataTable extends Table {
 	public Table flightDataTable = null;
 
 	
-
-	
 	// constructor
 	protected FlightDataTable(final train_rank_final train_rank_value , final String flight_id) {
 		super("Flight Data");
 		this.setFlight_id(flight_id);
 		this.setTrain_rank_value(train_rank_value);
+		logger.info("create flight Data table");
 	}
 
 	public void createEmptyFlightDataTable( ) {

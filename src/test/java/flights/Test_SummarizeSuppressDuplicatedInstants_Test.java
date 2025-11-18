@@ -83,7 +83,5 @@ public class Test_SummarizeSuppressDuplicatedInstants_Test {
 		System.out.println( filteredTable.print());
 		
 
-		
-
 	}
 }
