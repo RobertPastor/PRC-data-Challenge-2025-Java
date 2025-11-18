@@ -9,6 +9,8 @@ public class FlightDataSchema {
 	
 		String flight_id, 
 		Instant timestamp,
+		String typecode,
+		String source,
 		
 		Double longitude,
 		Double latitude,
@@ -20,13 +22,8 @@ public class FlightDataSchema {
 		Double vertical_rate,
 		
 		Double  mach,
-		
-		String typecode,
-		
 		Double TAS,
-		Double CAS,
-		
-		String source
+		Double CAS
 		
 	) {
 

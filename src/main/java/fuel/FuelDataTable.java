@@ -407,9 +407,9 @@ public class FuelDataTable extends Table implements Runnable {
 	public void setDouble( Row row , final String columnName , final Double doubleValueWithPotentialNull) {
 
 		if ( (Double)doubleValueWithPotentialNull == null ) {
-			row.doubleColumnMap.get(columnName).setMissing(row.getIndex(row.getRowNumber()));
+			row.setMissing(columnName);
 		} else {
-			row.doubleColumnMap.get(columnName).set(row.getIndex(row.getRowNumber()), doubleValueWithPotentialNull);
+			row.setDouble(columnName, doubleValueWithPotentialNull);
 		}
 	}
 
@@ -418,7 +418,7 @@ public class FuelDataTable extends Table implements Runnable {
 		//===============================================
 		// altitude
 		Double aircraft_altitude_ft_fuel_start = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("altitude" ,  start);
-		row.setDouble("aircraft_altitude_ft_at_fuel_start" , aircraft_altitude_ft_fuel_start);
+		this.setDouble(row, "aircraft_altitude_ft_at_fuel_start" , aircraft_altitude_ft_fuel_start);
 
 		Double aircraft_altitude_ft_fuel_end = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("altitude" ,  end);
 		row.setDouble("aircraft_altitude_ft_at_fuel_end" , aircraft_altitude_ft_fuel_end);
@@ -428,16 +428,16 @@ public class FuelDataTable extends Table implements Runnable {
 		float airport_origin_elevation_ft = row.getFloat("origin_elevation_feet");
 		// delta altitude origin airport to aircraft altitude at fuel start
 		if (( aircraft_altitude_ft_fuel_start == null) || ( ((Float)airport_origin_elevation_ft) == null ) ){
-			row.setDouble("aircraft_delta_altitude_ft_origin_fuel_start" , null);
+			this.setDouble(row,"aircraft_delta_altitude_ft_origin_fuel_start" , null);
 		} else {
-			row.setDouble("aircraft_delta_altitude_ft_origin_fuel_start" , (aircraft_altitude_ft_fuel_start - airport_origin_elevation_ft));
+			this.setDouble(row,"aircraft_delta_altitude_ft_origin_fuel_start" , (aircraft_altitude_ft_fuel_start - airport_origin_elevation_ft));
 		}
 
 		if (( aircraft_altitude_ft_fuel_end == null) || ( ((Float)airport_origin_elevation_ft) == null ) ){
-			row.setDouble("aircraft_delta_altitude_ft_origin_end_start" , null);
+			this.setDouble(row,"aircraft_delta_altitude_ft_origin_end_start" , null);
 		} else {
 			// delta altitude origin airport to aircraft altitude at fuel end
-			row.setDouble("aircraft_delta_altitude_ft_origin_end_start" , (aircraft_altitude_ft_fuel_end - airport_origin_elevation_ft));
+			this.setDouble(row,"aircraft_delta_altitude_ft_origin_end_start" , (aircraft_altitude_ft_fuel_end - airport_origin_elevation_ft));
 		}
 
 		//============================================================
@@ -445,16 +445,16 @@ public class FuelDataTable extends Table implements Runnable {
 		float airport_destination_elevation_ft = row.getFloat("destination_elevation_feet");
 
 		if (( aircraft_altitude_ft_fuel_start == null) || ( (Float)(airport_destination_elevation_ft) == null)) {
-			row.setDouble("aircraft_delta_altitude_ft_start_destination" , null);
+			this.setDouble(row,"aircraft_delta_altitude_ft_start_destination" , null);
 		} else {
-			row.setDouble("aircraft_delta_altitude_ft_start_destination" , (aircraft_altitude_ft_fuel_start - airport_destination_elevation_ft));
+			this.setDouble(row,"aircraft_delta_altitude_ft_start_destination" , (aircraft_altitude_ft_fuel_start - airport_destination_elevation_ft));
 		}
 
 		if (( aircraft_altitude_ft_fuel_end == null) || ( ((Float)(airport_destination_elevation_ft)) == null) ) {
-			row.setDouble("aircraft_delta_altitude_ft_end_destination" , null);
+			this.setDouble(row,"aircraft_delta_altitude_ft_end_destination" , null);
 		} else {
 			// delta altitude aircraft altitude at fuel end to destination airport altitude
-			row.setDouble("aircraft_delta_altitude_ft_end_destination" , (aircraft_altitude_ft_fuel_end - airport_destination_elevation_ft));
+			this.setDouble(row,"aircraft_delta_altitude_ft_end_destination" , (aircraft_altitude_ft_fuel_end - airport_destination_elevation_ft));
 		}
 
 		//========================================
@@ -463,11 +463,11 @@ public class FuelDataTable extends Table implements Runnable {
 
 		// warning -> do not used absolute because this feature can be Positive or Negative
 		if (( aircraft_altitude_ft_fuel_end == null )||( aircraft_altitude_ft_fuel_start == null )|| ( ((Long) time_diff_sec) == null)) {
-			row.setDouble("aircraft_computed_vertical_rate_ft_min" , null);
+			this.setDouble(row,"aircraft_computed_vertical_rate_ft_min" , null);
 
 		} else {
 			double computed_vertical_ft_min_rate = (aircraft_altitude_ft_fuel_end - aircraft_altitude_ft_fuel_start)/ (float)(time_diff_sec / 60.0);
-			row.setDouble("aircraft_computed_vertical_rate_ft_min" , computed_vertical_ft_min_rate);
+			this.setDouble(row,"aircraft_computed_vertical_rate_ft_min" , computed_vertical_ft_min_rate);
 		}
 	}
 
@@ -476,50 +476,50 @@ public class FuelDataTable extends Table implements Runnable {
 		//=======================================
 		// ground speed at fuel start and at fuel end
 		Double groundSpeed_start = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("groundspeed",  start);
-		row.setDouble("aircraft_groundspeed_kt_at_fuel_start" , groundSpeed_start);
+		this.setDouble(row,"aircraft_groundspeed_kt_at_fuel_start" , groundSpeed_start);
 
 		Double groundSpeed_end = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("groundspeed" ,  end);
-		row.setDouble("aircraft_groundspeed_kt_at_fuel_end" , groundSpeed_end);
+		this.setDouble(row,"aircraft_groundspeed_kt_at_fuel_end" , groundSpeed_end);
 
 		//=======================================
 		// track angle degrees as fuel start and at fuel end
 		Double track_angle_deg_start = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("track" ,  start);
-		row.setDouble("aircraft_track_angle_deg_at_fuel_start" , track_angle_deg_start);
+		this.setDouble(row,"aircraft_track_angle_deg_at_fuel_start" , track_angle_deg_start);
 
 		Double track_angle_deg_end = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("track" ,  end);
-		row.setDouble("aircraft_track_angle_deg_at_fuel_end" ,  track_angle_deg_end);
+		this.setDouble(row,"aircraft_track_angle_deg_at_fuel_end" ,  track_angle_deg_end);
 
 		//=======================================
 		// ground speed X and Y projected components
 		if (( groundSpeed_start == null ) || ( track_angle_deg_start == null)){
-			row.setDouble("aircraft_groundspeed_kt_X_at_fuel_start" , null);
-			row.setDouble("aircraft_groundspeed_kt_Y_at_fuel_start" , null);
+			this.setDouble(row,"aircraft_groundspeed_kt_X_at_fuel_start" , null);
+			this.setDouble(row,"aircraft_groundspeed_kt_Y_at_fuel_start" , null);
 		} else {
-			row.setDouble("aircraft_groundspeed_kt_X_at_fuel_start" , groundSpeed_start * Math.cos(Math.toRadians(track_angle_deg_start)));
-			row.setDouble("aircraft_groundspeed_kt_Y_at_fuel_start" , groundSpeed_start * Math.sin(Math.toRadians(track_angle_deg_start)));
+			this.setDouble(row,"aircraft_groundspeed_kt_X_at_fuel_start" , groundSpeed_start * Math.cos(Math.toRadians(track_angle_deg_start)));
+			this.setDouble(row,"aircraft_groundspeed_kt_Y_at_fuel_start" , groundSpeed_start * Math.sin(Math.toRadians(track_angle_deg_start)));
 		}
 
 		// ground speed X and Y projected components
 		if (( groundSpeed_end == null ) || (track_angle_deg_end == null)){
-			row.setDouble("aircraft_groundspeed_kt_X_at_fuel_end" , null);
-			row.setDouble("aircraft_groundspeed_kt_Y_at_fuel_end" , null);
+			this.setDouble(row,"aircraft_groundspeed_kt_X_at_fuel_end" , null);
+			this.setDouble(row,"aircraft_groundspeed_kt_Y_at_fuel_end" , null);
 		} else {
-			row.setDouble("aircraft_groundspeed_kt_X_at_fuel_end" , groundSpeed_end * Math.cos(Math.toRadians(track_angle_deg_end) ) );
-			row.setDouble("aircraft_groundspeed_kt_Y_at_fuel_end" , groundSpeed_end * Math.sin(Math.toRadians(track_angle_deg_end)));
+			this.setDouble(row,"aircraft_groundspeed_kt_X_at_fuel_end" , groundSpeed_end * Math.cos(Math.toRadians(track_angle_deg_end) ) );
+			this.setDouble(row,"aircraft_groundspeed_kt_Y_at_fuel_end" , groundSpeed_end * Math.sin(Math.toRadians(track_angle_deg_end)));
 		}
 
 		//===========================================
 		// track angle radians at fuel start
 		if (track_angle_deg_start == null) {
-			row.setDouble("aircraft_track_angle_rad_at_fuel_start" , null );
+			this.setDouble(row,"aircraft_track_angle_rad_at_fuel_start" , null );
 		} else {
-			row.setDouble("aircraft_track_angle_rad_at_fuel_start" , Math.toRadians(track_angle_deg_start) );
+			this.setDouble(row,"aircraft_track_angle_rad_at_fuel_start" , Math.toRadians(track_angle_deg_start) );
 		}	
 		// track angle at fuel end
 		if (track_angle_deg_end== null) {
-			row.setDouble("aircraft_track_angle_rad_at_fuel_end" ,  null);
+			this.setDouble(row,"aircraft_track_angle_rad_at_fuel_end" ,  null);
 		} else {
-			row.setDouble("aircraft_track_angle_rad_at_fuel_end" ,  Math.toRadians(track_angle_deg_end));
+			this.setDouble(row,"aircraft_track_angle_rad_at_fuel_end" ,  Math.toRadians(track_angle_deg_end));
 		}
 	}
 
@@ -528,10 +528,10 @@ public class FuelDataTable extends Table implements Runnable {
 		//=======================================
 		// mach
 		Double mach_start = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("mach" ,  start);
-		row.setDouble("aircraft_mach_at_fuel_start" , mach_start);
+		this.setDouble(row,"aircraft_mach_at_fuel_start" , mach_start);
 
 		Double mach_end = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("mach" ,  end);
-		row.setDouble("aircraft_mach_at_fuel_end" , mach_end);
+		this.setDouble(row,"aircraft_mach_at_fuel_end" , mach_end);
 
 		//=======================================
 		// TAS - or use mach if mach not missing / hole / nan
@@ -548,11 +548,11 @@ public class FuelDataTable extends Table implements Runnable {
 					row.setMissing("aircraft_TAS_at_fuel_start");
 				} else {
 					TAS_start = this.airSpeedConverter.mach2tas(mach_start, aircraft_altitude_ft_fuel_start, speed_units, alt_units);
-					row.setDouble("aircraft_TAS_at_fuel_start" , TAS_start);
+					this.setDouble(row,"aircraft_TAS_at_fuel_start" , TAS_start);
 				}
 			}
 		} else {
-			row.setDouble("aircraft_TAS_at_fuel_start" , TAS_start);
+			this.setDouble(row,"aircraft_TAS_at_fuel_start" , TAS_start);
 		}
 		//======================================
 		// TAS at fuel end
@@ -567,14 +567,14 @@ public class FuelDataTable extends Table implements Runnable {
 				String alt_units = "ft";
 				Double aircraft_altitude_ft_fuel_end = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("altitude" ,  start);
 				if (aircraft_altitude_ft_fuel_end == null) {
-					row.setDouble("aircraft_TAS_at_fuel_end" , null);
+					this.setDouble(row,"aircraft_TAS_at_fuel_end" , null);
 				} else {
 					TAS_end = this.airSpeedConverter.mach2tas(mach_end, aircraft_altitude_ft_fuel_end, speed_units, alt_units);
-					row.setDouble("aircraft_TAS_at_fuel_end" , TAS_end);
+					this.setDouble(row,"aircraft_TAS_at_fuel_end" , TAS_end);
 				}
 			}
 		} else {
-			row.setDouble("aircraft_TAS_at_fuel_end" , TAS_end);
+			this.setDouble(row,"aircraft_TAS_at_fuel_end" , TAS_end);
 		}
 
 		//=======================================
@@ -589,14 +589,14 @@ public class FuelDataTable extends Table implements Runnable {
 				String alt_units = "ft";
 				Double aircraft_altitude_ft_fuel_start = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("altitude" ,  start);
 				if ( aircraft_altitude_ft_fuel_start == null) {
-					row.setDouble("aircraft_CAS_at_fuel_start" , null);
+					this.setDouble(row,"aircraft_CAS_at_fuel_start" , null);
 				} else {
 					CAS_start = this.airSpeedConverter.mach2cas(mach_start, aircraft_altitude_ft_fuel_start, speed_units, alt_units);
-					row.setDouble("aircraft_CAS_at_fuel_start" , CAS_start);
+					this.setDouble(row,"aircraft_CAS_at_fuel_start" , CAS_start);
 				}
 			}
 		} else {
-			row.setDouble("aircraft_CAS_at_fuel_start" , CAS_start);
+			this.setDouble(row,"aircraft_CAS_at_fuel_start" , CAS_start);
 		}
 
 		//===========================================
@@ -615,11 +615,11 @@ public class FuelDataTable extends Table implements Runnable {
 					row.setMissing("aircraft_CAS_at_fuel_end");
 				} else {
 					CAS_end = this.airSpeedConverter.mach2cas(mach_end, aircraft_altitude_ft_fuel_end, speed_units, alt_units);
-					row.setDouble("aircraft_CAS_at_fuel_end" , CAS_end);
+					this.setDouble(row,"aircraft_CAS_at_fuel_end" , CAS_end);
 				}
 			}
 		} else {
-			row.setDouble("aircraft_CAS_at_fuel_end" , CAS_end);
+			this.setDouble(row,"aircraft_CAS_at_fuel_end" , CAS_end);
 		}
 	}
 
@@ -630,6 +630,7 @@ public class FuelDataTable extends Table implements Runnable {
 	 * @throws IOException 
 	 * @throws utils.CustomException 
 	 */
+	@SuppressWarnings("null")
 	public void extendOneFuelRowStartEndInstantWithFlightData (final LocalDateTime startTime, Row row ) throws IOException, utils.CustomException {
 
 		LocalDateTime nowDateTime = LocalDateTime.now();
@@ -677,42 +678,42 @@ public class FuelDataTable extends Table implements Runnable {
 			Double ac_lat_deg_fuel_end = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("latitude"  ,end);
 			Double ac_lon_deg_fuel_end = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("longitude"  ,end);
 
-			row.setDouble("aircraft_latitude_deg_at_fuel_start" , ac_lat_deg_fuel_start);
+			this.setDouble(row,"aircraft_latitude_deg_at_fuel_start" , ac_lat_deg_fuel_start);
 			if ( ac_lat_deg_fuel_start == null ) {
-				row.setDouble("aircraft_latitude_rad_at_fuel_start" , null);
+				this.setDouble(row,"aircraft_latitude_rad_at_fuel_start" , null);
 			} else {
-				row.setDouble("aircraft_latitude_rad_at_fuel_start" , Math.toRadians(ac_lat_deg_fuel_start ));
+				this.setDouble(row,"aircraft_latitude_rad_at_fuel_start" , Math.toRadians(ac_lat_deg_fuel_start ));
 			}
 
-			row.setDouble("aircraft_longitude_deg_at_fuel_start" , ac_lon_deg_fuel_start);
+			this.setDouble(row,"aircraft_longitude_deg_at_fuel_start" , ac_lon_deg_fuel_start);
 			if ( ac_lon_deg_fuel_start == null ) {
-				row.setDouble("aircraft_longitude_rad_at_fuel_start" , null);
+				this.setDouble(row,"aircraft_longitude_rad_at_fuel_start" , null);
 			} else {
-				row.setDouble("aircraft_longitude_rad_at_fuel_start" , Math.toRadians( ac_lon_deg_fuel_start ));
+				this.setDouble(row,"aircraft_longitude_rad_at_fuel_start" , Math.toRadians( ac_lon_deg_fuel_start ));
 			}
 
-			row.setDouble("aircraft_latitude_deg_at_fuel_end" , ac_lat_deg_fuel_end);
+			this.setDouble(row,"aircraft_latitude_deg_at_fuel_end" , ac_lat_deg_fuel_end);
 			if ( ac_lat_deg_fuel_end == null ) {
-				row.setDouble("aircraft_latitude_rad_at_fuel_end" , null);
+				this.setDouble(row,"aircraft_latitude_rad_at_fuel_end" , null);
 			} else {
-				row.setDouble("aircraft_latitude_rad_at_fuel_end" , Math.toRadians( ac_lat_deg_fuel_end ) );
+				this.setDouble(row,"aircraft_latitude_rad_at_fuel_end" , Math.toRadians( ac_lat_deg_fuel_end ) );
 			}
 
-			row.setDouble("aircraft_longitude_deg_at_fuel_end" , ac_lon_deg_fuel_end);
+			this.setDouble(row,"aircraft_longitude_deg_at_fuel_end" , ac_lon_deg_fuel_end);
 			if ( ac_lon_deg_fuel_end == null ) {
-				row.setDouble("aircraft_longitude_rad_at_fuel_end" , null);
+				this.setDouble(row,"aircraft_longitude_rad_at_fuel_end" , null);
 			} else {
-				row.setDouble("aircraft_longitude_rad_at_fuel_end" , Math.toRadians(ac_lon_deg_fuel_end ));
+				this.setDouble(row,"aircraft_longitude_rad_at_fuel_end" , Math.toRadians(ac_lon_deg_fuel_end ));
 			}
 
 			//=================================================================
 			// compute distance flown in Nautical miles between fuel start and fuel end
 			if (( ac_lat_deg_fuel_start == null )|| (ac_lon_deg_fuel_start == null)||(ac_lat_deg_fuel_end==null)||(ac_lon_deg_fuel_end==null)) {
-				row.setDouble("aircraft_distance_flown_start_end_Nm" , null);
+				this.setDouble(row,"aircraft_distance_flown_start_end_Nm" , null);
 			} else {
 				double distanceFlownNmBetweenStartEnd = Utils.calculateHaversineDistanceNauticalMiles( ac_lat_deg_fuel_start, ac_lon_deg_fuel_start, 
 						ac_lat_deg_fuel_end, ac_lon_deg_fuel_end); 
-				row.setDouble("aircraft_distance_flown_start_end_Nm" , distanceFlownNmBetweenStartEnd);
+				this.setDouble(row,"aircraft_distance_flown_start_end_Nm" , distanceFlownNmBetweenStartEnd);
 			}                                                                                               
 
 			//============================================================
@@ -722,20 +723,20 @@ public class FuelDataTable extends Table implements Runnable {
 			Double origin_longitude_deg = row.getDouble("origin_longitude_deg");
 
 			if (( origin_latitude_deg==null)||(origin_longitude_deg==null)||(ac_lat_deg_fuel_start==null)||(ac_lon_deg_fuel_start==null)){
-				row.setDouble("aircraft_distance_flown_origin_start_Nm", null);
+				this.setDouble(row,"aircraft_distance_flown_origin_start_Nm", null);
 			}else {
 				Double distanceNmFlownOriginToStart = Utils.calculateHaversineDistanceNauticalMiles(
 						origin_latitude_deg, origin_longitude_deg, ac_lat_deg_fuel_start, ac_lon_deg_fuel_start);
-				row.setDouble("aircraft_distance_flown_origin_start_Nm", distanceNmFlownOriginToStart);
+				this.setDouble(row,"aircraft_distance_flown_origin_start_Nm", distanceNmFlownOriginToStart);
 			}
 
 			if ( (origin_latitude_deg==null)||(origin_longitude_deg==null)||(ac_lat_deg_fuel_end==null)||(ac_lon_deg_fuel_end==null)){
-				row.setDouble("aircraft_distance_flown_origin_end_Nm", null);
+				this.setDouble(row,"aircraft_distance_flown_origin_end_Nm", null);
 			} else {
 				// compute distance flown in Nm between origin airport and aircraft position at fuel end
 				double distanceFlownNmOriginToEnd = Utils.calculateHaversineDistanceNauticalMiles(
 						origin_latitude_deg, origin_longitude_deg, ac_lat_deg_fuel_end, ac_lon_deg_fuel_end);
-				row.setDouble("aircraft_distance_flown_origin_end_Nm", distanceFlownNmOriginToEnd);
+				this.setDouble(row,"aircraft_distance_flown_origin_end_Nm", distanceFlownNmOriginToEnd);
 			}
 
 			// compute distance to be flown in Nm between aircraft position at fuel start and destination airport
@@ -743,20 +744,20 @@ public class FuelDataTable extends Table implements Runnable {
 			Double destination_longitude_deg = row.getDouble("destination_longitude_deg");
 
 			if ( (ac_lat_deg_fuel_start==null)||(ac_lon_deg_fuel_start==null)||(destination_latitude_deg==null)||(destination_longitude_deg==null)) {
-				row.setDouble("aircraft_distance_to_be_flown_start_destination_Nm", null);
+				this.setDouble(row,"aircraft_distance_to_be_flown_start_destination_Nm", null);
 			} else {
 				Double distanceToBeFlownNmStartToDestination = Utils.calculateHaversineDistanceNauticalMiles(
 						ac_lat_deg_fuel_start, ac_lon_deg_fuel_start, destination_latitude_deg, destination_longitude_deg);
-				row.setDouble("aircraft_distance_to_be_flown_start_destination_Nm", distanceToBeFlownNmStartToDestination);
+				this.setDouble(row,"aircraft_distance_to_be_flown_start_destination_Nm", distanceToBeFlownNmStartToDestination);
 			}
 
 			// compute distance to be flown in Nm between aircraft position at fuel end and destination airport
 			if ( (ac_lat_deg_fuel_end==null)||(ac_lon_deg_fuel_end==null)||(destination_latitude_deg==null)||(destination_longitude_deg==null)) {
-				row.setDouble("aircraft_distance_to_be_flown_end_destination_Nm", null);
+				this.setDouble(row,"aircraft_distance_to_be_flown_end_destination_Nm", null);
 			} else {
 				Double distanceToBeFlownNmEndToDestination = Utils.calculateHaversineDistanceNauticalMiles(
 						ac_lat_deg_fuel_end, ac_lon_deg_fuel_end, destination_latitude_deg, destination_longitude_deg);
-				row.setDouble("aircraft_distance_to_be_flown_end_destination_Nm", distanceToBeFlownNmEndToDestination);
+				this.setDouble(row,"aircraft_distance_to_be_flown_end_destination_Nm", distanceToBeFlownNmEndToDestination);
 			}
 
 			// manage altitudes 
@@ -769,10 +770,10 @@ public class FuelDataTable extends Table implements Runnable {
 			//=======================================
 			// vertical rate
 			Double vertical_rate_ft_min_start = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("vertical_rate" ,  start);
-			row.setDouble("aircraft_vertical_rate_ft_min_at_fuel_start" , vertical_rate_ft_min_start);
+			this.setDouble(row,"aircraft_vertical_rate_ft_min_at_fuel_start" , vertical_rate_ft_min_start);
 
 			Double vertical_rate_ft_min_end = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("vertical_rate" ,  end);
-			row.setDouble("aircraft_vertical_rate_ft_min_at_fuel_end" , vertical_rate_ft_min_end);
+			this.setDouble(row,"aircraft_vertical_rate_ft_min_at_fuel_end" , vertical_rate_ft_min_end);
 
 			// every thing related to mach , TAS and CAS
 			this.manageSpeeds( row , start, end );
@@ -800,7 +801,7 @@ public class FuelDataTable extends Table implements Runnable {
 				row.setLong("fuel_burnt_start_relative_to_takeoff_sec" , duration_sec);
 			} else {
 				System.out.println("Error takeoff = " + takeoff + " -- not before fuel burnt start = " + start);
-				row.setLong("fuel_burnt_start_relative_to_takeoff_sec" , null);
+				row.setLong("fuel_burnt_start_relative_to_takeoff_sec" , (Long)null);
 			}
 			// takeoff versus fuel end
 			if ( ( takeoff != null ) && takeoff.isBefore(end) ) {
@@ -809,7 +810,7 @@ public class FuelDataTable extends Table implements Runnable {
 				row.setLong("fuel_burnt_end_relative_to_takeoff_sec" , duration_sec);
 			} else {
 				System.out.println("Error takeoff = " + takeoff + " -- not before fuel burnt end = " + end);
-				row.setLong("fuel_burnt_end_relative_to_takeoff_sec" , null);
+				row.setLong("fuel_burnt_end_relative_to_takeoff_sec" , (Long)null);
 			}
 			// start versus landed
 			if ( ( landed != null ) && ( landed.getEpochSecond() > 0 )) {
@@ -818,7 +819,7 @@ public class FuelDataTable extends Table implements Runnable {
 					row.setLong("fuel_burnt_start_relative_to_landed_sec" , duration_sec);
 				}
 			} else {
-				row.setLong("fuel_burnt_start_relative_to_landed_sec" , null);
+				row.setLong("fuel_burnt_start_relative_to_landed_sec" , (Long)null);
 				System.out.println("Error fuel burnt end = " + end + " -- not before landed = " + landed);
 			}
 			// end versus landed
@@ -828,7 +829,7 @@ public class FuelDataTable extends Table implements Runnable {
 					row.setLong("fuel_burnt_end_relative_to_landed_sec" , duration_sec);
 				}
 			} else {
-				row.setLong("fuel_burnt_end_relative_to_landed_sec" , null);
+				row.setLong("fuel_burnt_end_relative_to_landed_sec" , (Long)null);
 				System.out.println("Error fuel burnt end = " + end + " -- not before landed = " + landed);
 			}
 
@@ -879,87 +880,87 @@ public class FuelDataTable extends Table implements Runnable {
 			Double ac_lat_fuel_end = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("latitude"  ,end);
 			Double ac_lon_fuel_end = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("longitude"  ,end);
 
-			row.setDouble("aircraft_latitude_deg_at_fuel_start" , ac_lat_fuel_start);
-			row.setDouble("aircraft_latitude_rad_at_fuel_start" , (ac_lat_fuel_start * Math.PI)/180.0);
+			this.setDouble(row,"aircraft_latitude_deg_at_fuel_start" , ac_lat_fuel_start);
+			this.setDouble(row,"aircraft_latitude_rad_at_fuel_start" , (ac_lat_fuel_start * Math.PI)/180.0);
 
-			row.setDouble("aircraft_longitude_deg_at_fuel_start" , ac_lon_fuel_start);
-			row.setDouble("aircraft_longitude_rad_at_fuel_start" , ( ac_lon_fuel_start * Math.PI)/180.0);
+			this.setDouble(row,"aircraft_longitude_deg_at_fuel_start" , ac_lon_fuel_start);
+			this.setDouble(row,"aircraft_longitude_rad_at_fuel_start" , ( ac_lon_fuel_start * Math.PI)/180.0);
 
-			row.setDouble("aircraft_latitude_deg_at_fuel_end" , ac_lat_fuel_end);
-			row.setDouble("aircraft_latitude_rad_at_fuel_end" , ( ac_lat_fuel_end * Math.PI)/180.0);
+			this.setDouble(row,"aircraft_latitude_deg_at_fuel_end" , ac_lat_fuel_end);
+			this.setDouble(row,"aircraft_latitude_rad_at_fuel_end" , ( ac_lat_fuel_end * Math.PI)/180.0);
 
-			row.setDouble("aircraft_longitude_deg_at_fuel_end" , ac_lon_fuel_end);
-			row.setDouble("aircraft_longitude_rad_at_fuel_end" , (ac_lon_fuel_end * Math.PI)/180.0);
+			this.setDouble(row,"aircraft_longitude_deg_at_fuel_end" , ac_lon_fuel_end);
+			this.setDouble(row,"aircraft_longitude_rad_at_fuel_end" , (ac_lon_fuel_end * Math.PI)/180.0);
 
 			// compute distance flown in Nautical miles between fuel start and fuel end
 			Double distanceFlownBetweenStartEnd = Utils.calculateHaversineDistanceNauticalMiles( ac_lat_fuel_start, ac_lon_fuel_start, ac_lat_fuel_end, ac_lon_fuel_end); 
-			row.setDouble("aircraft_distance_flown_start_end_Nm" , distanceFlownBetweenStartEnd);
+			this.setDouble(row,"aircraft_distance_flown_start_end_Nm" , distanceFlownBetweenStartEnd);
 
 			Double altitude_start = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("altitude" ,  start);
-			row.setDouble("aircraft_altitude_ft_at_fuel_start" , altitude_start);
+			this.setDouble(row,"aircraft_altitude_ft_at_fuel_start" , altitude_start);
 
 			Double altitude_end = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("altitude" ,  end);
-			row.setDouble("aircraft_altitude_ft_at_fuel_end" , altitude_end);
+			this.setDouble(row,"aircraft_altitude_ft_at_fuel_end" , altitude_end);
 
 			// computed vertical rate feet per minutes
 			long time_diff_sec = row.getLong("time_diff_seconds");
 
 			double computed_vertical_rate = (altitude_end - altitude_start)/ (float)time_diff_sec;
-			row.setDouble("aircraft_computed_vertical_rate_ft_min" , computed_vertical_rate);
+			this.setDouble(row,"aircraft_computed_vertical_rate_ft_min" , computed_vertical_rate);
 
 			// ground speed
 			Double groundSpeed_start = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("groundspeed",  start);
-			row.setDouble("aircraft_groundspeed_kt_at_fuel_start" , groundSpeed_start);
+			this.setDouble(row,"aircraft_groundspeed_kt_at_fuel_start" , groundSpeed_start);
 
 			Double groundSpeed_end = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("groundspeed" ,  end);
-			row.setDouble("aircraft_groundspeed_kt_at_fuel_end" , groundSpeed_end);
+			this.setDouble(row,"aircraft_groundspeed_kt_at_fuel_end" , groundSpeed_end);
 
 			// track angle degrees
 			Double track_angle_deg_start = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("track" ,  start);
-			row.setDouble("aircraft_track_angle_deg_at_fuel_start" , track_angle_deg_start);
+			this.setDouble(row,"aircraft_track_angle_deg_at_fuel_start" , track_angle_deg_start);
 
 			Double track_angle_deg_end = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("track" ,  end);
-			row.setDouble("aircraft_track_angle_deg_at_fuel_end" ,  track_angle_deg_end);
+			this.setDouble(row,"aircraft_track_angle_deg_at_fuel_end" ,  track_angle_deg_end);
 
 			// ground speed X and Y projected components
-			row.setDouble("aircraft_groundspeed_kt_X_at_fuel_start" , groundSpeed_end * Math.cos(Math.toRadians(track_angle_deg_end)));
-			row.setDouble("aircraft_groundspeed_kt_Y_at_fuel_start" , groundSpeed_end * Math.sin(Math.toRadians(track_angle_deg_end)));
+			this.setDouble(row,"aircraft_groundspeed_kt_X_at_fuel_start" , groundSpeed_end * Math.cos(Math.toRadians(track_angle_deg_end)));
+			this.setDouble(row,"aircraft_groundspeed_kt_Y_at_fuel_start" , groundSpeed_end * Math.sin(Math.toRadians(track_angle_deg_end)));
 
 			// ground speed X and Y projected components
-			row.setDouble("aircraft_groundspeed_kt_X_at_fuel_end" , groundSpeed_start * Math.cos(Math.toRadians(track_angle_deg_start)));
-			row.setDouble("aircraft_groundspeed_kt_Y_at_fuel_end" , groundSpeed_start * Math.sin(Math.toRadians(track_angle_deg_start)));
+			this.setDouble(row,"aircraft_groundspeed_kt_X_at_fuel_end" , groundSpeed_start * Math.cos(Math.toRadians(track_angle_deg_start)));
+			this.setDouble(row,"aircraft_groundspeed_kt_Y_at_fuel_end" , groundSpeed_start * Math.sin(Math.toRadians(track_angle_deg_start)));
 
 			// track angle radians
-			row.setDouble("aircraft_track_angle_rad_at_fuel_start" , Math.toRadians(track_angle_deg_start) );
-			row.setDouble("aircraft_track_angle_rad_at_fuel_end" ,  Math.toRadians(track_angle_deg_end));
+			this.setDouble(row,"aircraft_track_angle_rad_at_fuel_start" , Math.toRadians(track_angle_deg_start) );
+			this.setDouble(row,"aircraft_track_angle_rad_at_fuel_end" ,  Math.toRadians(track_angle_deg_end));
 
 			// vertical rate
 			Double vertical_rate_ft_min_start = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("vertical_rate" ,  start);
-			row.setDouble("aircraft_vertical_rate_ft_min_at_fuel_start" , vertical_rate_ft_min_start);
+			this.setDouble(row,"aircraft_vertical_rate_ft_min_at_fuel_start" , vertical_rate_ft_min_start);
 
 			Double vertical_rate_ft_min_end = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("vertical_rate" ,  end);
-			row.setDouble("aircraft_vertical_rate_ft_min_at_fuel_end" , vertical_rate_ft_min_end);
+			this.setDouble(row,"aircraft_vertical_rate_ft_min_at_fuel_end" , vertical_rate_ft_min_end);
 
 			// mach
 			Double mach_start = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("mach" ,  start);
-			row.setDouble("aircraft_mach_at_fuel_start" , mach_start);
+			this.setDouble(row,"aircraft_mach_at_fuel_start" , mach_start);
 
 			Double mach_end = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("mach" ,  end);
-			row.setDouble("aircraft_mach_at_fuel_end" , mach_end);
+			this.setDouble(row,"aircraft_mach_at_fuel_end" , mach_end);
 
 			// TAS
 			Double TAS_start = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("TAS" ,  start);
-			row.setDouble("aircraft_TAS_at_fuel_start" , TAS_start);
+			this.setDouble(row,"aircraft_TAS_at_fuel_start" , TAS_start);
 
 			Double TAS_end = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("TAS" ,  end);
-			row.setDouble("aircraft_TAS_at_fuel_end" , TAS_end);
+			this.setDouble(row,"aircraft_TAS_at_fuel_end" , TAS_end);
 
 			// CAS
 			Double CAS_start = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("CAS" ,  start);
-			row.setDouble("aircraft_CAS_at_fuel_start" , CAS_start);
+			this.setDouble(row,"aircraft_CAS_at_fuel_start" , CAS_start);
 
 			Double CAS_end = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("CAS" ,  end);
-			row.setDouble("aircraft_CAS_at_fuel_end" , CAS_end);
+			this.setDouble(row,"aircraft_CAS_at_fuel_end" , CAS_end);
 
 
 			// duration between flight takeoff and fuel burnt start end

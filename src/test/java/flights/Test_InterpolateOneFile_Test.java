@@ -2,8 +2,6 @@ package flights;
 
 import java.io.IOException;
 import java.time.Instant;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import org.apache.commons.math3.analysis.interpolation.LinearInterpolator;
 import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
@@ -12,10 +10,10 @@ import org.junit.jupiter.api.Test;
 import dataChallengeEnums.DataChallengeEnums.train_rank_final;
 import flightLists.FlightListData;
 import tech.tablesaw.aggregate.AggregateFunctions;
-import tech.tablesaw.aggregate.Summarizer;
 import tech.tablesaw.api.DoubleColumn;
-import tech.tablesaw.api.NumberColumn;
+import tech.tablesaw.api.InstantColumn;
 import tech.tablesaw.api.Table;
+import tech.tablesaw.columns.Column;
 import utils.CustomException;
 
 public class Test_InterpolateOneFile_Test {
@@ -25,53 +23,62 @@ public class Test_InterpolateOneFile_Test {
 		// sort again
 		tableToInterpolate = tableToInterpolate.sortOn("timestamp");
 		System.out.println(tableToInterpolate.structure().print());
+		System.out.println(tableToInterpolate.shape());
 
 		// take only double feature column value for the first time-stamp (in case of duplicates)
 		// suppress duplicates in timestap row 
 		//Summarizer summarizer =  tableToInterpolate.summarize(columnNameToInterpolate, AggregateFunctions.min);
 				
 		tableToInterpolate = tableToInterpolate.summarize(columnNameToInterpolate, AggregateFunctions.first).by("timestamp");
-		
+		tableToInterpolate.column(1).setName(columnNameToInterpolate);
+
 		System.out.println(tableToInterpolate.structure().print());
-		//localTableCopy = localTableCopy.selectColumns("timestamp",columnNameToInterpolate).dropDuplicateRows();
+		// warning InstantColumn in tablesaw are down to milliseconds not nanoseconds as the java.time.Instant
+		tableToInterpolate = tableToInterpolate.sortOn("timestamp");
+		System.out.println(tableToInterpolate.print());
 		
 		// rename column with index = 1
-		tableToInterpolate.column(1).setName(columnNameToInterpolate);
+		int rowCount = tableToInterpolate.rowCount();
+		
 		System.out.println(tableToInterpolate.structure().print());
+		System.out.println(tableToInterpolate.shape());
 
-		Instant[] xInstants =  (Instant[]) tableToInterpolate.column("timestamp").asObjectArray();
-		int sizeOfArray = xInstants.length;
-
-		double[] xSeconds = new double[sizeOfArray];
+		InstantColumn columnInstant = (InstantColumn) tableToInterpolate.column("timestamp");
+		double[] xMilliseconds = new double[rowCount];
+		
 		// convert Instant to seconds (long)
-		for ( int i = 0 ; i < xInstants.length ; i++) {
-			xSeconds[i] = xInstants[i].getEpochSecond();
+		for ( int i = 0 ; i < rowCount ; i++) {
+			// to avoid duplicates and error in math3 interpolate need to convert Instant to nano seconds
+			// converting to seconds will produce identifical consecutives seconds
+			// instant column with milliseconds precision unlike java.time down to nanoseconds			
+			Instant instant =  columnInstant.get(i);
+
+			long timeStampAsLong = instant.toEpochMilli();
+			xMilliseconds[i] = (double)timeStampAsLong;
+			//System.out.println(String.valueOf(timeStampAsLong));
 		}
 
 		// build a double array as expected by the Apache.math3 interpolation function
-		// transform column to interpolate into an array of doubble
-		DoubleColumn doubleCol = (DoubleColumn) tableToInterpolate.column(columnNameToInterpolate);
-		double[] yValues = new double[sizeOfArray];
-		yValues = doubleCol.asDoubleArray();
-
+		// transform column to interpolate into an array of double
+		DoubleColumn columnDouble = (DoubleColumn) tableToInterpolate.column(columnNameToInterpolate);
+		double[] yValues = new double[rowCount];
+		yValues = columnDouble.asDoubleArray();
+		
 		LinearInterpolator interpolator = new LinearInterpolator();
-		PolynomialSplineFunction interpolateFunction = interpolator.interpolate(xSeconds, yValues);
+		PolynomialSplineFunction interpolateFunction = interpolator.interpolate(xMilliseconds, yValues);
 
-		// forward fill interpolation
-		double[] yInterpolatedValues = new double[sizeOfArray];
-
-		for (int i = 0; i < sizeOfArray; i++) {
+		//  interpolation of holes / empty / Not a numbe
+		for (int i = 0; i < rowCount; i++) {
 			if (!Double.isNaN(yValues[i])) {
 
-				double instantSecTToInterpolate = xSeconds[i];
-				if (  interpolateFunction.isValidPoint(instantSecTToInterpolate)) {
-					yInterpolatedValues[i] = interpolateFunction.value(instantSecTToInterpolate);
+				double instantMilliSecondsTToInterpolate = xMilliseconds[i];
+				if (  interpolateFunction.isValidPoint(instantMilliSecondsTToInterpolate)) {
+					yValues[i] = interpolateFunction.value(instantMilliSecondsTToInterpolate);
 				} 
-			} else {
-				yInterpolatedValues[i] = yValues[i];
 			}
 		}
-		
+		Table interpolatedTable = Table.create( )
+		return interpolatedTable;
 	}
 
 	@Test
@@ -107,8 +114,8 @@ public class Test_InterpolateOneFile_Test {
 				//System.out.println(columnName);
 
 				int countMissing = localTableCopy.column(columnNameToInterpolate).countMissing();
-
-				if ( countMissing == localTableCopy.rowCount() ) {
+				boolean columnToInterpolateIsEmpty = localTableCopy.column(columnNameToInterpolate).isEmpty();
+				if ( ( countMissing == localTableCopy.rowCount() ) || columnToInterpolateIsEmpty  ) {
 					// the whole column is empty -> impossible to interpolate
 
 					System.out.printf("Column %s - row count = %d -> number of missing %d \n" , columnNameToInterpolate , localTableCopy.rowCount() , countMissing);
@@ -119,9 +126,9 @@ public class Test_InterpolateOneFile_Test {
 					// drop all other columns - should keep timestamp and the column to interpolate
 					
 					Table tableToInterpolate = localTableCopy.selectColumns("timestamp",columnNameToInterpolate);
-					System.out.println(tableToInterpolate.structure().print());
+					//System.out.println(tableToInterpolate.structure().print());
 
-					this.interpolate(tableToInterpolate , columnNameToInterpolate);
+					Table interpolatedTable = this.interpolate(tableToInterpolate , columnNameToInterpolate);
 				}
 			}
 		}

@@ -7,8 +7,7 @@ xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 https://maven.apache.org/
   <version>0.0.1-SNAPSHOT</version>
   <name>PRC-Data-Challenge-2025</name>
   <description>PRC-Data-Challenge-2025</description>
-  
-  
+ 
    <properties>
     	<mavenVersion>3.9.5</mavenVersion>
         <maven.compiler.source>21</maven.compiler.source>

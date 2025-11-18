@@ -2,6 +2,7 @@ package flights;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.logging.Logger;
 
 import com.jerolba.carpet.CarpetReader;
@@ -29,6 +30,14 @@ public class FlightData extends FlightDataTable {
 		 +---
 	 */
 
+	private void setMyOwnDouble( Row row , final String columnName , final Double doubleValueWithPotentialNull) {
+
+		if ( (Double)doubleValueWithPotentialNull == null ) {
+			row.setMissing(columnName);
+		} else {
+			row.setDouble(columnName, doubleValueWithPotentialNull);
+		}
+	}
 
 	/**
 	 * new method of reading parquet files and managing missing values (holes)
@@ -49,81 +58,84 @@ public class FlightData extends FlightDataTable {
 		if (( parquetFile != null ) &&  parquetFile.isFile() ) {
 
 			try {
-
 				CarpetReader<FlightDataRecord> reader = new CarpetReader<FlightDataRecord>(parquetFile, FlightDataRecord.class);
-				reader.stream().forEachOrdered(record -> {
-
+				Iterator<FlightDataRecord> iter = reader.iterator();
+				while( iter.hasNext() ) {
+				//.stream().forEachOrdered(record -> {
+					FlightDataRecord flightDataRecord = iter.next();
 					Row row = this.flightDataTable.appendRow();
 
-					row.setString("flight_id", record.flight_id());
-					row.setInstant("timestamp", record.timestamp());
+					row.setString("flight_id", flightDataRecord.flight_id());
+					row.setInstant("timestamp", flightDataRecord.timestamp());
+					row.setString("typecode", flightDataRecord.typecode());
+					row.setString("source", flightDataRecord.source());
 
 					// assumption no holes in latitude nor in longitude
-					if (record.latitude() == null) {
+					if (flightDataRecord.latitude() == null) {
 						//System.out.println("row = " + record.timestamp() + " -> longitude --> null found");
 						//System.out.println("--- do nothing - do not fill empty cell ---");
 					} else {
-						row.setDouble("latitude" , record.latitude());
+						this.setMyOwnDouble(row,"latitude" , flightDataRecord.latitude());
 					}
 
-					if (record.longitude() == null) {
+					if (flightDataRecord.longitude() == null) {
 						//System.out.println("row = " + record.timestamp() + " -> longitude --> null found");
 						//System.out.println("--- do nothing - do not fill empty cell ---");
 					} else {
-						row.setDouble("longitude", record.longitude());
+						this.setMyOwnDouble(row,"longitude", flightDataRecord.longitude());
 					}
 					/**
 					 * managing holes in the floating values of altitude
 					 */
-					if ( record.altitude() == null) {
+					if ( flightDataRecord.altitude() == null) {
 						//System.out.println("row = " + record.timestamp() + " -> altitude --> null found");
 						//System.out.println("--- do nothing - do not fill empty cell ---");
 					} else {
-						row.setDouble("altitude", record.altitude());
+						this.setMyOwnDouble(row, "altitude", flightDataRecord.altitude());
 					}
 
-					if ( record.groundspeed() == null) {
+					if ( flightDataRecord.groundspeed() == null) {
 						//System.out.println("row = " + record.timestamp() + " -> groundspeed --> null found");
 						//System.out.println("--- do nothing - do not fill empty cell ---");
 					} else {
-						row.setDouble("groundspeed", record.groundspeed());
+						this.setMyOwnDouble(row,"groundspeed", flightDataRecord.groundspeed());
 					}
 
-					if ( record.track() == null) {
+					if ( flightDataRecord.track() == null) {
 						//System.out.println("row = " + record.timestamp() + " -> track --> null found");
 						//System.out.println("--- do nothing - do not fill empty cell ---");
 					} else {
-						row.setDouble("track", record.track());
+						this.setMyOwnDouble(row,"track", flightDataRecord.track());
 					}
 
-					if ( record.vertical_rate() == null) {
+					if ( flightDataRecord.vertical_rate() == null) {
 						//System.out.println("row = " + record.timestamp() + " -> vertical_rate --> null found");
 						//System.out.println("--- do nothing - do not fill empty cell ---");
 					} else {
-						row.setDouble("vertical_rate", record.vertical_rate());
+						this.setMyOwnDouble(row,"vertical_rate", flightDataRecord.vertical_rate());
 					}
 
-					if ( record.mach() == null) {
+					if ( flightDataRecord.mach() == null) {
 						//System.out.println("row = " + record.timestamp() + " -> mach --> null found");
 						//System.out.println("--- do nothing - do not fill empty cell ---");
 					} else {
-						row.setDouble("mach", record.mach());
+						this.setMyOwnDouble(row,"mach", flightDataRecord.mach());
 					}
 
-					if ( record.TAS() == null) {
+					if ( flightDataRecord.TAS() == null) {
 						//System.out.println("row = " + record.timestamp() + " -> TAS --> null found");
 						//System.out.println("--- do nothing - do not fill empty cell ---");
 					} else {
-						row.setDouble("TAS", record.TAS());
+						this.setMyOwnDouble(row,"TAS", flightDataRecord.TAS());
 					}
 
-					if ( record.CAS() == null) {
+					if ( flightDataRecord.CAS() == null) {
 						//System.out.println("row = " + record.timestamp() + " -> CAS --> null found");
 						//System.out.println("--- do nothing - do not ill empty cell ---");
 					} else {
-						row.setDouble("CAS", record.CAS());
+						this.setMyOwnDouble(row,"CAS", flightDataRecord.CAS());
 					}
-				});
+				};
 				//System.out.println( this.getFlightDataTable().print(10));
 
 			}catch (Exception e) {
