@@ -33,3 +33,6 @@ mvn test -Dtest="Test_SearchForMissingFeatiresFinal_Test"
 mvn test -Dtest="Test_InterpolateOneFile_Test"
 
 mvn test -Dtest="Test_SummarizeSuppressDuplicatedInstants_Test"
+
+mvn test -Dtest="Test_CreateInterpolatedFlightsFile_Test"
+

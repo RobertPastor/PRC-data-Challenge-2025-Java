@@ -9,13 +9,14 @@ public class FlightDataSchema {
 	
 		String flight_id, 
 		Instant timestamp,
+		
 		String typecode,
 		String source,
 		
 		Double longitude,
 		Double latitude,
-		
 		Double altitude,
+		
 		Double groundspeed,
 		
 		Double track,

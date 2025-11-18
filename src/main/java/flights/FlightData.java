@@ -2,16 +2,25 @@ package flights;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Logger;
 
 import com.jerolba.carpet.CarpetReader;
+import com.jerolba.carpet.CarpetWriter;
+import com.jerolba.carpet.io.FileSystemOutputFile;
 
 import dataChallengeEnums.DataChallengeEnums.train_rank_final;
 import flights.FlightDataSchema.FlightDataRecord;
 import folderDiscovery.FolderDiscovery;
+import fuel.FuelDataSchema.FuelExtendedDataRecord;
 import tech.tablesaw.api.Row;
 import utils.CustomException;
+import utils.Utils;
 
 
 public class FlightData extends FlightDataTable {
@@ -38,7 +47,8 @@ public class FlightData extends FlightDataTable {
 			row.setDouble(columnName, doubleValueWithPotentialNull);
 		}
 	}
-
+	
+	
 	/**
 	 * new method of reading parquet files and managing missing values (holes)
 	 * @throws IOException

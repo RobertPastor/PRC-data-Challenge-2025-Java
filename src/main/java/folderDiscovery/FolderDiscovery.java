@@ -13,84 +13,28 @@ public class FolderDiscovery {
 
 	String className = "";
 	
-	//private static String flightTrainFolderStr = "C:/Users/rober/git/PRCdataChallenge2025/Data-Download-OpenSkyNetwork/competition-train-data-interpolated/";
-	private static String flightTrainFolderStr = "C:/Users/rober/git/PRCdataChallenge2025/Data-Download-OpenSkyNetwork/competition-train-data/";
-	//private static String flightRankFolderStr = "C:/Users/rober/git/PRCdataChallenge2025/Data-Download-OpenSkyNetwork/competition-rank-data-interpolated/";
+	private static String flightTrainInterpolatedFolderStr = "C:/Users/rober/git/PRCdataChallenge2025/Data-Download-OpenSkyNetwork/competition-train-data-interpolated/";
+	private static String flightTrainFolderStr= "C:/Users/rober/git/PRCdataChallenge2025/Data-Download-OpenSkyNetwork/competition-train-data/";
+	
+	private static String flightRankInterpolatedFolderStr = "C:/Users/rober/git/PRCdataChallenge2025/Data-Download-OpenSkyNetwork/competition-rank-data-interpolated/";
 	private static String flightRankFolderStr = "C:/Users/rober/git/PRCdataChallenge2025/Data-Download-OpenSkyNetwork/competition-rank-data/";
-	//private static String flightFinalFolderStr = "C:/Users/rober/git/PRCdataChallenge2025/Data-Download-OpenSkyNetwork/competition-final-data-interpolated/";
+	
+	private static String flightFinalInterpolatedFolderStr = "C:/Users/rober/git/PRCdataChallenge2025/Data-Download-OpenSkyNetwork/competition-final-data-interpolated/";
 	private static String flightFinalFolderStr = "C:/Users/rober/git/PRCdataChallenge2025/Data-Download-OpenSkyNetwork/competition-final-data/";
 	
-	public static String getFuelFinalFolderStr() {
-		return fuelFinalFolderStr;
+	public static String getTrainRankFinalInterpolatedFlightsOutputfolderStr( final train_rank_final trainRankFinalvalue ) {
+		if ( trainRankFinalvalue == train_rank_final.train) {
+			return flightTrainInterpolatedFolderStr;
+		} else {
+			if ( trainRankFinalvalue == train_rank_final.rank) {
+				return flightRankInterpolatedFolderStr;
+			} else {
+				return flightFinalInterpolatedFolderStr;
+			}
+		}
 	}
-
-	public static void setFuelFinalFolderStr(String fuelFinalFolderStr) {
-		FolderDiscovery.fuelFinalFolderStr = fuelFinalFolderStr;
-	}
-
-	public static String getTrainRankFinalOutputfolderStr() {
-		return trainRankFinalOutputfolderStr;
-	}
-
-	public static void setTrainRankFinalOutputfolderStr(String trainRankFinalOutputfolderStr) {
-		FolderDiscovery.trainRankFinalOutputfolderStr = trainRankFinalOutputfolderStr;
-	}
-
-	public File getFlightFinalFolder() {
-		return flightFinalFolder;
-	}
-
-	public void setFlightFinalFolder(File flightFinalFolder) {
-		this.flightFinalFolder = flightFinalFolder;
-	}
-
-	public File[] getFlightFinalFiles() {
-		return flightFinalFiles;
-	}
-
-	public void setFlightFinalFiles(File[] flightFinalFiles) {
-		this.flightFinalFiles = flightFinalFiles;
-	}
-
-	public static void setFlightTrainFolderStr(String flightTrainFolderStr) {
-		FolderDiscovery.flightTrainFolderStr = flightTrainFolderStr;
-	}
-
-	public static void setFlightRankFolderStr(String flightRankFolderStr) {
-		FolderDiscovery.flightRankFolderStr = flightRankFolderStr;
-	}
-
-	public static void setFlightFinalFolderStr(String flightFinalFolderStr) {
-		FolderDiscovery.flightFinalFolderStr = flightFinalFolderStr;
-	}
-
-	public static void setFuelRankFolderStr(String fuelRankFolderStr) {
-		FolderDiscovery.fuelRankFolderStr = fuelRankFolderStr;
-	}
-
-	public static void setFlightListTrainRankFolderStr(String flightListTrainRankFolderStr) {
-		FolderDiscovery.flightListTrainRankFolderStr = flightListTrainRankFolderStr;
-	}
-
-	public static void setLegacyAirportsFolderStr(String legacyAirportsFolderStr) {
-		FolderDiscovery.legacyAirportsFolderStr = legacyAirportsFolderStr;
-	}
-
-	public static void setAirportsLegacyFolderStr(String airportsLegacyFolderStr) {
-		FolderDiscovery.airportsLegacyFolderStr = airportsLegacyFolderStr;
-	}
-
-	public static void setAircraftsFolderPath(String aircraftsFolderPath) {
-		FolderDiscovery.aircraftsFolderPath = aircraftsFolderPath;
-	}
-
-	public void setFlightTrainFolder(File flightTrainFolder) {
-		this.flightTrainFolder = flightTrainFolder;
-	}
-
-	public void setFlightRankFolder(File flightRankFolder) {
-		this.flightRankFolder = flightRankFolder;
-	}
+	
+	
 
 	private static String fuelRankFolderStr = "C:/Users/rober/git/PRCdataChallenge2025/trajectory/Fuel/";
 	private static String fuelTrainFolderStr = "C:/Users/rober/git/PRCdataChallenge2025/trajectory/Fuel/";
@@ -166,7 +110,6 @@ public class FolderDiscovery {
 	public File getFlightRankFolder() {
 		return flightRankFolder;
 	}
-
 
 	public File[] getFlightRankFiles() {
 		return flightRankFiles;
@@ -351,4 +294,87 @@ public class FolderDiscovery {
 		return flightFinalFolderStr;
 	}
 
+	public static String getFuelFinalFolderStr() {
+		return fuelFinalFolderStr;
+	}
+
+	public static void setFuelFinalFolderStr(String fuelFinalFolderStr) {
+		FolderDiscovery.fuelFinalFolderStr = fuelFinalFolderStr;
+	}
+
+	public static String getTrainRankFinalOutputfolderStr() {
+		return trainRankFinalOutputfolderStr;
+	}
+
+	public static void setTrainRankFinalOutputfolderStr(String trainRankFinalOutputfolderStr) {
+		FolderDiscovery.trainRankFinalOutputfolderStr = trainRankFinalOutputfolderStr;
+	}
+	
+	public static String getFlightTrainInterpolatedFolderStr() {
+		return flightTrainInterpolatedFolderStr;
+	}
+
+	public static String getFlightRankInterpolatedFolderStr() {
+		return flightRankInterpolatedFolderStr;
+	}
+
+	public static String getFlightFinalInterpolatedFolderStr() {
+		return flightFinalInterpolatedFolderStr;
+	}
+
+	public File getFlightFinalFolder() {
+		return flightFinalFolder;
+	}
+
+	public void setFlightFinalFolder(File flightFinalFolder) {
+		this.flightFinalFolder = flightFinalFolder;
+	}
+
+	public File[] getFlightFinalFiles() {
+		return flightFinalFiles;
+	}
+
+	public void setFlightFinalFiles(File[] flightFinalFiles) {
+		this.flightFinalFiles = flightFinalFiles;
+	}
+
+	public static void setFlightTrainFolderStr(String flightTrainFolderStr) {
+		FolderDiscovery.flightTrainFolderStr = flightTrainFolderStr;
+	}
+
+	public static void setFlightRankFolderStr(String flightRankFolderStr) {
+		FolderDiscovery.flightRankFolderStr = flightRankFolderStr;
+	}
+
+	public static void setFlightFinalFolderStr(String flightFinalFolderStr) {
+		FolderDiscovery.flightFinalFolderStr = flightFinalFolderStr;
+	}
+
+	public static void setFuelRankFolderStr(String fuelRankFolderStr) {
+		FolderDiscovery.fuelRankFolderStr = fuelRankFolderStr;
+	}
+
+	public static void setFlightListTrainRankFolderStr(String flightListTrainRankFolderStr) {
+		FolderDiscovery.flightListTrainRankFolderStr = flightListTrainRankFolderStr;
+	}
+
+	public static void setLegacyAirportsFolderStr(String legacyAirportsFolderStr) {
+		FolderDiscovery.legacyAirportsFolderStr = legacyAirportsFolderStr;
+	}
+
+	public static void setAirportsLegacyFolderStr(String airportsLegacyFolderStr) {
+		FolderDiscovery.airportsLegacyFolderStr = airportsLegacyFolderStr;
+	}
+
+	public static void setAircraftsFolderPath(String aircraftsFolderPath) {
+		FolderDiscovery.aircraftsFolderPath = aircraftsFolderPath;
+	}
+
+	public void setFlightTrainFolder(File flightTrainFolder) {
+		this.flightTrainFolder = flightTrainFolder;
+	}
+
+	public void setFlightRankFolder(File flightRankFolder) {
+		this.flightRankFolder = flightRankFolder;
+	}
 }
