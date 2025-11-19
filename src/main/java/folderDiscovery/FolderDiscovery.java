@@ -33,8 +33,6 @@ public class FolderDiscovery {
 			}
 		}
 	}
-	
-	
 
 	private static String fuelRankFolderStr = "C:/Users/rober/git/PRCdataChallenge2025/trajectory/Fuel/";
 	private static String fuelTrainFolderStr = "C:/Users/rober/git/PRCdataChallenge2025/trajectory/Fuel/";
@@ -119,6 +117,12 @@ public class FolderDiscovery {
 		this.className = FolderDiscovery.class.getSimpleName();
 	}
 	
+	/**
+	 * use interpolated files
+	 * @param train_rank_value
+	 * @param fileName
+	 * @return
+	 */
 	public File getFlightFileFromFileName ( train_rank_final train_rank_value , String fileName ) {
 		
 		//logger.info(this.className + " --- " + fileName );
@@ -126,14 +130,16 @@ public class FolderDiscovery {
 			fileName = fileName + ".parquet";
 		}
 		try {
+			//FolderDiscovery.getTrainRankFinalInterpolatedFlightsOutputfolderStr
+			
 			Path path = null;
 			if ( train_rank_value == train_rank_final.train) {
-				path = Paths.get(FolderDiscovery.flightTrainFolderStr , fileName);
+				path = Paths.get(FolderDiscovery.flightTrainInterpolatedFolderStr , fileName);
 			} else {
 				if ( train_rank_value == train_rank_final.rank ) {
-					path = Paths.get(FolderDiscovery.flightRankFolderStr , fileName);
+					path = Paths.get(FolderDiscovery.flightRankInterpolatedFolderStr , fileName);
 				}else {
-					path = Paths.get(FolderDiscovery.flightFinalFolderStr , fileName);
+					path = Paths.get(FolderDiscovery.flightFinalInterpolatedFolderStr , fileName);
 				}
 			}
 			//logger.info(path.toString());

@@ -65,6 +65,11 @@ public class FlightData extends FlightDataTable {
 		//logger.info(fileName);
 
 		File parquetFile = folderDiscovery.getFlightFileFromFileName(this.getTrain_rank_value() , fileName);
+		
+		System.out.println("---------- > " + parquetFile.getAbsolutePath());
+		System.out.println("---------- > " + parquetFile.getAbsolutePath());
+		System.out.println("---------- > " + parquetFile.getAbsolutePath());
+		
 		if (( parquetFile != null ) &&  parquetFile.isFile() ) {
 
 			try {

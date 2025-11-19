@@ -200,14 +200,21 @@ public class FlightDataTable extends Table {
 		return this.flightDataTable;
 	}
 
-	public void generateParquetFileFor(final train_rank_final train_rank_final_value , final String flight_id) throws IOException {
+	/**
+	 * create a parquet file from the inside contained flight data dataframe
+	 * @param train_rank_final_value
+	 * @param flight_id
+	 * @throws IOException
+	 */
+	public void generateParquetFileFor(final train_rank_final train_rank_final_value , 
+			final String flight_id) throws IOException {
 
 		logger.info("--- start write parquet <<" + train_rank_final_value + ">> parquet file <<" +  flight_id + ">>  ------");
 
-		String currentDateTimeAsStr = Utils.getCurrentDateTimeasStr();
-		String fileName  = flight_id + "_" + train_rank_final_value + "_" + "interpolated" + "_" + currentDateTimeAsStr + "_" + ".parquet";
+		//String currentDateTimeAsStr = Utils.getCurrentDateTimeasStr();
+		String fileName  = flight_id + ".parquet";
 
-		String folderStr = FolderDiscovery.getTrainRankFinalInterpolatedFlightsOutputfolderStr(this.getTrain_rank_value());
+		String folderStr = FolderDiscovery.getTrainRankFinalInterpolatedFlightsOutputfolderStr(train_rank_final_value);
 
 		Path path = Paths.get(folderStr , fileName );
 		File file = path.toFile();

@@ -3,6 +3,8 @@ package flights;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.commons.math3.analysis.interpolation.LinearInterpolator;
 import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
@@ -15,7 +17,6 @@ import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.InstantColumn;
 import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
-import tech.tablesaw.columns.Column;
 import utils.CustomException;
 
 public class Test_InterpolateOneFile_Test {
@@ -39,8 +40,8 @@ public class Test_InterpolateOneFile_Test {
 
 		tableToInterpolate = tableToInterpolate.dropDuplicateRows();		
 		
-		System.out.println("Interpolated resulting table shape " + interpolatedTable.shape());
-		System.out.println("Interpolated resulting table structure " + interpolatedTable.structure().print());
+		//System.out.println("Interpolated resulting table shape " + interpolatedTable.shape());
+		//System.out.println("Interpolated resulting table structure " + interpolatedTable.structure().print());
 		return tableToInterpolate;
 	}
 	
@@ -62,19 +63,25 @@ public class Test_InterpolateOneFile_Test {
 		DoubleColumn doubleColumn = (DoubleColumn) tableToInterpolate.column(columnNameToInterpolate);
 		interpolatedTable = interpolatedTable.addColumns(doubleColumn);
 
-		System.out.println("Interpolated resulting table shape " + interpolatedTable.shape());
-		System.out.println("Interpolated resulting table structure " + interpolatedTable.structure().print());
+		//System.out.println("Interpolated resulting table shape " + interpolatedTable.shape());
+		//System.out.println("Interpolated resulting table structure " + interpolatedTable.structure().print());
 		return interpolatedTable;
 
 	}
 
+	/**
+	 * interpolate using apache math3 interpolation function
+	 * @param train_rank_final_value
+	 * @param flight_id
+	 * @param tableToInterpolate
+	 * @param columnNameToInterpolate
+	 * @return
+	 */
 	private Table interpolate(final train_rank_final train_rank_final_value, final String flight_id ,
 			Table tableToInterpolate , final String columnNameToInterpolate) {
 		
 		// sort again
 		tableToInterpolate = tableToInterpolate.sortOn("timestamp");
-		//System.out.println(tableToInterpolate.structure().print());
-		//System.out.println(tableToInterpolate.shape());
 
 		// take only double feature column value for the first time-stamp (in case of duplicates)
 		// suppress duplicates in timestap row 
@@ -101,7 +108,6 @@ public class Test_InterpolateOneFile_Test {
 			// converting to seconds will produce identifical consecutives seconds
 			// instant column with milliseconds precision unlike java.time down to nanoseconds			
 			Instant instant =  instantColumn.get(i);
-
 			long timeStampAsLong = instant.toEpochMilli();
 			xMilliseconds[i] = (double)timeStampAsLong;
 			//System.out.println(String.valueOf(timeStampAsLong));
@@ -115,25 +121,56 @@ public class Test_InterpolateOneFile_Test {
 		
 		LinearInterpolator interpolator = new LinearInterpolator();
 		PolynomialSplineFunction interpolateFunction = interpolator.interpolate(xMilliseconds, yValues);
+		
+		// new interpolated column
+		DoubleColumn interpolatedColumn = doubleColumn.createCol(columnNameToInterpolate);
 
 		//  interpolation of holes / empty / Not a numbe
 		for (int i = 0; i < rowCount; i++) {
 			if (!Double.isNaN(yValues[i])) {
 				double instantMilliSecondsTToInterpolate = xMilliseconds[i];
 				if (  interpolateFunction.isValidPoint(instantMilliSecondsTToInterpolate)) {
-					yValues[i] = interpolateFunction.value(instantMilliSecondsTToInterpolate);
-				} 
+					//System.out.println("replace missing with an interpolated value");
+					double interpolatedValue = interpolateFunction.value(instantMilliSecondsTToInterpolate);
+					yValues[i] = interpolatedValue;
+					interpolatedColumn = interpolatedColumn.append(interpolatedValue);
+				} else {
+					interpolatedColumn = interpolatedColumn.append((Double)null);
+				}
+			} else {
+				interpolatedColumn = interpolatedColumn.append(yValues[i]);
 			}
 		}
 		Table interpolatedTable = Table.create(this.getInterpolatedColumnTableName(train_rank_final_value, flight_id, columnNameToInterpolate) );
 		interpolatedTable = interpolatedTable.addColumns(instantColumn);
-		interpolatedTable = interpolatedTable.addColumns(doubleColumn);
 		
-		System.out.println("Interpolated resulting table shape " + interpolatedTable.shape());
-		System.out.println("Interpolated resulting table structure " + interpolatedTable.structure().print());
+		// create double column and add the vales
+		interpolatedTable = interpolatedTable.addColumns(interpolatedColumn);
+		
+		//System.out.println("Interpolated resulting table shape " + interpolatedTable.shape());
+		//System.out.println("Interpolated resulting table structure " + interpolatedTable.structure().print());
 
 		//System.out.println(interpolatedTable.print());
 		return interpolatedTable;
+	}
+	
+	private void countMissing(final Table flightDatatable) {
+		
+		SortedSet<String> sortedColNames = new TreeSet<String>(flightDatatable.columnNames());
+		
+		System.out.println("|--------------------|------------------|-----------|");
+		System.out.println("| columnName         | count missing    | row count | ");
+		System.out.println("|--------------------|------------------|-----------|");
+
+		for (String columnName : sortedColNames) {
+		
+			int countMissing = flightDatatable.column( columnName ).countMissing();
+			int rowCount = flightDatatable.rowCount();
+
+			System.out.println("|" + columnName + " | " + String.valueOf(countMissing) + "|" + String.valueOf(rowCount) + "|");
+			System.out.println("|--------------------|------------------|-----------|");
+
+		}
 	}
 
 	@SuppressWarnings("deprecation")
@@ -155,8 +192,10 @@ public class Test_InterpolateOneFile_Test {
 
 		FlightData flightData = new FlightData(train_rank_final_value , flight_id);
 		flightData.readParquetWithStream();	
-
+		
 		Table flightDatatable = flightData.getFlightDataTable();
+		this.countMissing(flightDatatable);
+
 		//System.out.println(flightDatatable.print());
 		//System.out.println(flightDatatable.structure().print());
 
@@ -182,8 +221,8 @@ public class Test_InterpolateOneFile_Test {
 			} else {
 				finalInterpolatedTable = finalInterpolatedTable.joinOn("timestamp").leftOuter(interpolatedTable);
 			}
-			System.out.println("final interpolated table -> " + finalInterpolatedTable.shape());
-			System.out.println("final interpolated table -> " + finalInterpolatedTable.structure().print());
+			//System.out.println("final interpolated table -> " + finalInterpolatedTable.shape());
+			//System.out.println("final interpolated table -> " + finalInterpolatedTable.structure().print());
 		}
 		
 
@@ -199,8 +238,8 @@ public class Test_InterpolateOneFile_Test {
 				if ( ( countMissing == localTableCopy.rowCount() ) || columnToInterpolateIsEmpty  ) {
 					// the whole column is empty -> impossible to interpolate
 
-					System.out.printf("Column <<%s>> - row count = <<%d>> -> number of missing <<%d>> \n" , columnNameToInterpolate , localTableCopy.rowCount() , countMissing);
-					System.out.println("--- cannot interpolate a column <<" + columnNameToInterpolate + ">> that is empty ---");
+					//System.out.printf("Column <<%s>> - row count = <<%d>> -> number of missing <<%d>> \n" , columnNameToInterpolate , localTableCopy.rowCount() , countMissing);
+					//System.out.println("--- cannot interpolate a column <<" + columnNameToInterpolate + ">> that is empty ---");
 					// the filtered table may have less rows because of duplicated timestamps
 					Table tableToInterpolate = localTableCopy.selectColumns("timestamp",columnNameToInterpolate);
 
@@ -208,10 +247,10 @@ public class Test_InterpolateOneFile_Test {
 							tableToInterpolate, columnNameToInterpolate);
 					
 					finalInterpolatedTable = interpolatedTable.joinOn("timestamp").leftOuter(finalInterpolatedTable);
-					System.out.println(finalInterpolatedTable.shape());
+					//System.out.println(finalInterpolatedTable.shape());
 					
 				} else {
-					System.out.println("--- <<" +  columnNameToInterpolate + ">> ready to interpolate ---");
+					//System.out.println("--- <<" +  columnNameToInterpolate + ">> ready to interpolate ---");
 					// drop all other columns - should keep timestamp and the column to interpolate
 					
 					Table tableToInterpolate = localTableCopy.selectColumns("timestamp",columnNameToInterpolate);
@@ -220,13 +259,15 @@ public class Test_InterpolateOneFile_Test {
 					Table interpolatedTable = this.interpolate(train_rank_final_value , flight_id , tableToInterpolate , columnNameToInterpolate);
 					
 					finalInterpolatedTable = interpolatedTable.joinOn("timestamp").leftOuter(finalInterpolatedTable);
-					System.out.println(finalInterpolatedTable.structure().print());
+					//System.out.println(finalInterpolatedTable.structure().print());
 				}
 			}
 		}
-		System.out.println("final interpolated table -> " + finalInterpolatedTable.shape());
-		System.out.println("final interpolated table -> " + finalInterpolatedTable.structure().print());
+		//System.out.println("final interpolated table -> " + finalInterpolatedTable.shape());
+		//System.out.println("final interpolated table -> " + finalInterpolatedTable.structure().print());
 		FlightDataTable flightDataTable = new FlightDataTable(finalInterpolatedTable);
+		this.countMissing(finalInterpolatedTable);
+
 		flightDataTable.generateParquetFileFor(train_rank_final_value , flight_id);
 	}
 }

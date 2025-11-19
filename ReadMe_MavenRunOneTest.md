@@ -36,3 +36,4 @@ mvn test -Dtest="Test_SummarizeSuppressDuplicatedInstants_Test"
 
 mvn test -Dtest="Test_CreateInterpolatedFlightsFile_Test"
 
+mvn test -Dtest="Test_FuelTableFillwithExecutors_Test"
