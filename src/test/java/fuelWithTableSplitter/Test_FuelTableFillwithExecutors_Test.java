@@ -23,18 +23,11 @@ public class Test_FuelTableFillwithExecutors_Test {
 	private static final Logger logger = Logger.getLogger(Test_FuelTableFillwithExecutors_Test.class.getName());
 	
 	static int count = 0;
-
-	@Test
-	public void processParallelyWithExecutorService() throws InterruptedException, IOException , utils.CustomException {
+	
+	public void processParallelInternal( final train_rank_final train_rank_final_value , 
+			long maxToBeComputedRow	) throws InterruptedException, IOException , utils.CustomException {
 		
-		//train_rank train_rank_value = train_rank.train;
-		//train_rank_value = train_rank_final.rank;
-		train_rank_final train_rank_value = train_rank_final.train ;
-
-		long maxToBeComputedRow = 1000000;
-		//long maxToBeComputedRow = 1000;
-
-		FuelData fuelData = new FuelData(train_rank_value , maxToBeComputedRow);
+		FuelData fuelData = new FuelData(train_rank_final_value , maxToBeComputedRow);
 		fuelData.readParquet();
 		
 		//logger.info( fuelData.getFuelDataTable().shape());
@@ -46,7 +39,7 @@ public class Test_FuelTableFillwithExecutors_Test {
 		AircraftsData aircraftsData = new AircraftsData();
 		aircraftsData.readExcelFile();
 		
-		FlightListData flightListData = new FlightListData(train_rank_value);
+		FlightListData flightListData = new FlightListData(train_rank_final_value);
 		flightListData.readParquet();
 		// convert the flight date into Year, Month and day of the year
 		flightListData.extendWithFlightDateData();
@@ -129,6 +122,34 @@ public class Test_FuelTableFillwithExecutors_Test {
 		fuelData.generateParquetFileFor();
 		// generate a text file with errors
 		fuelData.generateListOfErrors();
+	}
+
+	@Test
+	public void processParallelyWithExecutorService_Train() throws InterruptedException, IOException , utils.CustomException {
+		
+		//train_rank train_rank_value = train_rank.train;
+		//train_rank_value = train_rank_final.rank;
+		
+		train_rank_final train_rank_final_value = train_rank_final.train ;
+
+		long maxToBeComputedRow = 1000000;
+		//long maxToBeComputedRow = 1000;
+
+		 this.processParallelInternal( train_rank_final_value , maxToBeComputedRow);
+	}
+	
+	@Test
+	public void processParallelyWithExecutorService_Rank() throws InterruptedException, IOException , utils.CustomException {
+		
+		//train_rank train_rank_value = train_rank.train;
+		//train_rank_value = train_rank_final.rank;
+		
+		train_rank_final train_rank_final_value = train_rank_final.rank ;
+
+		long maxToBeComputedRow = 1000000;
+		//long maxToBeComputedRow = 1000;
+
+		 this.processParallelInternal( train_rank_final_value , maxToBeComputedRow);
 	}
 	
 }
