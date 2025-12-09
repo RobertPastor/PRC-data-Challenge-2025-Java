@@ -76,7 +76,6 @@ public class FuelDataTable extends Table implements Runnable {
 
 		this.flightDataInterpolation = new FlightDataInterpolation(flightDatacolumnsToInterpolateList);
 		this.airSpeedConverter = new AirSpeedConverter();
-
 	}
 
 	public void generateListOfErrors() {
@@ -643,7 +642,8 @@ public class FuelDataTable extends Table implements Runnable {
 
 		String flight_id = row.getString ("flight_id");
 		logger.info(flight_id);
-		FlightData flightData = new FlightData( train_rank_value , flight_id );
+		
+		FlightData flightData = new FlightData( this.train_rank_value , flight_id );
 		// 27th October 2025 - use new stream reader capable of filling empty values
 		// read one flight data parquet file
 		try {
@@ -766,7 +766,6 @@ public class FuelDataTable extends Table implements Runnable {
 			// manage everything related to track angles
 			this.manageTrackAngles(row, start, end);
 
-
 			//=======================================
 			// vertical rate
 			Double vertical_rate_ft_min_start = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("vertical_rate" ,  start);
@@ -778,9 +777,8 @@ public class FuelDataTable extends Table implements Runnable {
 			// every thing related to mach , TAS and CAS
 			this.manageSpeeds( row , start, end );
 
-
 			//================================
-			// duration between flight takeoff and fuel burnt start end
+			// duration between flight take-off and fuel burnt start end
 			// duration between fuel burnt start and end ... and flight landed Instant
 			int idx = row.getInt("idx");
 
@@ -794,7 +792,7 @@ public class FuelDataTable extends Table implements Runnable {
 				this.errorsMap.put(idx, new ArrayList<>(List.of(row.getString("flight_id") , takeoff.toString() , landed.toString())));
 				//System.out.println(row.getRowNumber());
 			}
-			// takeoff versus fuel start
+			// take-off versus fuel start
 			if ( ( takeoff != null ) && takeoff.isBefore(start) ) {
 				//assert takeoff.isBefore(start);
 				long duration_sec = Duration.between(takeoff, start).toSeconds();
@@ -803,7 +801,7 @@ public class FuelDataTable extends Table implements Runnable {
 				System.out.println("Error takeoff = " + takeoff + " -- not before fuel burnt start = " + start);
 				row.setLong("fuel_burnt_start_relative_to_takeoff_sec" , (Long)null);
 			}
-			// takeoff versus fuel end
+			// take-off versus fuel end
 			if ( ( takeoff != null ) && takeoff.isBefore(end) ) {
 				//assert takeoff.isBefore(end);
 				long duration_sec = Duration.between(takeoff, end).toSeconds();
@@ -832,7 +830,6 @@ public class FuelDataTable extends Table implements Runnable {
 				row.setLong("fuel_burnt_end_relative_to_landed_sec" , (Long)null);
 				System.out.println("Error fuel burnt end = " + end + " -- not before landed = " + landed);
 			}
-
 		}
 	}
 
@@ -961,7 +958,6 @@ public class FuelDataTable extends Table implements Runnable {
 
 			Double CAS_end = this.flightDataInterpolation.getDoubleFlightDataAtInterpolatedStartEndFuelInstant("CAS" ,  end);
 			this.setDouble(row,"aircraft_CAS_at_fuel_end" , CAS_end);
-
 
 			// duration between flight takeoff and fuel burnt start end
 			// duration between fuel burnt start and end ... and flight landed Instant
@@ -1102,7 +1098,6 @@ public class FuelDataTable extends Table implements Runnable {
 
 	@Override
 	public void run() {
-
 	}
 
 	public void setFuelDataTable(Table fuelDataTable) {

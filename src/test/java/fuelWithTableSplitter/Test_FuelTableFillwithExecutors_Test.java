@@ -41,6 +41,7 @@ public class Test_FuelTableFillwithExecutors_Test {
 		
 		FlightListData flightListData = new FlightListData(train_rank_final_value);
 		flightListData.readParquet();
+		
 		// convert the flight date into Year, Month and day of the year
 		flightListData.extendWithFlightDateData();
 
@@ -71,7 +72,7 @@ public class Test_FuelTableFillwithExecutors_Test {
 		fuelData.createExtendedEngineeringFeaturesColumns();
 		
 		//============================================
-		// exploiting multi threading for 32 cores some waiting for IO operations on parquet files
+		// exploiting multi threading for 32 cores some waiting for IO operations on reading parquet files
 		//============================================
 		
 		int cores = Runtime.getRuntime().availableProcessors();
@@ -80,7 +81,7 @@ public class Test_FuelTableFillwithExecutors_Test {
 		// create a pool of thread to execute concurrently
 		// 1 set of cores for the CPU operations and 1/2 for the IO asynchronous parquet reader
 		int numberOfExecutors = (int)(cores+(cores/2));
-		//numberOfExecutors = (int)(2*cores);
+		
 		System.out.println("Number of executors: " + numberOfExecutors);
 		ExecutorService executor = Executors.newFixedThreadPool(numberOfExecutors);
 
@@ -135,8 +136,9 @@ public class Test_FuelTableFillwithExecutors_Test {
 		long maxToBeComputedRow = 1000000;
 		//long maxToBeComputedRow = 1000;
 
-		 this.processParallelInternal( train_rank_final_value , maxToBeComputedRow);
+		this.processParallelInternal( train_rank_final_value , maxToBeComputedRow);
 	}
+	
 	
 	@Test
 	public void processParallelyWithExecutorService_Rank() throws InterruptedException, IOException , utils.CustomException {
@@ -149,7 +151,7 @@ public class Test_FuelTableFillwithExecutors_Test {
 		long maxToBeComputedRow = 1000000;
 		//long maxToBeComputedRow = 1000;
 
-		 this.processParallelInternal( train_rank_final_value , maxToBeComputedRow);
+		this.processParallelInternal( train_rank_final_value , maxToBeComputedRow);
 	}
 	
 }
