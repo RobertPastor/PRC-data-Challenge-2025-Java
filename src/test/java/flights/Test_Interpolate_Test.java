@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.SortedSet;
-import java.util.TreeSet;
 
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +22,7 @@ public class Test_Interpolate_Test {
 		
 		System.out.println("================ test two searching for missing lat lon altitudes ==========================");
 		
-		FlightListData flightListData = new FlightListData(train_rank_final_value );
+		FlightListData flightListData = new FlightListData( train_rank_final_value , "A320");
 		flightListData.readParquet();
 		
 		System.out.println("shape = " + flightListData.getFlightListDataTable().shape() );
@@ -50,7 +49,6 @@ public class Test_Interpolate_Test {
 			
 			for ( String columnName : columnNamesList) {
 				assert ( flightDataTable.columnNames().contains(columnName) );
-				
 			}
 		}
 		System.out.printf("%d", index);

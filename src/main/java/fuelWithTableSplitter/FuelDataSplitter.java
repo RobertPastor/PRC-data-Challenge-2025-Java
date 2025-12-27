@@ -38,11 +38,11 @@ public class FuelDataSplitter extends FuelDataTableSplitter {
 	}
 	
 	/**
-	 * called i=once before the big work interpolation starts
+	 * called once before the big work interpolation starts
 	 * @param maxToBeComputedRow
 	 * @throws IOException
 	 */
-	public void prepareBeforeMergeFueltoOtherData (final long maxToBeComputedRow  ) throws IOException {
+	public void prepareBeforeMergeFueltoOtherData (final long maxToBeComputedRow , final String aircraft_type_code ) throws IOException {
 		
 		train_rank_final train_rank_value = this.getTrain_rank_value();
 		
@@ -52,7 +52,7 @@ public class FuelDataSplitter extends FuelDataTableSplitter {
 		AircraftsData aircraftsData = new AircraftsData();
 		aircraftsData.readExcelFile();
 		
-		FlightListData flightListData = new FlightListData(train_rank_value);
+		FlightListData flightListData = new FlightListData(train_rank_value, aircraft_type_code);
 		flightListData.readParquet();
 		flightListData.extendWithFlightDateData();
 

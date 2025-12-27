@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import dataChallengeEnums.DataChallengeEnums.train_rank_final;
+import flightLists.FlightListData;
 
 public class Test_InterpolateFuelStartEndFromFlightData_Train {
 
@@ -13,11 +14,14 @@ public class Test_InterpolateFuelStartEndFromFlightData_Train {
 			
 			train_rank_final train_rank_value = train_rank_final.train;
 			
+			FlightListData flightListData = new FlightListData(train_rank_value);
+			flightListData.readParquet();
+			
 			long maxToBeComputedRow = 1000000;
 			//maxToBeComputedRow = 100;
 			
 			FuelData fuelData = new FuelData( train_rank_value , maxToBeComputedRow);
-			fuelData.readParquet();
+			fuelData.readParquet(flightListData);
 			
 			System.out.println( fuelData.getFuelDataTable().shape());
 			System.out.println( fuelData.getFuelDataTable().structure().print());

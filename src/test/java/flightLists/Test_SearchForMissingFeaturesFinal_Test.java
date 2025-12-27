@@ -26,7 +26,9 @@ public class Test_SearchForMissingFeaturesFinal_Test {
 		
 		System.out.println("================ test two searching for missing lat lon altitudes ==========================");
 		
-		FlightListData flightListData = new FlightListData(train_rank_final_value );
+		String aircraft_type_code = "A320";
+
+		FlightListData flightListData = new FlightListData(train_rank_final_value , aircraft_type_code);
 		flightListData.readParquet();
 		
 		System.out.println("shape = " + flightListData.getFlightListDataTable().shape() );

@@ -25,10 +25,14 @@ public class Test_FuelTableFillwithExecutors_Test {
 	static int count = 0;
 	
 	public void processParallelInternal( final train_rank_final train_rank_final_value , 
-			long maxToBeComputedRow	) throws InterruptedException, IOException , utils.CustomException {
+			long maxToBeComputedRow	, final String aircraft_type_code ) throws InterruptedException, IOException , utils.CustomException {
+		
+		// filter on one aircraft type code (for instance A320)
+		FlightListData flightListData = new FlightListData(train_rank_final_value, aircraft_type_code);
+		flightListData.readParquet();
 		
 		FuelData fuelData = new FuelData(train_rank_final_value , maxToBeComputedRow);
-		fuelData.readParquet();
+		fuelData.readParquet(flightListData);
 		
 		//logger.info( fuelData.getFuelDataTable().shape());
 		//logger.info( fuelData.getFuelDataTable().structure().print());
@@ -38,9 +42,6 @@ public class Test_FuelTableFillwithExecutors_Test {
 
 		AircraftsData aircraftsData = new AircraftsData();
 		aircraftsData.readExcelFile();
-		
-		FlightListData flightListData = new FlightListData(train_rank_final_value);
-		flightListData.readParquet();
 		
 		// convert the flight date into Year, Month and day of the year
 		flightListData.extendWithFlightDateData();
@@ -72,7 +73,7 @@ public class Test_FuelTableFillwithExecutors_Test {
 		fuelData.createExtendedEngineeringFeaturesColumns();
 		
 		//============================================
-		// exploiting multi threading for 32 cores some waiting for IO operations on reading parquet files
+		// exploiting multi threading for 32 cores some waiting for IO operations while reading parquet files
 		//============================================
 		
 		int cores = Runtime.getRuntime().availableProcessors();
@@ -121,6 +122,7 @@ public class Test_FuelTableFillwithExecutors_Test {
 
 		// last step generate the parquet file
 		fuelData.generateParquetFileFor();
+		
 		// generate a text file with errors
 		fuelData.generateListOfErrors();
 	}
@@ -135,8 +137,9 @@ public class Test_FuelTableFillwithExecutors_Test {
 
 		long maxToBeComputedRow = 1000000;
 		//long maxToBeComputedRow = 1000;
-
-		this.processParallelInternal( train_rank_final_value , maxToBeComputedRow);
+		
+		String aircraft_type = "A320";
+		this.processParallelInternal( train_rank_final_value , maxToBeComputedRow , aircraft_type);
 	}
 	
 	
@@ -148,10 +151,11 @@ public class Test_FuelTableFillwithExecutors_Test {
 		
 		train_rank_final train_rank_final_value = train_rank_final.rank ;
 
-		long maxToBeComputedRow = 1000000;
-		//long maxToBeComputedRow = 1000;
-
-		this.processParallelInternal( train_rank_final_value , maxToBeComputedRow);
+		//long maxToBeComputedRow = 1000000;
+		long maxToBeComputedRow = 100;
+		
+		String aircraft_type = "A320";
+		this.processParallelInternal( train_rank_final_value , maxToBeComputedRow, aircraft_type);
 	}
 	
 }

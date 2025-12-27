@@ -69,7 +69,9 @@ public class Test_SearchForMissingFeaturesInInterpolated_Tests {
 		List<String> flightIdsTrainList = List.of("prc770822360","prc770885136","prc770887555",
 				"prc770893597", "prc772539375" ,"prc776853928", "prc777326263","prc784305329");
 
-		FlightListData flightListData = new FlightListData(train_rank_final_value );
+		String aircraft_type_code = "A320";
+
+		FlightListData flightListData = new FlightListData(train_rank_final_value , aircraft_type_code);
 		flightListData.readParquet();
 		
 		System.out.println("shape = " + flightListData.getFlightListDataTable().shape() );
@@ -91,7 +93,9 @@ public class Test_SearchForMissingFeaturesInInterpolated_Tests {
 
 		List<String> flightIdsRankList = List.of("prc806642601","prc806714985","prc809272840");
 		
-		FlightListData flightListData = new FlightListData(train_rank_final_value );
+		String aircraft_type_code = "A320";
+		
+		FlightListData flightListData = new FlightListData(train_rank_final_value , aircraft_type_code);
 		flightListData.readParquet();
 		
 		System.out.println("shape = " + flightListData.getFlightListDataTable().shape() );

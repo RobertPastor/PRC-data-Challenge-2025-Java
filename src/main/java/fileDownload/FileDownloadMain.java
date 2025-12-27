@@ -1,7 +1,5 @@
 package fileDownload;
 
-import java.io.FileOutputStream;
-
 //Source - https://stackoverflow.com/a
 //Posted by Sameer Jadhav
 //Retrieved 2025-12-11, License - CC BY-SA 4.0
@@ -13,7 +11,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 
 
 public class FileDownloadMain {

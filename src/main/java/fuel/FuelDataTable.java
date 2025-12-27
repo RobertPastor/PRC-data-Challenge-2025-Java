@@ -1,6 +1,5 @@
 package fuel;
 
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -36,7 +35,6 @@ import tech.tablesaw.columns.Column;
 import utils.Utils;
 
 
-
 public class FuelDataTable extends Table implements Runnable {
 
 	class CustomException extends Exception {
@@ -52,7 +50,8 @@ public class FuelDataTable extends Table implements Runnable {
 	private static final Logger logger = Logger.getLogger(FuelDataTable.class.getName());
 
 	protected train_rank_final train_rank_value;
-	private  long maxToBeComputedRow = 0;
+	protected long maxToBeComputedRow = 0;
+	
 	private Map<Integer, ArrayList<String>> errorsMap = null;
 
 	public Table fuelDataTable = null;
@@ -90,11 +89,11 @@ public class FuelDataTable extends Table implements Runnable {
 
 		try (FileWriter writer = new FileWriter(file.getAbsoluteFile())) {
 			// write the header
-			writer.write( "Error" + ";" + "Value");
+			writer.write( "Error" + ";" + "Value" + "\n");
 			// Iterate through the map
 			for (Map.Entry<Integer, ArrayList<String>> entry : errorsMap.entrySet()) {
 				System.out.println("Key: " + entry.getKey() + ", Value: " + entry.getValue());
-				writer.write( entry.getKey() + ";" + entry.getValue());
+				writer.write( entry.getKey() + ";" + entry.getValue() + "\n");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -629,7 +628,7 @@ public class FuelDataTable extends Table implements Runnable {
 	 * @throws IOException 
 	 * @throws utils.CustomException 
 	 */
-	@SuppressWarnings("null")
+	//@SuppressWarnings("null")
 	public void extendOneFuelRowStartEndInstantWithFlightData (final LocalDateTime startTime, Row row ) throws IOException, utils.CustomException {
 
 		LocalDateTime nowDateTime = LocalDateTime.now();
@@ -1111,5 +1110,6 @@ public class FuelDataTable extends Table implements Runnable {
 	public Map<Integer, ArrayList<String>> getErrorsMap() {
 		return errorsMap;
 	}
+	
 }
 

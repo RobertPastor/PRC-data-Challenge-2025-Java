@@ -4,9 +4,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.logging.Logger;
@@ -51,22 +49,22 @@ public class FlightListDataTable extends Table {
 	public void createEmptyFlightListDataTable( ) {
 		this.flightListDataTable = Table.create("Flight List Data",
 
-				StringColumn.create("flight_id"),
-				// assumption is UTC or Zulu Date ???
-				DateColumn.create("flight_date"),
+			StringColumn.create("flight_id"),
+			// assumption is UTC or Zulu Date ???
+			DateColumn.create("flight_date"),
 
-				InstantColumn.create("takeoff"),
+			InstantColumn.create("takeoff"),
 
-				StringColumn.create("origin_icao"),
-				StringColumn.create("origin_name"),
+			StringColumn.create("origin_icao"),
+			StringColumn.create("origin_name"),
 
-				InstantColumn.create("landed"),
+			InstantColumn.create("landed"),
 
-				StringColumn.create("destination_icao"),
-				StringColumn.create("destination_name"),
+			StringColumn.create("destination_icao"),
+			StringColumn.create("destination_name"),
 
-				StringColumn.create("aircraft_type")
-				);
+			StringColumn.create("aircraft_type")
+		);
 	}
 	
 	/**

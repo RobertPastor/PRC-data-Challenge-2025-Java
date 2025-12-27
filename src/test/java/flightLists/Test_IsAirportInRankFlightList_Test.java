@@ -18,7 +18,9 @@ public class Test_IsAirportInRankFlightList_Test {
 		AirportsData airportsData = new AirportsData();
 		airportsData.readParquet();
 		
-		FlightListData flightListData = new FlightListData(train_rank_final.rank );
+		String aircraft_type_code = "A320";
+
+		FlightListData flightListData = new FlightListData(train_rank_final.rank , aircraft_type_code);
 		flightListData.readParquet();
 		
 		flightListData.extendWithAirportData(airportsData);

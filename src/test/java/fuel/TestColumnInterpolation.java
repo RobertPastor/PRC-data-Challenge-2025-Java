@@ -1,8 +1,6 @@
 package fuel;
 
 import java.io.IOException;
-import java.time.Instant;
-import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +20,7 @@ public class TestColumnInterpolation {
 		FlightListData flightListData = new FlightListData(train_rank_value);
 		flightListData.readParquet();
 		
-		Instant takeoff = flightListData.getTakeoffInstant(flight_id);
+		//Instant takeoff = flightListData.getTakeoffInstant(flight_id);
 		
 		FlightData flightData = new FlightData( train_rank_value , flight_id );
 		flightData.readParquetWithStream();

@@ -11,7 +11,6 @@ import tech.tablesaw.aggregate.AggregateFunctions;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.InstantColumn;
 import tech.tablesaw.api.Table;
-import tech.tablesaw.joining.DataFrameJoiner;
 
 public class Test_SummarizeSuppressDuplicatedInstants_Test {
 

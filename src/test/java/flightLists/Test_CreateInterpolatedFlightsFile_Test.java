@@ -10,12 +10,13 @@ import tech.tablesaw.api.Table;
 
 public class Test_CreateInterpolatedFlightsFile_Test {
 
-	
 	@Test
     public void loopThroughtListOfFlightIds() throws IOException {
 		
+		String aircraft_type_code = "A320";
+		
 		train_rank_final train_rank_final_value = train_rank_final.train;
-		FlightListData flightListData = new FlightListData( train_rank_final_value);
+		FlightListData flightListData = new FlightListData( train_rank_final_value , aircraft_type_code);
 		flightListData.readParquet();
 		
 		Table flightListTable = flightListData.getFlightListDataTable();

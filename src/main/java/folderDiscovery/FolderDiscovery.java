@@ -131,15 +131,16 @@ public class FolderDiscovery {
 		}
 		try {
 			//FolderDiscovery.getTrainRankFinalInterpolatedFlightsOutputfolderStr
-			
+			// 27th December 2025 - stay with original files with holes 
+			// but focus on one aircraft type such as A320
 			Path path = null;
 			if ( train_rank_value == train_rank_final.train) {
-				path = Paths.get(FolderDiscovery.flightTrainInterpolatedFolderStr , fileName);
+				path = Paths.get(FolderDiscovery.flightTrainFolderStr , fileName);
 			} else {
 				if ( train_rank_value == train_rank_final.rank ) {
-					path = Paths.get(FolderDiscovery.flightRankInterpolatedFolderStr , fileName);
+					path = Paths.get(FolderDiscovery.flightRankFolderStr , fileName);
 				}else {
-					path = Paths.get(FolderDiscovery.flightFinalInterpolatedFolderStr , fileName);
+					path = Paths.get(FolderDiscovery.flightFinalFolderStr , fileName);
 				}
 			}
 			//logger.info(path.toString());

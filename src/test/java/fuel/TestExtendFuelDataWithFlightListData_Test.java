@@ -31,7 +31,7 @@ public class TestExtendFuelDataWithFlightListData_Test {
 		flightListData.extendWithAirportsSinusCosinusOfLatitudeLongitude();
 
 		FuelData fuelData = new FuelData(train_rank_value , nbMaxRows );
-		fuelData.readParquet();
+		fuelData.readParquet(flightListData);
 		
 		fuelData.extendFuelWithEndStartDifference();
 		fuelData.extendFuelFlowKgSeconds();
@@ -59,7 +59,7 @@ public class TestExtendFuelDataWithFlightListData_Test {
 
 		train_rank_final train_rank_value = train_rank_final.train;
 		
-		FlightListData flightListData = new FlightListData(train_rank_value);
+		FlightListData flightListData = new FlightListData(train_rank_value , "A320");
 		flightListData.readParquet();
 		
 		flightListData.extendWithAircraftsData( aircraftsData );
@@ -67,7 +67,7 @@ public class TestExtendFuelDataWithFlightListData_Test {
 		flightListData.extendWithAirportsSinusCosinusOfLatitudeLongitude();
 
 		FuelData fuelData = new FuelData(train_rank_value , nbMaxRows );
-		fuelData.readParquet();
+		fuelData.readParquet(flightListData);
 		
 		fuelData.extendFuelWithEndStartDifference();
 		fuelData.extendFuelFlowKgSeconds();

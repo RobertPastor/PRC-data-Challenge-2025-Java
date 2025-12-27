@@ -48,7 +48,6 @@ public class FlightData extends FlightDataTable {
 		}
 	}
 	
-	
 	/**
 	 * new method of reading parquet files and managing missing values (holes)
 	 * @throws IOException

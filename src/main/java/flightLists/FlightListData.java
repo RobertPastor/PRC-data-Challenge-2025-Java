@@ -14,13 +14,21 @@ import folderDiscovery.FolderDiscovery;
 public class FlightListData extends FlightListDataTable {
 
 	private static final Logger logger = Logger.getLogger(FlightListData.class.getName());
+	private String aircraft_type_code = "";
 
+	public FlightListData( train_rank_final value, String aircraft_type_code ) {
+		this.train_rank_value = value;
+		this.aircraft_type_code = aircraft_type_code;
+	}
+	
 	public FlightListData( train_rank_final value ) {
 		this.train_rank_value = value;
+		this.aircraft_type_code = "A320";
 	}
 
 	/**
 	 * read the flight list from a parquet file
+	 * 27th December 2025 - filter on one aircraft type code
 	 * @throws IOException
 	 */
 	public void readParquet( ) throws IOException {
@@ -39,14 +47,16 @@ public class FlightListData extends FlightListDataTable {
 			while (iterator.hasNext()) {
 				FlightListDataSchema.FlightListDataRecord record = iterator.next();
 				//System.out.println(r);
-
-				// assert - sanity check
-				assert (record.takeoff() != null ) && (record.takeoff().getEpochSecond() > 0);
-				assert (record.landed() != null) && (record.landed().getEpochSecond() > 0);
-				assert record.landed().isAfter(record.takeoff()) ;
 				
-				this.appendRowToFlightListDataTable(record);
+				if ( record.aircraft_type().equalsIgnoreCase(aircraft_type_code)) {
 
+					// assert - sanity check
+					assert (record.takeoff() != null ) && (record.takeoff().getEpochSecond() > 0);
+					assert (record.landed() != null) && (record.landed().getEpochSecond() > 0);
+					assert record.landed().isAfter(record.takeoff()) ;
+					
+					this.appendRowToFlightListDataTable(record);
+				}
 			}
 			//logger.info( this.flightListDataTable.shape() );
 			//logger.info( this.flightListDataTable.structure().print() );
